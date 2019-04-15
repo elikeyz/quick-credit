@@ -1,6 +1,3 @@
-html {
-    height: 100%;
-}
 
 body {
     margin: 0;
@@ -71,6 +68,8 @@ main {
 .bg-img {
     background-image: url('../images/background.jpg');
     background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
     height: 100%;
 }
 
@@ -85,6 +84,94 @@ main {
     color: #FFF8E1;
 }
 
+.form-container {
+    font-family: 'Open Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 100px 0;
+}
+
+.card {
+    width: 40%;
+    border-radius: 5px;
+}
+
+form {
+    background-color: rgba(159, 168, 218, 0.5);
+    padding: 10px;
+}
+
+.form-header {
+    color: #1A237E;
+    padding: 10px;
+    text-align: center;
+}
+
+.form-unit {
+    display: flex;
+    flex-direction: row;
+    padding: 10px 5px;
+    justify-content: center;
+}
+
+label {
+    font-weight: bold;
+    width: 30%;
+}
+
+input {
+    border: 1px solid rgba(159, 168, 218, 0.5);
+    border-radius: 5px;
+    height: 30px;
+    width: 70%;
+}
+
+textarea {
+    border: 1px solid rgba(159, 168, 218, 0.5);
+    border-radius: 5px;
+    height: 40px;
+    width: 70%;
+}
+
+.form-button {
+    height: 40px;
+    width: 100%;
+    border: 1px solid #1A237E;
+    border-radius: 20px;
+    background-color: #1A237E;
+    color: #FFF8E1;
+    cursor: pointer;
+}
+
+#admin-login-btn {
+    background-color: rgba(159, 168, 218, 0.5);
+    color: #1A237E;
+}
+
+.form-btn-link {
+    width: 40%;
+    margin: 5px;
+}
+
+@media only screen and (max-height: 675px) {
+    .short-html {
+        height: 100%;
+    }
+}
+
+@media only screen and (min-height: 730px) {
+    html {
+        height: 100%;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .card {
+        width: 60%;
+    }
+}
+
 @media only screen and (max-width: 760px) {
     .onboarding-display {
         width: 60%;
@@ -92,6 +179,29 @@ main {
 
     .onboarding-links {
         width: 40%;
+    }
+
+    .form-unit {
+        flex-direction: column;
+    }
+
+    .form-btn-link {
+        align-self: center;
+        width: 60%;
+    }
+
+    .label, input, textarea {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .form-btn-link {
+        width: 80%;
+    }
+
+    .card {
+        width: 80%;
     }
 }
 
@@ -102,5 +212,13 @@ main {
 
     .onboarding-links {
         width: 50%;
+    }
+
+    .card {
+        width: 90%;
+    }
+
+    .form-btn-link {
+        width: 100%;
     }
 }
