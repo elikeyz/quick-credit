@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="short-html">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="An online lending platform that provides short term loans to individuals">
@@ -11,32 +11,30 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="css/styles.css">
-    <title>Quick Credit</title>
+    <title>Quick Credit | Loan Repayment History</title>
 </head>
 <body>
     <header>
         <nav class="onboarding-display">
-            <a class="header-text nav-link" href="#"><span class="display-icon"><i class="fas fa-university"></i></span>QUICK CREDIT</a>
+                <a class="header-text nav-link" href="./index.html"><span class="display-icon"><i class="fas fa-university"></i></span>QUICK CREDIT</a>
         </nav>
         <nav class="onboarding-links">
             <ul class="nav-list">
-                <li class="onboarding-nav-item"><a class="nav-link nav-item" href="./login.html">Login</a></li>
-                <li class="onboarding-nav-item"><a class="nav-link nav-item" href="./signup.html">Register</a></li>
+                <li class="onboarding-nav-item"><a class="nav-link nav-item" href="#"><span><i class="fas fa-plus"></i></span> Apply for a Loan</a></li>
+                <li class="onboarding-nav-item" id="drop-btn"><a class="nav-link nav-item" href="#"><span><i class="fas fa-arrow-down"></i></span> User</a></li>
             </ul>
         </nav>
     </header>
     <main>
-        <div class="bg-img">
-            <div class="overlay">
-                <div class="onboarding-container">
-                    <h1 class="display-text">Welcome to Quick Credit</h1>
-                    <br><br><br>
-                    <h2 class="display-text">We offer easy, instant short-term soft loans</h2>
-                    <br><br>
-                    <h2 class="display-text">No collateral, no hidden charges, no problem</h2>
-                </div>
-            </div>
+        <div class="dropdown-content hidden">
+            <a href="#">Loan Repayments</a>
+            <a href="#">Profile</a>
+            <a href="./index.html">Logout</a>
+        </div>
+        <div class="container">
+            <h1>Loan Repayment History</h1>
         </div>
     </main>
+    <script src="./js/dropdown.js"></script>
 </body>
 </html>

@@ -1,4 +1,3 @@
-
 body {
     margin: 0;
     height: 100%;
@@ -9,6 +8,11 @@ header {
     color: #FFF8E1;
     padding: 5px;
     display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-shadow: rgba(0,0,0,0.6) 1px 1px 5px 1px, rgba(0,0,0,0.4) 2px 2px 7px 2px;
 }
 
 .onboarding-display {
@@ -16,7 +20,7 @@ header {
 }
 
 .onboarding-links {
-    width: 20%;
+    width: 30%;
 }
 
 .header-text {
@@ -80,7 +84,7 @@ main {
 
 .onboarding-container {
     font-family: 'Open Sans', sans-serif;
-    padding: 100px 20%;
+    padding: 150px 20%;
     color: #FFF8E1;
 }
 
@@ -89,12 +93,13 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 100px 0;
+    padding: 120px 0;
 }
 
 .card {
     width: 40%;
     border-radius: 5px;
+    box-shadow: rgb(0,0,0,0.5) 1px 1px 5px 1px;
 }
 
 form {
@@ -142,6 +147,7 @@ textarea {
     background-color: #1A237E;
     color: #FFF8E1;
     cursor: pointer;
+    font-size: 15px;
 }
 
 #admin-login-btn {
@@ -154,15 +160,51 @@ textarea {
     margin: 5px;
 }
 
-@media only screen and (max-height: 675px) {
+.container {
+    padding: 50px 20px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.dropdown-content {
+    display: block;
+    position: fixed;
+    top: 55px;
+    right: 0;
+    float: right;
+    background-color: #1A237E;
+    width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.hidden {
+    display: none;
+}
+  
+.dropdown-content a {
+    color: #FFF8E1;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+  }
+
+@media only screen and (max-height: 824px) {
     .short-html {
         height: 100%;
     }
 }
 
-@media only screen and (min-height: 730px) {
+@media only screen and (min-height: 1016px) {
     html {
         height: 100%;
+    }
+}
+
+@media only screen and (max-width: 1034px) {
+    .dropdown-content {
+        top: 69px;
     }
 }
 
@@ -205,6 +247,12 @@ textarea {
     }
 }
 
+@media only screen and (max-width: 387px) {
+    .dropdown-content {
+        top: 91px;
+    }
+}
+
 @media only screen and (max-width: 300px) {
     .onboarding-display {
         width: 50%;
@@ -220,5 +268,11 @@ textarea {
 
     .form-btn-link {
         width: 100%;
+    }
+}
+
+@media only screen and (max-width: 249px) {
+    .dropdown-content {
+        top: 113px;
     }
 }
