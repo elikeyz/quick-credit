@@ -12,6 +12,7 @@ header {
     top: 0;
     left: 0;
     right: 0;
+    z-index: 1;
     box-shadow: rgba(0,0,0,0.6) 1px 1px 5px 1px, rgba(0,0,0,0.4) 2px 2px 7px 2px;
 }
 
@@ -92,12 +93,12 @@ main {
     font-family: 'Open Sans', sans-serif;
     display: flex;
     flex-direction: column;
+    -ms-flex-direction: column;
     align-items: center;
     padding: 120px 0;
 }
 
 .card {
-    width: 40%;
     border-radius: 5px;
     box-shadow: rgb(0,0,0,0.5) 1px 1px 5px 1px;
 }
@@ -105,6 +106,7 @@ main {
 form {
     background-color: rgba(159, 168, 218, 0.5);
     padding: 10px;
+    width: 40%;
 }
 
 .form-header {
@@ -116,6 +118,7 @@ form {
 .form-unit {
     display: flex;
     flex-direction: row;
+    -ms-flex-direction: row;
     padding: 10px 5px;
     justify-content: center;
 }
@@ -141,7 +144,8 @@ textarea {
 
 .form-button {
     height: 40px;
-    width: 100%;
+    width: 40%;
+    margin: 5px;
     border: 1px solid #1A237E;
     border-radius: 20px;
     background-color: #1A237E;
@@ -155,13 +159,8 @@ textarea {
     color: #1A237E;
 }
 
-.form-btn-link {
-    width: 40%;
-    margin: 5px;
-}
-
 .container {
-    padding: 50px 20px;
+    padding: 50px;
     font-family: 'Open Sans', sans-serif;
 }
 
@@ -188,7 +187,43 @@ textarea {
     text-decoration: none;
     display: block;
     cursor: pointer;
-  }
+}
+
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.record {
+    width: 25%;
+    background-color: #FFF8E1;
+    margin: 10px 0;
+}
+
+.record-header {
+    color: #1A237E;
+    padding: 5px;
+    text-align: center;
+}
+
+.record-body {
+    padding: 5px;
+}
+
+.record-unit {
+    display: flex;
+}
+
+.key {
+    width: 50%;
+    font-weight: bold;
+}
+
+.value {
+    width: 50%;
+}
 
 @media only screen and (max-height: 824px) {
     .short-html {
@@ -209,8 +244,12 @@ textarea {
 }
 
 @media only screen and (max-width: 900px) {
-    .card {
+    form {
         width: 60%;
+    }
+
+    .record {
+        width: 40%;
     }
 }
 
@@ -235,6 +274,14 @@ textarea {
     .label, input, textarea {
         width: 100%;
     }
+
+    .record {
+        width: 60%;
+    }
+
+    .cards {
+        justify-content: center;
+    }
 }
 
 @media only screen and (max-width: 500px) {
@@ -242,7 +289,11 @@ textarea {
         width: 80%;
     }
 
-    .card {
+    form {
+        width: 80%;
+    }
+
+    .record {
         width: 80%;
     }
 }
@@ -250,6 +301,10 @@ textarea {
 @media only screen and (max-width: 387px) {
     .dropdown-content {
         top: 91px;
+    }
+
+    .record {
+        width: 90%;
     }
 }
 
@@ -262,11 +317,15 @@ textarea {
         width: 50%;
     }
 
-    .card {
+    form {
         width: 90%;
     }
 
     .form-btn-link {
+        width: 100%;
+    }
+
+    .record {
         width: 100%;
     }
 }
