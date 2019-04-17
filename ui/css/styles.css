@@ -128,7 +128,7 @@ label {
     width: 30%;
 }
 
-input {
+input, select {
     border: 1px solid rgba(159, 168, 218, 0.5);
     border-radius: 5px;
     height: 30px;
@@ -154,7 +154,7 @@ textarea {
     font-size: 15px;
 }
 
-#admin-login-btn {
+.btn-two {
     background-color: rgba(159, 168, 218, 0.5);
     color: #1A237E;
 }
@@ -223,6 +223,43 @@ textarea {
 
 .value {
     width: 50%;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 5;
+    padding-top: 70px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+    margin: auto;
+    background-color: rgb(159, 168, 218);
+    font-family: 'Open Sans', sans-serif;
+}
+
+.modal-content .form-unit {
+    flex-direction: column;
+}
+
+.modal-content label, .modal-content input, .modal-content textarea, .modal-content select {
+    width: 100%;
+}
+
+.modal-content .form-button {
+    width: 40%;
+    align-self: center;
+}
+
+.modal-content #btn-container {
+    flex-direction: row;
 }
 
 @media only screen and (max-height: 824px) {
@@ -295,6 +332,10 @@ textarea {
 
     .record {
         width: 80%;
+    }
+
+    .container {
+        padding: 100px 50px;
     }
 }
 

@@ -14,13 +14,49 @@
     <title>Quick Credit | Loan Repayment History</title>
 </head>
 <body>
+    <div id="my-modal" class="modal">
+        <form class="modal-content card">
+            <div class="form-header">
+                <h1 class="display-text">Apply for a Loan</h1>
+            </div>
+            <div class="form-unit">
+                <label for="amount">How much do you want to borrow?</label>
+                <input type="number" id="amount" placeholder="Amount" required>
+            </div>
+            <div class="form-unit">
+                <label for="reason">Briefly explain reason for loan request.</label>
+                <textarea id="reason" placeholder="Reason for loan request..." required></textarea>
+            </div>
+            <div class="form-unit">
+                <label for="tenor">Select your preferable loan tenor. (Number of months needed to pay back)</label>
+                <select id="tenor" required>
+                    <option value="1">1 month</option>
+                    <option value="2">2 months</option>
+                    <option value="3">3 months</option>
+                    <option value="4">4 months</option>
+                    <option value="5">5 months</option>
+                    <option value="6">6 months</option>
+                    <option value="7">7 months</option>
+                    <option value="8">8 months</option>
+                    <option value="9">9 months</option>
+                    <option value="10">10 months</option>
+                    <option value="11">11 months</option>
+                    <option value="12">12 months</option>
+                </select>
+            </div>
+            <div class="form-unit" id="btn-container">
+                <input type="submit" class="form-button btn-one" id="submit-btn" value="Apply">
+                <input type="reset" class="form-button btn-two" id="cancel-btn" value="Cancel">
+            </div>
+        </form>
+    </div>
     <header>
         <nav class="onboarding-display">
-                <a class="header-text nav-link" href="./index.html"><span class="display-icon"><i class="fas fa-university"></i></span>QUICK CREDIT</a>
+            <a class="header-text nav-link" href="./index.html"><span class="display-icon"><i class="fas fa-university"></i></span>QUICK CREDIT</a>
         </nav>
         <nav class="onboarding-links">
             <ul class="nav-list">
-                <li class="onboarding-nav-item"><a class="nav-link nav-item" href="#"><span><i class="fas fa-plus"></i></span> Apply for a Loan</a></li>
+                <li class="onboarding-nav-item" id="open-modal"><a class="nav-link nav-item" href="#"><span><i class="fas fa-plus"></i></span> Apply for a Loan</a></li>
                 <li class="onboarding-nav-item" id="drop-btn"><a class="nav-link nav-item" href="#"><span><i class="fas fa-arrow-down"></i></span> User</a></li>
             </ul>
         </nav>
@@ -95,5 +131,6 @@
         </div>
     </main>
     <script src="./js/dropdown.js"></script>
+    <script src="js/modal.js"></script>
 </body>
 </html>
