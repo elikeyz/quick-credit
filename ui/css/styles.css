@@ -170,7 +170,7 @@ textarea {
     top: 55px;
     right: 0;
     float: right;
-    background-color: #1A237E;
+    background-color: #303F9F;
     width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
@@ -179,6 +179,10 @@ textarea {
 
 .hidden {
     display: none;
+}
+
+.dropdown-content a:hover {
+    background-color: #1A237E;
 }
   
 .dropdown-content a {
@@ -262,6 +266,55 @@ textarea {
     flex-direction: row;
 }
 
+.profile-container {
+    padding: 50px 15%;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.profile-header {
+    background-color: #303F9F;
+    color: #FFF8E1;
+    text-align: center;
+    width: 100%;
+    padding: 20px 0;
+    margin: 50px 0;
+}
+
+.avatar {
+    height: 100px;
+    width: 100px;
+}
+
+.profile-body {
+    background-color: #FFF8E1;
+    width: 100%;
+    padding: 20px 0;
+    margin: 50px 0;
+}
+
+.profile-unit {
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+}
+
+.profile-key {
+    width: 20%;
+    font-weight: bold;
+}
+
+.profile-value {
+    width: 80%;
+}
+
+.verified {
+    color: #2E7D32;
+}
+
+.unverified {
+    color: #FFC107;
+}
+
 @media only screen and (max-height: 824px) {
     .short-html {
         height: 100%;
@@ -319,6 +372,18 @@ textarea {
     .cards {
         justify-content: center;
     }
+
+    .profile-container {
+        padding: 50px 10%;
+    }
+
+    .profile-unit {
+        flex-direction: column;
+    }
+
+    .profile-key, .profile-value {
+        width: 100%;
+    }
 }
 
 @media only screen and (max-width: 500px) {
@@ -336,6 +401,10 @@ textarea {
 
     .container {
         padding: 100px 50px;
+    }
+
+    .profile-container {
+        padding: 100px 10%;
     }
 }
 
