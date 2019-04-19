@@ -362,6 +362,14 @@ textarea {
     .client-menu {
         top: 69px;
     }
+
+    .admin-display {
+        width: 30%;
+    }
+
+    .admin-links {
+        width: 70%;
+    }
 }
 
 @media only screen and (max-width: 900px) {
