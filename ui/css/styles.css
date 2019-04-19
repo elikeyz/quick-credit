@@ -17,7 +17,7 @@ header {
 }
 
 .onboarding-display {
-    width: 80%;
+    width: 70%;
 }
 
 .onboarding-links {
@@ -167,7 +167,6 @@ textarea {
 .dropdown-content {
     display: block;
     position: fixed;
-    top: 55px;
     right: 0;
     float: right;
     background-color: #303F9F;
@@ -175,6 +174,10 @@ textarea {
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
     font-family: 'Open Sans', sans-serif;
+}
+
+.client-menu {
+    top: 55px;
 }
 
 .hidden {
@@ -251,6 +254,7 @@ textarea {
 
 .modal-content .form-unit {
     flex-direction: column;
+    -ms-flex-direction: column;
 }
 
 .modal-content label, .modal-content input, .modal-content textarea, .modal-content select {
@@ -264,6 +268,7 @@ textarea {
 
 .modal-content #btn-container {
     flex-direction: row;
+    -ms-flex-direction: row;
 }
 
 .profile-container {
@@ -296,6 +301,7 @@ textarea {
     padding: 20px;
     display: flex;
     flex-direction: row;
+    -ms-flex-direction: row;
 }
 
 .profile-key {
@@ -315,6 +321,31 @@ textarea {
     color: #FFC107;
 }
 
+.admin-display {
+    width: 40%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.admin-links {
+    width: 60%;
+}
+
+.admin-nav-item {
+    height: 100%;
+    width: 25%;
+    display: flex;
+    text-align: center;
+}
+
+.menu-icon {
+    display: none;
+}
+
+.admin-menu {
+    top: 55px;
+}
+
 @media only screen and (max-height: 824px) {
     .short-html {
         height: 100%;
@@ -328,7 +359,7 @@ textarea {
 }
 
 @media only screen and (max-width: 1034px) {
-    .dropdown-content {
+    .client-menu {
         top: 69px;
     }
 }
@@ -354,6 +385,7 @@ textarea {
 
     .form-unit {
         flex-direction: column;
+        -ms-flex-direction: column;
     }
 
     .form-btn-link {
@@ -379,6 +411,7 @@ textarea {
 
     .profile-unit {
         flex-direction: column;
+        -ms-flex-direction: column;
     }
 
     .profile-key, .profile-value {
@@ -399,17 +432,35 @@ textarea {
         width: 80%;
     }
 
-    .container {
+    .client-container {
         padding: 100px 50px;
     }
 
     .profile-container {
         padding: 100px 10%;
     }
+
+    .admin-links {
+        display: none;
+    }
+
+    .admin-display {
+        width: 100%;
+    }
+
+    .menu-icon {
+        display: block;
+    }
+}
+
+@media only screen and (min-width: 500px) {
+    .admin-menu {
+        display: none;
+    }
 }
 
 @media only screen and (max-width: 387px) {
-    .dropdown-content {
+    .client-menu {
         top: 91px;
     }
 
@@ -441,7 +492,13 @@ textarea {
 }
 
 @media only screen and (max-width: 249px) {
-    .dropdown-content {
+    .client-menu {
         top: 113px;
+    }
+}
+
+@media only screen and (max-width: 196px) {
+    .admin-menu {
+        top: 92px;
     }
 }

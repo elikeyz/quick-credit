@@ -5,9 +5,9 @@ modalBtn.addEventListener('click', (event) => {
     event.preventDefault();
     modal.style.display = 'block';
 
-    const form = document.getElementsByTagName('form')[0];
+    const cancelBtn = document.getElementById('cancel-btn');
 
-    form.addEventListener('reset', () => {
+    cancelBtn.addEventListener('click', () => {
         modal.style.display = 'none';
     });
 });
