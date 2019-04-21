@@ -14,6 +14,33 @@
     <title>Quick Credit | Clients</title>
 </head>
 <body>
+    <div id="my-modal" class="modal">
+        <div class="client-modal-content card">
+            <div class="profile-header">
+                <img class="avatar" src="./images/avatar.png" alt="Avatar">
+                <p><strong>John Doe</strong></p>
+                <p>johndoe25@gmail.com</p>
+            </div>
+            <div class="profile-body">
+                <div class="profile-unit">
+                    <p class="profile-key display-text"><span><i class="fas fa-home"></i></span> Residential Address</p>
+                    <p class="profile-value display-text">123, Acme Drive, Wakanda District.</p>
+                </div>
+                <div class="profile-unit">
+                    <p class="profile-key display-text"><span><i class="fas fa-city"></i></span> Office Address</p>
+                    <p class="profile-value display-text">456, Foobar Avenue, Vibranium Valley.</p>
+                </div>
+                <div class="profile-unit">
+                    <p class="profile-key display-text">Status</p>
+                    <p class="profile-value display-text">Unverified <span class="unverified"><i class="fas fa-exclamation-triangle"></i></span></p>
+                </div>
+                <div class="modal-btn-unit">
+                    <button class="form-button">Verify</button>
+                    <button class="form-button btn-two" id="cancel-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <header>
         <nav class="admin-display">
             <a class="header-text nav-link" href="./index.html"><span class="display-icon"><i class="fas fa-university"></i></span>QUICK CREDIT</a>
@@ -37,8 +64,59 @@
         </div>
         <div class="container">
             <h1><span><i class="fas fa-user"></i></span> Clients</h1>
+            <div class="cards">
+                <div class="card record">
+                    <div class="record-header">
+                        <img class="avatar" src="./images/avatar.png" alt="Avatar">
+                        <p><strong>John Doe</strong></p>
+                        <p>johndoe25@gmail.com</p>
+                    </div>
+                    <div class="record-body">
+                        <div class="record-unit">
+                            <p class="profile-key">Status</p>
+                            <p class="profile-value">Unverified <span class="unverified"><i class="fas fa-exclamation-triangle"></i></span></p>
+                        </div>
+                    </div>
+                    <div class="modal-btn-unit">
+                        <button class="form-button open-modal"><span><i class="fas fa-eye"></i></span> View</button>
+                    </div>
+                </div>
+                <div class="card record">
+                    <div class="record-header">
+                        <img class="avatar" src="./images/avatar.png" alt="Avatar">
+                        <p><strong>John Doe</strong></p>
+                        <p>johndoe25@gmail.com</p>
+                    </div>
+                    <div class="record-body">
+                        <div class="record-unit">
+                            <p class="profile-key">Status</p>
+                            <p class="profile-value">Unverified <span class="unverified"><i class="fas fa-exclamation-triangle"></i></span></p>
+                        </div>
+                    </div>
+                    <div class="modal-btn-unit">
+                        <button class="form-button open-modal"><span><i class="fas fa-eye"></i></span> View</button>
+                    </div>
+                </div>
+                <div class="card record">
+                    <div class="record-header">
+                        <img class="avatar" src="./images/avatar.png" alt="Avatar">
+                        <p><strong>John Doe</strong></p>
+                        <p>johndoe25@gmail.com</p>
+                    </div>
+                    <div class="record-body">
+                        <div class="record-unit">
+                            <p class="profile-key">Status</p>
+                            <p class="profile-value">Unverified <span class="unverified"><i class="fas fa-exclamation-triangle"></i></span></p>
+                        </div>
+                    </div>
+                    <div class="modal-btn-unit">
+                        <button class="form-button open-modal"><span><i class="fas fa-eye"></i></span> View</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
     <script src="js/dropdown.js"></script>
+    <script src="js/clients.js"></script>
 </body>
 </html>
