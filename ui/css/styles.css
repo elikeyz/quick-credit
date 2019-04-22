@@ -157,6 +157,7 @@ textarea {
 .btn-two {
     background-color: rgba(159, 168, 218, 0.5);
     color: #1A237E;
+    border: 1px solid #1A237E;
 }
 
 .container {
@@ -372,6 +373,47 @@ textarea {
     justify-content: center;
 }
 
+.application-button {
+    height: 40px;
+    width: 30%;
+    margin: 5px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.accept-btn {
+    background-color: #2E7D32;
+    color: #FFF8E1;
+    border: 1px solid #2E7D32;
+}
+
+.reject-btn {
+    background-color: #D32F2F;
+    color: #FFF8E1;
+    border: 1px solid #D32F2F;
+}
+
+.application-body {
+    background-color: #FFF8E1;
+    width: 100%;
+    padding: 20px 0;
+    margin: 0;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.columns {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    -ms-flex-direction: row;
+}
+
+.application-column {
+    width: 50%;
+}
+
 @media only screen and (max-height: 824px) {
     .short-html {
         height: 100%;
@@ -405,6 +447,15 @@ textarea {
 
     .record {
         width: 40%;
+    }
+
+    .columns {
+        flex-direction: column;
+        -ms-flex-direction: column;
+    }
+
+    .application-column {
+        width: 100%;
     }
 }
 
@@ -448,6 +499,10 @@ textarea {
         -ms-flex-direction: column;
     }
 
+    .profile-unit .key, .profile-unit .value {
+        width: 100%;
+    }
+
     .profile-key, .profile-value {
         width: 100%;
     }
@@ -484,6 +539,16 @@ textarea {
 
     .menu-icon {
         display: block;
+    }
+
+    .modal-btn-unit {
+        flex-direction: column;
+        -ms-flex-direction: column;
+        align-items: center;
+    }
+
+    .modal-btn-unit button {
+        width: 80%;
     }
 }
 
