@@ -161,7 +161,7 @@ textarea {
 }
 
 .container {
-    padding: 50px;
+    padding: 50px 5%;
     font-family: 'Open Sans', sans-serif;
 }
 
@@ -414,6 +414,57 @@ textarea {
     width: 50%;
 }
 
+.tabs {
+    height: 40px;
+    width: 100%;
+    display: flex;
+}
+
+.tab {
+    width: calc(100% / 3);
+    background-color: #1A237E;
+    color: #FFF8E1;
+    text-align: center;
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    cursor: pointer;
+}
+
+.tab:hover {
+    background-color: #303F9F;
+}
+
+.active-tab, .active-tab:hover {
+    background-color: rgb(159, 168, 218);
+    color: #1A237E;
+}
+
+.tab-text {
+    margin: 0;
+    padding: 10px;
+}
+
+.title-bar {
+    display: flex;
+    flex-direction: row;
+    -ms-flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.title-button {
+    height: 40px;
+    width: 300px;
+    margin: 5px;
+    border: 1px solid #1A237E;
+    border-radius: 20px;
+    background-color: #1A237E;
+    color: #FFF8E1;
+    cursor: pointer;
+    font-size: 15px;
+}
+
 @media only screen and (max-height: 824px) {
     .short-html {
         height: 100%;
@@ -548,6 +599,16 @@ textarea {
     }
 
     .modal-btn-unit button {
+        width: 80%;
+    }
+
+    .title-bar {
+        flex-direction: column;
+        -ms-flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .title-button {
         width: 80%;
     }
 }
