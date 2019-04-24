@@ -1,8 +1,9 @@
-const modal = document.getElementById('my-modal');
-const modalBtns = document.getElementsByClassName('open-modal');
+const modal = document.getElementById('loan-application-modal');
 
-for (let i = 0; i < modalBtns.length; i++) {
-    modalBtns[i].addEventListener('click', (event) => {
+for (let loanId = 1; loanId <= 3; loanId++) {
+    const modalBtn = document.getElementById(`open-modal-${loanId}`);
+
+    modalBtn.addEventListener('click', (event) => {
         event.preventDefault();
         modal.style.display = 'block';
     

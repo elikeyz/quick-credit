@@ -1,8 +1,9 @@
-const modal = document.getElementById('my-modal');
-const modalBtns = document.getElementsByClassName('open-modal');
+const modal = document.getElementById('client-modal');
 
-for (let i = 0; i < modalBtns.length; i++) {
-    modalBtns[i].addEventListener('click', (event) => {
+for (let clientId = 1; clientId <= 3; clientId++) {
+    const modalBtn = document.getElementById(`open-modal-${clientId}`);
+
+    modalBtn.addEventListener('click', (event) => {
         event.preventDefault();
         modal.style.display = 'block';
     

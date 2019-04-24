@@ -1,4 +1,4 @@
-const modal = document.getElementById('my-modal');
+const modal = document.getElementById('loan-application-form-modal');
 const modalBtn = document.getElementById('open-modal');
 
 modalBtn.addEventListener('click', (event) => {

@@ -14,6 +14,80 @@
     <title>Quick Credit | Loans</title>
 </head>
 <body>
+    <div id="loan-repayment-form-modal" class="modal">
+        <form class="modal-content card">
+            <div class="form-header">
+                <h1 class="display-text">Post Client Loan Repayment</h1>
+            </div>
+            <div class="form-unit">
+                <label for="email">Enter Client Email</label>
+                <input list="client-emails" type="email" id="email" placeholder="Email" required>
+                <datalist id="client-emails">
+                    <option value="johndoe25@gmail.com">
+                </datalist>
+            </div>
+            <div class="form-unit">
+                <label for="amount">Enter Repayment Amount</label>
+                <input type="number" id="amount" placeholder="Amount" required>
+            </div>
+            <div class="form-unit" id="btn-container">
+                <input type="submit" class="form-button btn-one" id="submit-btn" value="Post">
+                <input type="reset" class="form-button btn-two" id="cancel-form-btn" value="Cancel">
+            </div>
+        </form>
+    </div>
+    <div id="loan-modal" class="modal">
+        <div class="client-modal-content card">
+            <div class="profile-header">
+                <img class="avatar" src="./images/avatar.png" alt="Avatar">
+                <p><strong>John Doe</strong></p>
+                <p>johndoe25@gmail.com</p>
+            </div>
+            <div class="application-body">
+                <div class="columns">
+                    <div class="application-column">
+                        <div class="profile-unit">
+                            <p class="key display-text">Application Date</p>
+                            <p class="value display-text">01/01/2019, 08:00:00 GMT+0100</p>
+                        </div>
+                        <div class="profile-unit">
+                            <p class="key display-text">Amount</p>
+                            <p class="value display-text">N100,000.00</p>
+                        </div>
+                        <div class="profile-unit">
+                            <p class="key display-text">Tenor</p>
+                            <p class="value display-text">12 months</p>
+                        </div>
+                        <div class="profile-unit">
+                            <p class="key display-text">Balance</p>
+                            <p class="value display-text">N91,250.00</p>
+                        </div>
+                    </div>
+                    <div class="application-column">
+                        <div class="profile-unit">
+                            <p class="key display-text">Interest</p>
+                            <p class="value display-text">N5,000.00</p>
+                        </div>
+                        <div class="profile-unit">
+                            <p class="key display-text">Monthly payment</p>
+                            <p class="value display-text">N8,750.00</p>
+                        </div>
+                        <div class="profile-unit">
+                            <p class="key display-text">Last Repayment Amount</p>
+                            <p class="value display-text">N8,750.00</p>
+                        </div>
+                        <div class="profile-unit">
+                            <p class="key display-text">Last Repayment Date</p>
+                            <p class="value display-text">01/02/2019, 08:00:00 GMT+0100</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-btn-unit">
+                    <button class="form-button" id="cancel-btn">Back</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <header>
         <nav class="admin-display">
             <a class="header-text nav-link" href="./index.html"><span class="display-icon"><i class="fas fa-university"></i></span>QUICK CREDIT</a>
@@ -38,7 +112,7 @@
         <div class="container">
             <div class="title-bar">
                 <h1><span><i class="fas fa-money-check-alt"></i></span> Loans</h1>
-                <button class="title-button"><span><i class="fas fa-plus"></i></span> Post Client Loan Repayment</button>
+                <button class="title-button" id="open-form-modal"><span><i class="fas fa-plus"></i></span> Post Client Loan Repayment</button>
             </div>
             <div class="tabs">
                 <div class="tab active-tab" id="all-tab">
@@ -60,6 +134,10 @@
                     </div>
                     <div class="record-body">
                         <div class="record-unit">
+                            <p class="key">Application Date</p>
+                            <p class="value">01/01/2019, 08:00:00 GMT+0100</p>
+                        </div>
+                        <div class="record-unit">
                             <p class="key">Amount</p>
                             <p class="value">N100,000.00</p>
                         </div>
@@ -68,7 +146,7 @@
                             <p class="value">N91,250.00</p>
                         </div>
                         <div class="modal-btn-unit">
-                            <button class="form-button open-modal"><span><i class="fas fa-eye"></i></span> View</button>
+                            <button class="form-button" id="open-modal-1"><span><i class="fas fa-eye"></i></span> View</button>
                         </div>
                     </div>
                 </div>
@@ -80,6 +158,10 @@
                     </div>
                     <div class="record-body">
                         <div class="record-unit">
+                            <p class="key">Application Date</p>
+                            <p class="value">01/01/2019, 08:00:00 GMT+0100</p>
+                        </div>
+                        <div class="record-unit">
                             <p class="key">Amount</p>
                             <p class="value">N100,000.00</p>
                         </div>
@@ -88,7 +170,7 @@
                             <p class="value">N91,250.00</p>
                         </div>
                         <div class="modal-btn-unit">
-                            <button class="form-button open-modal"><span><i class="fas fa-eye"></i></span> View</button>
+                            <button class="form-button" id="open-modal-2"><span><i class="fas fa-eye"></i></span> View</button>
                         </div>
                     </div>
                 </div>
@@ -100,6 +182,10 @@
                     </div>
                     <div class="record-body">
                         <div class="record-unit">
+                            <p class="key">Application Date</p>
+                            <p class="value">01/01/2019, 08:00:00 GMT+0100</p>
+                        </div>
+                        <div class="record-unit">
                             <p class="key">Amount</p>
                             <p class="value">N100,000.00</p>
                         </div>
@@ -108,7 +194,7 @@
                             <p class="value">N91,250.00</p>
                         </div>
                         <div class="modal-btn-unit">
-                            <button class="form-button open-modal"><span><i class="fas fa-eye"></i></span> View</button>
+                            <button class="form-button" id="open-modal-3"><span><i class="fas fa-eye"></i></span> View</button>
                         </div>
                     </div>
                 </div>
@@ -116,6 +202,7 @@
         </div>
     </main>
     <script src="js/dropdown.js"></script>
+    <script src="js/loan-repay.js"></script>
     <script src="js/loans.js"></script>
 </body>
 </html>
