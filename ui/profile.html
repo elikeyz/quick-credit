@@ -24,7 +24,7 @@
                 <input type="number" id="amount" placeholder="Amount" required>
             </div>
             <div class="form-unit">
-                <label for="reason">Briefly explain reason for loan request.</label>
+                <label for="reason">Briefly explain reason for loan request. (max. 50 characters)</label>
                 <textarea id="reason" placeholder="Reason for loan request..." maxlength="50" required></textarea>
             </div>
             <div class="form-unit">
@@ -63,7 +63,7 @@
                 </li>
                 <li class="onboarding-nav-item" id="drop-btn">
                     <a class="nav-link nav-item" href="#">
-                        <span><i class="fas fa-arrow-down"></i></span> User
+                        <span><i class="fas fa-user"></i></span> User
                     </a>
                 </li>
             </ul>
@@ -71,7 +71,7 @@
     </header>
     <main>
         <div class="dropdown-content client-menu hidden">
-            <a href="./loan-repayments.html"><span><i class="fas fa-money-check-alt"></i></span> Loan Repayments</a>
+            <a href="./loan-repayments.html"><span><i class="fas fa-history"></i></span> Loan Repayments</a>
             <a href="./profile.html"><span><i class="fas fa-user"></i></span> Profile</a>
             <a href="./index.html"><span><i class="fas fa-sign-out-alt"></i></span> Logout</a>
         </div>
@@ -92,8 +92,90 @@
                     <p class="profile-value display-text">456, Foobar Avenue, Vibranium Valley.</p>
                 </div>
                 <div class="profile-unit">
-                    <p class="profile-key display-text">Status</p>
+                    <p class="profile-key display-text"><span><i class="fas fa-user"></i></span> Verification Status</p>
                     <p class="profile-value display-text">Verified <span class="verified"><i class="fas fa-check"></i></span></p>
+                </div>
+            </div>
+            <h2><span><i class="fas fa-briefcase"></i></span> My Loan Applications</h2>
+            <div class="application-body card">
+                <div class="columns">
+                    <div class="application-column">
+                        <div class="profile-unit">
+                            <p class="key display-text">Application Date</p>
+                            <p class="value display-text">01/01/2019, 08:00:00 GMT+0100</p>
+                        </div>
+                        <div class="profile-unit">
+                            <p class="key display-text">Amount</p>
+                            <p class="value display-text">N100,000.00</p>
+                        </div>
+                        <div class="profile-unit">
+                            <p class="key display-text">Tenor</p>
+                            <p class="value display-text">12 months</p>
+                        </div>
+                        <div class="profile-unit">
+                            <p class="key display-text">Status</p>
+                            <p class="value display-text">Pending <span class="unverified"><i class="fas fa-exclamation-triangle"></i></span></p>
+                        </div>
+                    </div>
+                    <div class="application-column">
+                        <div class="profile-unit">
+                            <p class="key display-text">Reason for Loan Request</p>
+                            <p class="value display-text">For business capital</p>
+                        </div>
+                        <div class="profile-unit">
+                            <p class="key display-text">Interest</p>
+                            <p class="value display-text">N5,000.00</p>
+                        </div>
+                        <div class="profile-unit">
+                            <p class="key display-text">Monthly payment</p>
+                            <p class="value display-text">N8,750.00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h2><span><i class="fas fa-money-check-alt"></i></span> My Loans</h2>
+            <div class="application-body card">
+                <div class="columns">
+                    <div class="application-column">
+                        <div class="profile-unit">
+                            <p class="key display-text">Application Date</p>
+                            <p class="value display-text">01/01/2019, 08:00:00 GMT+0100</p>
+                        </div>
+                        <div class="profile-unit">
+                            <p class="key display-text">Amount</p>
+                            <p class="value display-text">N100,000.00</p>
+                        </div>
+                        <div class="profile-unit">
+                            <p class="key display-text">Tenor</p>
+                            <p class="value display-text">12 months</p>
+                        </div>
+                        <div class="profile-unit">
+                            <p class="key display-text">Last Repayment Amount</p>
+                            <p class="value display-text">N8,750.00</p>
+                        </div>
+                        <div class="profile-unit">
+                            <p class="key display-text">Balance</p>
+                            <p class="value display-text">N91,250.00</p>
+                        </div>
+                    </div>
+                    <div class="application-column">
+                        <div class="profile-unit">
+                            <p class="key display-text">Reason for Loan Request</p>
+                            <p class="value display-text">For business capital</p>
+                        </div>
+                        <div class="profile-unit">
+                            <p class="key display-text">Interest</p>
+                            <p class="value display-text">N5,000.00</p>
+                        </div>
+                        <div class="profile-unit">
+                            <p class="key display-text">Monthly payment</p>
+                            <p class="value display-text">N8,750.00</p>
+                        </div>
+                        <div class="profile-unit">
+                            <p class="key display-text">Last Repayment Date</p>
+                            <p class="value display-text">01/02/2019, 08:00:00 GMT+0100</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

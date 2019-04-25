@@ -319,7 +319,11 @@ textarea {
 }
 
 .unverified {
-    color: #FFC107;
+    color: #FF6F00;
+}
+
+.rejected {
+    color: #D32F2F;
 }
 
 .admin-display {
