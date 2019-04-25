@@ -469,6 +469,49 @@ textarea {
     font-size: 15px;
 }
 
+.fade-in {
+    animation-name: fade-in;
+    -webkit-animation-name: fade-in;
+    animation-duration: 2s;
+    -webkit-animation-duration: 2s;
+}
+
+@keyframes fade-in {
+    from {
+        color: rgba(255, 248, 225, 0);
+    }
+    to {
+        color: rgba(255, 248, 225, 1);
+    }
+}
+
+@-webkit-keyframes fade-in {
+    from {
+        color: rgba(255, 248, 225, 0);
+    }
+    to {
+        color: rgba(255, 248, 225, 1);
+    }
+}
+
+@-moz-keyframes fade-in {
+    from {
+        color: rgba(255, 248, 225, 0);
+    }
+    to {
+        color: rgba(255, 248, 225, 1);
+    }
+}
+
+@-o-keyframes fade-in {
+    from {
+        color: rgba(255, 248, 225, 0);
+    }
+    to {
+        color: rgba(255, 248, 225, 1);
+    }
+}
+
 @media only screen and (max-height: 824px) {
     .short-html {
         height: 100%;
