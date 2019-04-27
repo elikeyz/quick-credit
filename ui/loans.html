@@ -21,14 +21,26 @@
             </div>
             <div class="form-unit">
                 <label for="email">Enter Client Email</label>
-                <input list="client-emails" type="email" id="email" placeholder="Email" required>
+                <input list="client-emails" type="email" id="email" placeholder="Client Email" required>
                 <datalist id="client-emails">
                     <option value="johndoe25@gmail.com">
                 </datalist>
             </div>
             <div class="form-unit">
+                <label for="client-name">Client Name</label>
+                <input type="text" id="client-name" placeholder="Client Name" disabled required>
+            </div>
+            <div class="form-unit">
+                <label for="loan-balance">Loan Balance</label>
+                <input type="number" id="loan-balance" placeholder="Loan Balance" disabled required>
+            </div>
+            <div class="form-unit">
+                <label for="monthly-installment">Monthly Installment</label>
+                <input type="number" id="monthly-installment" placeholder="Monthly Installment" disabled required>
+            </div>
+            <div class="form-unit">
                 <label for="amount">Enter Repayment Amount</label>
-                <input type="number" id="amount" placeholder="Amount" required>
+                <input type="number" id="amount" placeholder="Amount" disabled required>
             </div>
             <div class="form-unit" id="btn-container">
                 <input type="submit" class="form-button btn-one" id="submit-btn" value="Post">
