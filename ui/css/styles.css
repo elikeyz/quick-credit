@@ -267,7 +267,7 @@ textarea {
     align-self: center;
 }
 
-.modal-content #btn-container {
+#btn-container {
     flex-direction: row;
     -ms-flex-direction: row;
 }
@@ -472,8 +472,12 @@ textarea {
 .fade-in {
     animation-name: fade-in;
     -webkit-animation-name: fade-in;
+    -moz-animation-name: fade-in;
+    -o-animation-name: fade-in;
     animation-duration: 2s;
     -webkit-animation-duration: 2s;
+    -moz-animation-duration: 2s;
+    -o-animation-duration: 2s;
 }
 
 @keyframes fade-in {
@@ -571,9 +575,8 @@ textarea {
         -ms-flex-direction: column;
     }
 
-    .form-btn-link {
-        align-self: center;
-        width: 60%;
+    .form-button {
+        width: 50%;
     }
 
     .label, input, textarea {
@@ -607,10 +610,6 @@ textarea {
 }
 
 @media only screen and (max-width: 500px) {
-    .form-btn-link {
-        width: 80%;
-    }
-
     form, .client-modal-content {
         width: 80%;
     }
@@ -687,10 +686,6 @@ textarea {
 
     form, .client-modal-content {
         width: 90%;
-    }
-
-    .form-btn-link {
-        width: 100%;
     }
 
     .record {
