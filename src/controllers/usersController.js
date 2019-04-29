@@ -18,8 +18,27 @@ const signup = (req, res) => {
   });
 };
 
+const login = (req, res) => {
+  res.status(200).send({
+    status: 200,
+    data: {
+      token: '45erkjherht45495783',
+      id: req.user.id,
+      email: req.user.email,
+      firstName: req.user.firstName,
+      lastName: req.user.lastName,
+      password: req.body.password,
+      address: req.user.address,
+      workAddress: req.user.workAddress,
+      status: req.user.status,
+      isAdmin: req.user.isAdmin,
+    },
+  });
+};
+
 const usersController = {
   signup,
+  login,
 };
 
 export default usersController;

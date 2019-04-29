@@ -1,10 +1,10 @@
 const signupValidate2 = (req, res, next) => {
-  if (!req.body.address.trim()) {
+  if (!req.body.address || !req.body.address.trim()) {
     res.status(400).send({
       status: 400,
       error: 'You did not enter the home address',
     });
-  } else if (!req.body.workAddress.trim()) {
+  } else if (!req.body.workAddress || !req.body.workAddress.trim()) {
     res.status(400).send({
       status: 400,
       error: 'You did not enter the work address',

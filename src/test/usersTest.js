@@ -41,10 +41,50 @@ describe('POST /auth/signup', () => {
       });
   });
 
+  it('it should fail if email is not defined', (done) => {
+    const user = {
+      firstName: 'Elijah',
+      lastName: 'Enuem-Udogu',
+      password: 'mastahacka',
+      address: 'No. 11, Elaiho Lane.',
+      workAddress: 'Shopping Complex, EDPA.',
+    };
+
+    chai.request(app)
+      .post('/api/v1/auth/signup')
+      .type('form')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('You did not enter the email');
+        done();
+      });
+  });
+
   it('it should fail if first name is not specified', (done) => {
     const user = {
       email: 'koppter.kom@gmail.com',
       firstName: '',
+      lastName: 'Enuem-Udogu',
+      password: 'mastahacka',
+      address: 'No. 11, Elaiho Lane.',
+      workAddress: 'Shopping Complex, EDPA.',
+    };
+
+    chai.request(app)
+      .post('/api/v1/auth/signup')
+      .type('form')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('You did not enter the first name');
+        done();
+      });
+  });
+
+  it('it should fail if first name is not defined', (done) => {
+    const user = {
+      email: 'koppter.kom@gmail.com',
       lastName: 'Enuem-Udogu',
       password: 'mastahacka',
       address: 'No. 11, Elaiho Lane.',
@@ -67,6 +107,26 @@ describe('POST /auth/signup', () => {
       email: 'koppter.kom@gmail.com',
       firstName: 'Elijah',
       lastName: '',
+      password: 'mastahacka',
+      address: 'No. 11, Elaiho Lane.',
+      workAddress: 'Shopping Complex, EDPA.',
+    };
+
+    chai.request(app)
+      .post('/api/v1/auth/signup')
+      .type('form')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('You did not enter the last name');
+        done();
+      });
+  });
+
+  it('it should fail if last name is not defined', (done) => {
+    const user = {
+      email: 'koppter.kom@gmail.com',
+      firstName: 'Elijah',
       password: 'mastahacka',
       address: 'No. 11, Elaiho Lane.',
       workAddress: 'Shopping Complex, EDPA.',
@@ -125,6 +185,26 @@ describe('POST /auth/signup', () => {
       });
   });
 
+  it('it should fail if home address is not defined', (done) => {
+    const user = {
+      email: 'koppter.kom@gmail.com',
+      firstName: 'Elijah',
+      lastName: 'Enuem-Udogu',
+      password: 'mastahacka',
+      workAddress: 'Shopping Complex, EDPA.',
+    };
+
+    chai.request(app)
+      .post('/api/v1/auth/signup')
+      .type('form')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('You did not enter the home address');
+        done();
+      });
+  });
+
   it('it should fail if work address is not specified', (done) => {
     const user = {
       email: 'koppter.kom@gmail.com',
@@ -133,6 +213,26 @@ describe('POST /auth/signup', () => {
       password: 'mastahacka',
       address: 'No. 11, Elaiho Lane.',
       workAddress: '',
+    };
+
+    chai.request(app)
+      .post('/api/v1/auth/signup')
+      .type('form')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('You did not enter the work address');
+        done();
+      });
+  });
+
+  it('it should fail if work address is not defined', (done) => {
+    const user = {
+      email: 'koppter.kom@gmail.com',
+      firstName: 'Elijah',
+      lastName: 'Enuem-Udogu',
+      password: 'mastahacka',
+      address: 'No. 11, Elaiho Lane.',
     };
 
     chai.request(app)
@@ -208,6 +308,112 @@ describe('POST /auth/signup', () => {
         res.body.data.should.be.a('object');
         res.body.data.should.have.property('token');
         res.body.data.should.have.property('email').eql('koppter.kom@gmail.com');
+        done();
+      });
+  });
+});
+
+describe('POST /auth/signin', () => {
+  it('it should fail if the email is not provided', (done) => {
+    const userData = {
+      email: '',
+      password: 'johndoe25',
+    };
+
+    chai.request(app)
+      .post('/api/v1/auth/signin')
+      .type('form')
+      .send(userData)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('You did not enter your email');
+        done();
+      });
+  });
+
+  it('it should fail if the email is not defined', (done) => {
+    const userData = {
+      password: 'johndoe25',
+    };
+
+    chai.request(app)
+      .post('/api/v1/auth/signin')
+      .type('form')
+      .send(userData)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('You did not enter your email');
+        done();
+      });
+  });
+
+  it('it should fail if the password is not provided', (done) => {
+    const userData = {
+      email: 'johndoe25@gmail.com',
+      password: '',
+    };
+
+    chai.request(app)
+      .post('/api/v1/auth/signin')
+      .type('form')
+      .send(userData)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('You did not enter your password');
+        done();
+      });
+  });
+
+  it('it should fail if the email is not correct', (done) => {
+    const userData = {
+      email: 'koppter.kom@gmail.com',
+      password: 'johndoe25',
+    };
+
+    chai.request(app)
+      .post('/api/v1/auth/signin')
+      .type('form')
+      .send(userData)
+      .end((err, res) => {
+        res.should.have.status(401);
+        res.body.should.have.property('error').eql('The email or password you entered is incorrect');
+        done();
+      });
+  });
+
+  it('it should fail if the password is not correct', (done) => {
+    const userData = {
+      email: 'johndoe25@gmail.com',
+      password: 'mastahacka',
+    };
+
+    chai.request(app)
+      .post('/api/v1/auth/signin')
+      .type('form')
+      .send(userData)
+      .end((err, res) => {
+        res.should.have.status(401);
+        res.body.should.have.property('error').eql('The email or password you entered is incorrect');
+        done();
+      });
+  });
+
+  it('it should login the user successfully', (done) => {
+    const userData = {
+      email: 'johndoe25@gmail.com',
+      password: 'johndoe25',
+    };
+
+    chai.request(app)
+      .post('/api/v1/auth/signin')
+      .type('form')
+      .send(userData)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('data');
+        res.body.data.should.be.a('object');
+        res.body.data.should.have.property('token');
+        res.body.data.should.have.property('email').eql('johndoe25@gmail.com');
         done();
       });
   });
