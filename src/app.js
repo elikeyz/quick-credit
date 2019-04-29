@@ -11,7 +11,9 @@ app.use('/api/v1', router);
 app.get('/', (req, res) => {
   res.status(200).send({
     status: 200,
-    data: 'Welcome to Quick Credit API Version 1. Written by Elijah Enuem-Udogu',
+    data: {
+      message: 'Welcome to Quick Credit API Version 1. Written by Elijah Enuem-Udogu',
+    },
   });
 });
 
