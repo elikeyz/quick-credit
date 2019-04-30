@@ -50,7 +50,7 @@ const login = (req, res) => {
 
 const verifyClient = (req, res) => {
   users.forEach((user, userIndex) => {
-    if (user.email === req.params['userEmail']) {
+    if (user.email === req.params.userEmail) {
       const client = {
         id: user.id,
         email: user.email,

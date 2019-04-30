@@ -436,6 +436,7 @@ describe('PATCH /users/:userEmail/verify', () => {
       .end((err, res) => {
         res.should.have.status(200);
         res.body.should.have.property('data');
+        res.body.data.should.be.a('object');
         res.body.data.should.have.property('email').eql('janedoe25@gmail.com');
         res.body.data.should.have.property('status').eql('verified');
         done();

@@ -19,6 +19,7 @@ app.get('/', (req, res) => {
 
 const server = app.listen((process.env.PORT || 3000), () => {
   const { port } = server.address();
+  // eslint-disable-next-line no-console
   console.log(`Quick Credit app listening at port ${port}`);
 });
 
