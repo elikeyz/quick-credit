@@ -418,3 +418,27 @@ describe('POST /auth/signin', () => {
       });
   });
 });
+
+describe('PATCH /users/:userEmail/verify', () => {
+  it('it should fail if the client does not exist', (done) => {
+    chai.request(app)
+      .patch('/api/v1/users/kay1.kom@gmail.com/verify')
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.have.property('error').eql('Client does not exist');
+        done();
+      });
+  });
+
+  it('it should verify a client successfully', (done) => {
+    chai.request(app)
+      .patch('/api/v1/users/janedoe25@gmail.com/verify')
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('data');
+        res.body.data.should.have.property('email').eql('janedoe25@gmail.com');
+        res.body.data.should.have.property('status').eql('verified');
+        done();
+      });
+  });
+});
