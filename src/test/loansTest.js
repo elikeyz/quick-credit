@@ -50,6 +50,70 @@ describe('GET /loans/:loanId', () => {
 });
 
 describe('GET /loans', () => {
+  it('it should fail if an invalid value is passed to the status query', (done) => {
+    chai.request(app)
+      .get('/api/v1/loans?status=approv')
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('The only valid values for the status query are \'approved\', \'rejected\' and \'pending\'');
+        done();
+      });
+  });
+
+  it('it should fail if an invalid value is passed to the repaid query', (done) => {
+    chai.request(app)
+      .get('/api/v1/loans?repaid=fal')
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('The only valid values for the repaid query are \'true\' and \'false\'');
+        done();
+      });
+  });
+
+  it('it should get all the approved loan applications successfully', (done) => {
+    chai.request(app)
+      .get('/api/v1/loans?status=approved')
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('data');
+        res.body.data.should.be.a('array');
+        done();
+      })
+  });
+
+  it('it should get all the rejected loan applications and unrepaid loans successfully', (done) => {
+    chai.request(app)
+      .get('/api/v1/loans?repaid=false')
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('data');
+        res.body.data.should.be.a('array');
+        done();
+      });
+  });
+
+  it('it should get all the current loans successfully', (done) => {
+    chai.request(app)
+      .get('/api/v1/loans?status=approved&repaid=false')
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('data');
+        res.body.data.should.be.a('array');
+        done();
+      });
+  });
+
+  it('it should get all the repaid loans successfully', (done) => {
+    chai.request(app)
+      .get('/api/v1/loans?status=approved&repaid=true')
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('data');
+        res.body.data.should.be.a('array');
+        done();
+      });
+  });
+
   it('it should get all the loans successfully', (done) => {
     chai.request(app)
       .get('/api/v1/loans')

@@ -9,6 +9,7 @@ import loginVerify from './verifiers/loginVerify';
 import checkIfClientExists from './verifiers/checkIfClientExists';
 import loanIdValidate from './validators/loanIdValidate';
 import checkIfLoanExists from './verifiers/checkIfLoanExists';
+import loansValidate from './validators/loansValidate';
 
 const router = express.Router();
 const { signup, login, verifyClient } = usersController;
@@ -18,6 +19,6 @@ router.post('/auth/signup', signupValidate, signupValidate2, signupVerify, signu
 router.post('/auth/signin', loginValidate, loginVerify, login);
 router.patch('/users/:userEmail/verify', checkIfClientExists, verifyClient);
 router.get('/loans/:loanId', loanIdValidate, checkIfLoanExists, getALoan);
-router.get('/loans', getLoans);
+router.get('/loans', loansValidate, getLoans);
 
 export default router;
