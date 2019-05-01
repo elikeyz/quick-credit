@@ -1,7 +1,7 @@
 import loans from '../../models/loans';
 
 const checkIfLoanExists = (req, res, next) => {
-  const loanMatch = loans.filter(loan => loan.id === Number(req.params.loanId));
+  const loanMatch = loans.filter(loan => loan.id === parseInt(req.params.loanId, 10));
   if (loanMatch.length < 1) {
     res.status(404).send({
       status: 404,

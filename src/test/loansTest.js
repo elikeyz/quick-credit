@@ -6,6 +6,26 @@ should();
 chai.use(chaiHttp);
 
 describe('GET /loans/:loanId', () => {
+  it('it should fail if a non-numerical character is provided as the Loan ID', (done) => {
+    chai.request(app)
+      .get('/api/v1/loans/a')
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('The Loan ID parameter must be an integer');
+        done();
+      });
+  });
+
+  it('it should fail if a floating point number is provided as the Loan ID', (done) => {
+    chai.request(app)
+      .get('/api/v1/loans/1.1')
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('The Loan ID parameter must be an integer');
+        done();
+      });
+  });
+
   it('it should fail if the loan does not exist', (done) => {
     chai.request(app)
       .get('/api/v1/loans/50')

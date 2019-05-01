@@ -7,6 +7,7 @@ import signupVerify from './verifiers/signupVerify';
 import loginValidate from './validators/loginValidate';
 import loginVerify from './verifiers/loginVerify';
 import checkIfClientExists from './verifiers/checkIfClientExists';
+import loanIdValidate from './validators/loanIdValidate';
 import checkIfLoanExists from './verifiers/checkIfLoanExists';
 
 const router = express.Router();
@@ -16,6 +17,6 @@ const { getALoan } = loansController;
 router.post('/auth/signup', signupValidate, signupValidate2, signupVerify, signup);
 router.post('/auth/signin', loginValidate, loginVerify, login);
 router.patch('/users/:userEmail/verify', checkIfClientExists, verifyClient);
-router.get('/loans/:loanId', checkIfLoanExists, getALoan);
+router.get('/loans/:loanId', loanIdValidate, checkIfLoanExists, getALoan);
 
 export default router;
