@@ -12,11 +12,12 @@ import checkIfLoanExists from './verifiers/checkIfLoanExists';
 
 const router = express.Router();
 const { signup, login, verifyClient } = usersController;
-const { getALoan } = loansController;
+const { getALoan, getLoans } = loansController;
 
 router.post('/auth/signup', signupValidate, signupValidate2, signupVerify, signup);
 router.post('/auth/signin', loginValidate, loginVerify, login);
 router.patch('/users/:userEmail/verify', checkIfClientExists, verifyClient);
 router.get('/loans/:loanId', loanIdValidate, checkIfLoanExists, getALoan);
+router.get('/loans', getLoans);
 
 export default router;

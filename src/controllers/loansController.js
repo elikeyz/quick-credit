@@ -1,3 +1,5 @@
+import loans from '../models/loans';
+
 const getALoan = (req, res) => {
   res.status(200).send({
     status: 200,
@@ -5,8 +7,17 @@ const getALoan = (req, res) => {
   });
 };
 
+const getLoans = (req, res) => {
+  const loansNeeded = [...loans];
+  res.status(200).send({
+    status: 200,
+    data: loansNeeded,
+  });
+};
+
 const loansController = {
   getALoan,
+  getLoans,
 };
 
 export default loansController;

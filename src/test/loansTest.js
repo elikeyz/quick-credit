@@ -48,3 +48,16 @@ describe('GET /loans/:loanId', () => {
       });
   });
 });
+
+describe('GET /loans', () => {
+  it('it should get all the loans successfully', (done) => {
+    chai.request(app)
+      .get('/api/v1/loans')
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('data');
+        res.body.data.should.be.a('array');
+        done();
+      });
+  });
+});
