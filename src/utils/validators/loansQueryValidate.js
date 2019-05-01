@@ -1,4 +1,4 @@
-const loansValidate = (req, res, next) => {
+const loansQueryValidate = (req, res, next) => {
   if (req.query.status && req.query.status !== 'approved' && req.query.status !== 'rejected' && req.query.status !== 'pending') {
     res.status(400).send({
       status: 400,
@@ -14,4 +14,4 @@ const loansValidate = (req, res, next) => {
   }
 };
 
-export default loansValidate;
+export default loansQueryValidate;

@@ -78,7 +78,7 @@ describe('GET /loans', () => {
         res.body.should.have.property('data');
         res.body.data.should.be.a('array');
         done();
-      })
+      });
   });
 
   it('it should get all the rejected loan applications and unrepaid loans successfully', (done) => {
