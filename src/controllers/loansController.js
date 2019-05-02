@@ -1,4 +1,5 @@
 import loans from '../models/loans';
+import roundOfTo2dp from '../utils/roundOfTo2dp';
 
 const getALoan = (req, res) => {
   res.status(200).send({
@@ -24,9 +25,33 @@ const getLoans = (req, res) => {
   });
 };
 
+const requestLoan = (req, res) => {
+  const newLoan = {
+    id: loans.length + 1,
+    user: req.user.email,
+    firstName: req.user.firstName,
+    lastName: req.user.lastName,
+    createdOn: new Date().toLocaleString(),
+    purpose: req.body.purpose,
+    status: 'pending',
+    repaid: false,
+    tenor: parseInt(req.body.tenor, 10),
+    amount: roundOfTo2dp(req.body.amount),
+    paymentInstallment: roundOfTo2dp(Number(req.body.amount) * 1.05 / parseInt(req.body.tenor, 10)),
+    balance: roundOfTo2dp(Number(req.body.amount) * 1.05),
+    interest: roundOfTo2dp(Number(req.body.amount) * 0.05),
+  };
+  loans.push(newLoan);
+  res.status(201).send({
+    status: 201,
+    data: newLoan,
+  });
+};
+
 const loansController = {
   getALoan,
   getLoans,
+  requestLoan,
 };
 
 export default loansController;

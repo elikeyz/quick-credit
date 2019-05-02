@@ -125,3 +125,328 @@ describe('GET /loans', () => {
       });
   });
 });
+
+describe('POST /loans', () => {
+  it('it should fail if user email is not defined', (done) => {
+    const loanData = {
+      purpose: 'Business capital',
+      amount: 10000,
+      tenor: 3,
+    };
+
+    chai.request(app)
+      .post('/api/v1/loans')
+      .type('form')
+      .send(loanData)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('You did not specify the user email');
+        done();
+      });
+  });
+
+  it('it should fail if user email is not specified', (done) => {
+    const loanData = {
+      user: '',
+      purpose: 'Business capital',
+      amount: 10000,
+      tenor: 3,
+    };
+
+    chai.request(app)
+      .post('/api/v1/loans')
+      .type('form')
+      .send(loanData)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('You did not specify the user email');
+        done();
+      });
+  });
+
+  it('it should fail if loan purpose is not defined', (done) => {
+    const loanData = {
+      user: 'nikobellic25@gmail.com',
+      amount: 10000,
+      tenor: 3,
+    };
+
+    chai.request(app)
+      .post('/api/v1/loans')
+      .type('form')
+      .send(loanData)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('You did not specify the purpose of loan request');
+        done();
+      });
+  });
+
+  it('it should fail if loan purpose is not specified', (done) => {
+    const loanData = {
+      user: 'nikobellic25@gmail.com',
+      purpose: '',
+      amount: 10000,
+      tenor: 3,
+    };
+
+    chai.request(app)
+      .post('/api/v1/loans')
+      .type('form')
+      .send(loanData)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('You did not specify the purpose of loan request');
+        done();
+      });
+  });
+
+  it('it should fail if loan amount is not defined', (done) => {
+    const loanData = {
+      user: 'nikobellic25@gmail.com',
+      purpose: 'Business capital',
+      tenor: 3,
+    };
+
+    chai.request(app)
+      .post('/api/v1/loans')
+      .type('form')
+      .send(loanData)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('You did not specify the loan amount requested');
+        done();
+      });
+  });
+
+  it('it should fail if loan amount is not specified', (done) => {
+    const loanData = {
+      user: 'nikobellic25@gmail.com',
+      purpose: 'Business capital',
+      amount: '',
+      tenor: 3,
+    };
+
+    chai.request(app)
+      .post('/api/v1/loans')
+      .type('form')
+      .send(loanData)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('You did not specify the loan amount requested');
+        done();
+      });
+  });
+
+  it('it should fail if tenor is not defined', (done) => {
+    const loanData = {
+      user: 'nikobellic25@gmail.com',
+      purpose: 'Business capital',
+      amount: 10000,
+    };
+
+    chai.request(app)
+      .post('/api/v1/loans')
+      .type('form')
+      .send(loanData)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('You did not specify the number of months in the tenor period');
+        done();
+      });
+  });
+
+  it('it should fail if tenor is not specified', (done) => {
+    const loanData = {
+      user: 'nikobellic25@gmail.com',
+      purpose: 'Business capital',
+      amount: 10000,
+      tenor: '',
+    };
+
+    chai.request(app)
+      .post('/api/v1/loans')
+      .type('form')
+      .send(loanData)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('You did not specify the number of months in the tenor period');
+        done();
+      });
+  });
+
+  it('it should fail if the loan amount specified is not a valid number', (done) => {
+    const loanData = {
+      user: 'nikobellic25@gmail.com',
+      purpose: 'Business capital',
+      amount: 'sdkfl-=2',
+      tenor: 3,
+    };
+
+    chai.request(app)
+      .post('/api/v1/loans')
+      .type('form')
+      .send(loanData)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('The loan amount specified must be a valid number');
+        done();
+      });
+  });
+
+  it('it should fail if the loan amount specified is less than or equal to 0', (done) => {
+    const loanData = {
+      user: 'nikobellic25@gmail.com',
+      purpose: 'Business capital',
+      amount: 0,
+      tenor: 3,
+    };
+
+    chai.request(app)
+      .post('/api/v1/loans')
+      .type('form')
+      .send(loanData)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('The loan amount specified must be greater than 0');
+        done();
+      });
+  });
+
+  it('it should fail if the tenor specified is not a valid number', (done) => {
+    const loanData = {
+      user: 'nikobellic25@gmail.com',
+      purpose: 'Business capital',
+      amount: 10000,
+      tenor: 'sdsjdf',
+    };
+
+    chai.request(app)
+      .post('/api/v1/loans')
+      .type('form')
+      .send(loanData)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('The tenor specified must be an integer');
+        done();
+      });
+  });
+
+  it('it should fail if the tenor specified is greater than 12', (done) => {
+    const loanData = {
+      user: 'nikobellic25@gmail.com',
+      purpose: 'Business capital',
+      amount: 10000,
+      tenor: 234,
+    };
+
+    chai.request(app)
+      .post('/api/v1/loans')
+      .type('form')
+      .send(loanData)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('The tenor specified must be in the range of 1 to 12');
+        done();
+      });
+  });
+
+  it('it should fail if the tenor specified is less than 1', (done) => {
+    const loanData = {
+      user: 'nikobellic25@gmail.com',
+      purpose: 'Business capital',
+      amount: 10000,
+      tenor: 0,
+    };
+
+    chai.request(app)
+      .post('/api/v1/loans')
+      .type('form')
+      .send(loanData)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('error').eql('The tenor specified must be in the range of 1 to 12');
+        done();
+      });
+  });
+
+  it('it should fail if the client does not exist', (done) => {
+    const loanData = {
+      user: 'unknownclient@gmail.com',
+      purpose: 'Business capital',
+      amount: 10000,
+      tenor: 3,
+    };
+
+    chai.request(app)
+      .post('/api/v1/loans')
+      .type('form')
+      .send(loanData)
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.have.property('error').eql('Client does not exist');
+        done();
+      });
+  });
+
+  it('it should fail if the client info has not been verified', (done) => {
+    const loanData = {
+      user: 'hansolo25@gmail.com',
+      purpose: 'Business capital',
+      amount: 10000,
+      tenor: 3,
+    };
+
+    chai.request(app)
+      .post('/api/v1/loans')
+      .type('form')
+      .send(loanData)
+      .end((err, res) => {
+        res.should.have.status(403);
+        res.body.should.have.property('error').eql('You cannot apply for a loan until your user details are verified');
+        done();
+      });
+  });
+
+  it('it should fail if the client has an outstanding loan', (done) => {
+    const loanData = {
+      user: 'johndoe25@gmail.com',
+      purpose: 'Business capital',
+      amount: 10000,
+      tenor: 3,
+    };
+
+    chai.request(app)
+      .post('/api/v1/loans')
+      .type('form')
+      .send(loanData)
+      .end((err, res) => {
+        res.should.have.status(403);
+        res.body.should.have.property('error').eql('You cannot apply for more than one loan at a time');
+        done();
+      });
+  });
+
+  it('it should create a new loan successfully', (done) => {
+    const loanData = {
+      user: 'nikobellic25@gmail.com',
+      purpose: 'Business capital',
+      amount: 10000,
+      tenor: 3,
+    };
+
+    chai.request(app)
+      .post('/api/v1/loans')
+      .type('form')
+      .send(loanData)
+      .end((err, res) => {
+        res.should.have.status(201);
+        res.body.should.have.property('data');
+        res.body.data.should.be.a('object');
+        res.body.data.should.have.property('user').eql('nikobellic25@gmail.com');
+        res.body.data.should.have.property('amount').eql(10000);
+        res.body.data.should.have.property('tenor').eql(3);
+        done();
+      });
+  });
+});

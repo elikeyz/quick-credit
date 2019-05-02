@@ -15,18 +15,7 @@ const signup = (req, res) => {
   users.push(newUser);
   res.status(201).send({
     status: 201,
-    data: {
-      token: '45erkjherht45495783',
-      id: users.length,
-      email: req.body.email.trim(),
-      firstName: req.body.firstName.trim(),
-      lastName: req.body.lastName.trim(),
-      password: req.body.password,
-      address: req.body.address.trim(),
-      workAddress: req.body.workAddress.trim(),
-      status: 'unverified',
-      isAdmin: false,
-    },
+    data: { token: '45erkjherht45495783', ...newUser },
   });
 };
 
