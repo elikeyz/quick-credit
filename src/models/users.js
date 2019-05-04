@@ -54,6 +54,17 @@ const users = [
     status: 'unverified',
     isAdmin: false,
   },
+  {
+    id: 6,
+    email: 'carljohnson25@gmail.com',
+    firstName: 'Carl',
+    lastName: 'Johnson',
+    password: 'carljohnson25',
+    address: 'No. 123, Acme Drive, Wakanda District',
+    workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+    status: 'unverified',
+    isAdmin: false,
+  },
 ];
 
 export default users;

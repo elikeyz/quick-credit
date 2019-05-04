@@ -14,10 +14,13 @@ import loansQueryValidate from './validators/loansQueryValidate';
 import loanValidate from './validators/loanValidate';
 import loanValidate2 from './validators/loanValidate2';
 import loanVerify from './verifiers/loanVerify';
+import loanResponseValidate from './validators/loanResponseValidate';
 
 const router = express.Router();
 const { signup, login, verifyClient } = usersController;
-const { getALoan, getLoans, requestLoan } = loansController;
+const {
+  getALoan, getLoans, requestLoan, respondToLoanRequest,
+} = loansController;
 const { getLoanRepayments } = repaymentsController;
 
 router.post('/auth/signup', signupValidate, signupValidate2, signupVerify, signup);
@@ -27,5 +30,6 @@ router.get('/loans/:loanId', loanIdValidate, checkIfLoanExists, getALoan);
 router.get('/loans', loansQueryValidate, getLoans);
 router.get('/loans/:loanId/repayments', loanIdValidate, checkIfLoanExists, getLoanRepayments);
 router.post('/loans', loanValidate, loanValidate2, loanVerify, requestLoan);
+router.patch('/loans/:loanId', loanIdValidate, checkIfLoanExists, loanResponseValidate, respondToLoanRequest);
 
 export default router;

@@ -32,6 +32,7 @@ const requestLoan = (req, res) => {
     firstName: req.user.firstName,
     lastName: req.user.lastName,
     createdOn: new Date().toLocaleString(),
+    updatedOn: new Date().toLocaleString(),
     purpose: req.body.purpose,
     status: 'pending',
     repaid: false,
@@ -48,10 +49,39 @@ const requestLoan = (req, res) => {
   });
 };
 
+const respondToLoanRequest = (req, res) => {
+  loans.forEach((loan, loanIndex) => {
+    if (loan.id === parseInt(req.params.loanId, 10)) {
+      const newLoan = {
+        id: req.loan.id,
+        user: req.loan.email,
+        firstName: req.loan.firstName,
+        lastName: req.loan.lastName,
+        createdOn: req.loan.createdOn,
+        updatedOn: new Date().toLocaleString(),
+        purpose: req.loan.purpose,
+        status: req.body.status,
+        repaid: req.loan.repaid,
+        tenor: req.loan.tenor,
+        amount: req.loan.amount,
+        paymentInstallment: req.loan.paymentInstallment,
+        balance: req.loan.balance,
+        interest: req.loan.interest,
+      };
+      loans.splice(loanIndex, 1, newLoan);
+      res.status(200).send({
+        status: 200,
+        data: newLoan,
+      });
+    }
+  });
+};
+
 const loansController = {
   getALoan,
   getLoans,
   requestLoan,
+  respondToLoanRequest,
 };
 
 export default loansController;
