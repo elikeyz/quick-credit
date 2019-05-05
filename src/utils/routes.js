@@ -15,13 +15,15 @@ import loanValidate from './validators/loanValidate';
 import loanValidate2 from './validators/loanValidate2';
 import loanVerify from './verifiers/loanVerify';
 import loanResponseValidate from './validators/loanResponseValidate';
+import repaymentValidate from './validators/repaymentValidate';
+import repaymentValidate2 from './validators/repaymentValidate2';
 
 const router = express.Router();
 const { signup, login, verifyClient } = usersController;
 const {
   getALoan, getLoans, requestLoan, respondToLoanRequest,
 } = loansController;
-const { getLoanRepayments } = repaymentsController;
+const { getLoanRepayments, postClientRepaymentTranx } = repaymentsController;
 
 router.post('/auth/signup', signupValidate, signupValidate2, signupVerify, signup);
 router.post('/auth/signin', loginValidate, loginVerify, login);
@@ -31,5 +33,6 @@ router.get('/loans', loansQueryValidate, getLoans);
 router.get('/loans/:loanId/repayments', loanIdValidate, checkIfLoanExists, getLoanRepayments);
 router.post('/loans', loanValidate, loanValidate2, loanVerify, requestLoan);
 router.patch('/loans/:loanId', loanIdValidate, checkIfLoanExists, loanResponseValidate, respondToLoanRequest);
+router.post('/loans/:loanId/repayments', loanIdValidate, checkIfLoanExists, repaymentValidate, repaymentValidate2, postClientRepaymentTranx);
 
 export default router;

@@ -65,6 +65,17 @@ const users = [
     status: 'unverified',
     isAdmin: false,
   },
+  {
+    id: 6,
+    email: 'tommyvercetti25@gmail.com',
+    firstName: 'Tommy',
+    lastName: 'Vercetti',
+    password: 'tommyvercetti25',
+    address: 'No. 123, Acme Drive, Wakanda District',
+    workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+    status: 'verified',
+    isAdmin: false,
+  },
 ];
 
 export default users;
