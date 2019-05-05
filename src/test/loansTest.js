@@ -391,6 +391,25 @@ describe('Loans', () => {
         });
     });
 
+    it('it should fail if the specified email belongs to an admin account', (done) => {
+      const loanData = {
+        user: 'quickcredit2019@gmail.com',
+        purpose: 'Business capital',
+        amount: 10000,
+        tenor: 3,
+      };
+
+      chai.request(app)
+        .post('/api/v1/loans')
+        .type('form')
+        .send(loanData)
+        .end((err, res) => {
+          res.should.have.status(403);
+          res.body.should.have.property('error').eql('You cannot apply for a loan with an admin account');
+          done();
+        });
+    });
+
     it('it should fail if the client info has not been verified', (done) => {
       const loanData = {
         user: 'hansolo25@gmail.com',

@@ -8,6 +8,11 @@ const loanVerify = (req, res, next) => {
       status: 404,
       error: 'Client does not exist',
     });
+  } else if (userMatch[0].isAdmin) {
+    res.status(403).send({
+      status: 403,
+      error: 'You cannot apply for a loan with an admin account',
+    });
   } else if (userMatch[0].status !== 'verified') {
     res.status(403).send({
       status: 403,
