@@ -60,7 +60,7 @@ const verifyClient = (req, res) => {
   });
 };
 
-const viewClients = (req, res) => {
+const getClients = (req, res) => {
   const clients = users.filter(user => !user.isAdmin)
     .map(client => ({
       id: client.id,
@@ -78,11 +78,28 @@ const viewClients = (req, res) => {
   });
 };
 
+const getAClient = (req, res) => {
+  res.status(200).send({
+    status: 200,
+    data: {
+      id: req.client.id,
+      email: req.client.email,
+      firstName: req.client.firstName,
+      lastName: req.client.lastName,
+      address: req.client.address,
+      workAddress: req.client.workAddress,
+      status: req.client.status,
+      isAdmin: req.client.isAdmin,
+    },
+  });
+};
+
 const usersController = {
   signup,
   login,
   verifyClient,
-  viewClients,
+  getClients,
+  getAClient,
 };
 
 export default usersController;

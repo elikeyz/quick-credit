@@ -8,6 +8,8 @@ const checkIfClientExists = (req, res, next) => {
       error: 'Client does not exist',
     });
   } else {
+    const [client] = clientMatch;
+    req.client = client;
     next();
   }
 };

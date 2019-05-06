@@ -435,6 +435,41 @@ describe('Auth/Users', () => {
     });
   });
 
+  describe('GET /users/:userEmail', () => {
+    it('it should fail if the client does not exist', (done) => {
+      chai.request(app)
+        .get('/api/v1/users/kay1.kom@gmail.com')
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property('error').eql('Client does not exist');
+          done();
+        });
+    });
+
+    it('it should fail if the email specified belongs to an admin account', (done) => {
+      chai.request(app)
+        .get('/api/v1/users/quickcredit2019@gmail.com')
+        .end((err, res) => {
+          res.should.have.status(403);
+          res.body.should.have.property('error').eql('You are not authorized to view the user details of an admin account');
+          done();
+        });
+    });
+
+    it('it should get a client\'s user details successfully', (done) => {
+      chai.request(app)
+        .get('/api/v1/users/johndoe25@gmail.com')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property('data');
+          res.body.data.should.be.a('object');
+          res.body.data.should.have.property('email').eql('johndoe25@gmail.com');
+          res.body.data.should.have.property('isAdmin').eql(false);
+          done();
+        });
+    });
+  });
+
   describe('PATCH /users/:userEmail/verify', () => {
     it('it should fail if the client does not exist', (done) => {
       chai.request(app)
