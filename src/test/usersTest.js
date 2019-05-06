@@ -6,21 +6,22 @@ import app from '../app';
 should();
 chai.use(chaiHttp);
 
-describe('Auth/Users', () => {
-  describe('/GET /', () => {
-    it('it should load the base URL successfully', (done) => {
-      chai.request(app)
-        .get('/')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.have.property('data');
-          res.body.data.should.be.a('object');
-          res.body.data.should.have.property('message').eql('Welcome to Quick Credit API Version 1. Written by Elijah Enuem-Udogu');
-          done();
-        });
-    });
-  });
 
+describe('/GET /', () => {
+  it('it should load the base URL successfully', (done) => {
+    chai.request(app)
+      .get('/')
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('data');
+        res.body.data.should.be.a('object');
+        res.body.data.should.have.property('message').eql('Welcome to Quick Credit API Version 1. Written by Elijah Enuem-Udogu');
+        done();
+      });
+  });
+});
+
+describe('Auth/Users', () => {
   describe('POST /auth/signup', () => {
     it('it should fail if email is not specified', (done) => {
       const user = {
@@ -416,6 +417,19 @@ describe('Auth/Users', () => {
           res.body.data.should.be.a('object');
           res.body.data.should.have.property('token');
           res.body.data.should.have.property('email').eql('johndoe25@gmail.com');
+          done();
+        });
+    });
+  });
+
+  describe('GET /users', () => {
+    it('it should get all the client details successfully', (done) => {
+      chai.request(app)
+        .get('/api/v1/users')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property('data');
+          res.body.data.should.be.a('array');
           done();
         });
     });
