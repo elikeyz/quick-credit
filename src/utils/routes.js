@@ -30,6 +30,8 @@ const { getLoanRepayments, postClientRepaymentTranx } = repaymentsController;
 
 router.post('/auth/signup', signupValidate, signupValidate2, signupVerify, signup);
 router.post('/auth/signin', loginValidate, loginVerify, login);
+router.get('/users', getClients);
+router.get('/users/:userEmail', checkIfClientExists, checkIfClientIsAdmin, getAClient);
 router.patch('/users/:userEmail/verify', checkIfClientExists, verifyClient);
 router.get('/loans', loansQueryValidate, getLoans);
 router.get('/loans/:loanId', loanIdValidate, checkIfLoanExists, getALoan);
@@ -37,7 +39,5 @@ router.post('/loans', loanValidate, loanValidate2, loanVerify, requestLoan);
 router.patch('/loans/:loanId', loanIdValidate, checkIfLoanExists, loanResponseValidate, respondToLoanRequest);
 router.get('/loans/:loanId/repayments', loanIdValidate, checkIfLoanExists, getLoanRepayments);
 router.post('/loans/:loanId/repayments', loanIdValidate, checkIfLoanExists, repaymentValidate, repaymentValidate2, postClientRepaymentTranx);
-router.get('/users', getClients);
-router.get('/users/:userEmail', checkIfClientExists, checkIfClientIsAdmin, getAClient);
 
 export default router;
