@@ -9,12 +9,12 @@ const loanValidate = (req, res, next) => {
       status: 400,
       error: 'You did not specify the purpose of loan request',
     });
-  } else if (!req.body.amount || !req.body.amount.trim()) {
+  } else if (!req.body.amount) {
     res.status(400).send({
       status: 400,
       error: 'You did not specify the loan amount requested',
     });
-  } else if (!req.body.tenor || !req.body.tenor.trim()) {
+  } else if (!req.body.tenor) {
     res.status(400).send({
       status: 400,
       error: 'You did not specify the number of months in the tenor period',

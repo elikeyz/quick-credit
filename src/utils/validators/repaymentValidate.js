@@ -1,5 +1,5 @@
 const repaymentValidate = (req, res, next) => {
-  if (!req.body.paidAmount || !req.body.paidAmount.trim()) {
+  if (!req.body.paidAmount) {
     res.status(400).send({
       status: 400,
       error: 'You did not specify the paid amount',

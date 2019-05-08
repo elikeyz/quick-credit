@@ -481,6 +481,16 @@ describe('Auth/Users', () => {
         });
     });
 
+    it('it should fail if the email specified belongs to an admin account', (done) => {
+      chai.request(app)
+        .patch('/api/v1/users/quickcredit2019@gmail.com/verify')
+        .end((err, res) => {
+          res.should.have.status(403);
+          res.body.should.have.property('error').eql('You are not authorized to view the user details of an admin account');
+          done();
+        });
+    });
+
     it('it should verify a client successfully', (done) => {
       chai.request(app)
         .patch('/api/v1/users/hansolo25@gmail.com/verify')

@@ -32,7 +32,7 @@ router.post('/auth/signup', signupValidate, signupValidate2, signupVerify, signu
 router.post('/auth/signin', loginValidate, loginVerify, login);
 router.get('/users', getClients);
 router.get('/users/:userEmail', checkIfClientExists, checkIfClientIsAdmin, getAClient);
-router.patch('/users/:userEmail/verify', checkIfClientExists, verifyClient);
+router.patch('/users/:userEmail/verify', checkIfClientExists, checkIfClientIsAdmin, verifyClient);
 router.get('/loans', loansQueryValidate, getLoans);
 router.get('/loans/:loanId', loanIdValidate, checkIfLoanExists, getALoan);
 router.post('/loans', loanValidate, loanValidate2, loanVerify, requestLoan);

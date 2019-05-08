@@ -99,18 +99,6 @@ describe('Repayments', () => {
         });
     });
 
-    it('it should fail if the paid amount is not specified', (done) => {
-      chai.request(app)
-        .post('/api/v1/loans/2/repayments')
-        .type('form')
-        .send({ paidAmount: '' })
-        .end((err, res) => {
-          res.should.have.status(400);
-          res.body.should.have.property('error').eql('You did not specify the paid amount');
-          done();
-        });
-    });
-
     it('it should fail if the paid amount specified is not a valid number', (done) => {
       chai.request(app)
         .post('/api/v1/loans/2/repayments')
@@ -177,7 +165,7 @@ describe('Repayments', () => {
         .type('form')
         .send({ paidAmount: 9000 })
         .end((err, res) => {
-          res.should.have.status(200);
+          res.should.have.status(201);
           res.body.should.have.property('data');
           res.body.data.should.be.a('object');
           res.body.data.should.have.property('monthlyInstallment').eql(8750);
@@ -193,7 +181,7 @@ describe('Repayments', () => {
         .type('form')
         .send({ paidAmount: 4500 })
         .end((err, res) => {
-          res.should.have.status(200);
+          res.should.have.status(201);
           res.body.should.have.property('data');
           res.body.data.should.be.a('object');
           res.body.data.should.have.property('monthlyInstallment').eql(5250);

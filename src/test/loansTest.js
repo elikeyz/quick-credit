@@ -221,49 +221,11 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if loan amount is not specified', (done) => {
-      const loanData = {
-        user: 'nikobellic25@gmail.com',
-        purpose: 'Business capital',
-        amount: '',
-        tenor: 3,
-      };
-
-      chai.request(app)
-        .post('/api/v1/loans')
-        .type('form')
-        .send(loanData)
-        .end((err, res) => {
-          res.should.have.status(400);
-          res.body.should.have.property('error').eql('You did not specify the loan amount requested');
-          done();
-        });
-    });
-
     it('it should fail if tenor is not defined', (done) => {
       const loanData = {
         user: 'nikobellic25@gmail.com',
         purpose: 'Business capital',
         amount: 10000,
-      };
-
-      chai.request(app)
-        .post('/api/v1/loans')
-        .type('form')
-        .send(loanData)
-        .end((err, res) => {
-          res.should.have.status(400);
-          res.body.should.have.property('error').eql('You did not specify the number of months in the tenor period');
-          done();
-        });
-    });
-
-    it('it should fail if tenor is not specified', (done) => {
-      const loanData = {
-        user: 'nikobellic25@gmail.com',
-        purpose: 'Business capital',
-        amount: 10000,
-        tenor: '',
       };
 
       chai.request(app)

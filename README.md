@@ -15,13 +15,13 @@ Quick Credit is an online lending platform that provides short term soft loans t
 - ESLint (Code Linting)
 
 ## Installation
-You can install the application by running this command.
+You can install the application by cloning this repo and running this command.
 ```
 npm install
 ```
 
 ## Usage
-Start the application development mode with this command
+Start the application in development mode with this command
 ```
 npm run start-dev
 ```

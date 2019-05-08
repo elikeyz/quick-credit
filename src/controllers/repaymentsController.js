@@ -44,8 +44,8 @@ const postClientRepaymentTranx = (req, res) => {
       };
       loans.splice(loanIndex, 1, updatedLoan);
       repayments.push(newRepayment);
-      res.status(200).send({
-        status: 200,
+      res.status(201).send({
+        status: 201,
         data: {
           id: repayments.length + 1,
           createdOn: new Date().toLocaleString(),
