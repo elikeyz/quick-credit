@@ -15,7 +15,7 @@ describe('/GET /', () => {
         res.should.have.status(200);
         res.body.should.have.property('data');
         res.body.data.should.be.a('object');
-        res.body.data.should.have.property('message').eql('Welcome to Quick Credit API Version 1. Written by Elijah Enuem-Udogu');
+        res.body.data.should.have.property('message').eql('Welcome to Quick Credit API Version 1. Navigate to /api-docs for the API Documentation. Written by Elijah Enuem-Udogu');
         done();
       });
   });
