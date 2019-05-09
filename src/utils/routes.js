@@ -14,10 +14,13 @@ import checkIfLoanExists from './verifiers/checkIfLoanExists';
 import loansQueryValidate from './validators/loansQueryValidate';
 import loanValidate from './validators/loanValidate';
 import loanValidate2 from './validators/loanValidate2';
+import loanValidate3 from './validators/loanValidate3';
 import loanVerify from './verifiers/loanVerify';
+import loanVerify2 from './verifiers/loanVerify2';
 import loanResponseValidate from './validators/loanResponseValidate';
 import repaymentValidate from './validators/repaymentValidate';
 import repaymentValidate2 from './validators/repaymentValidate2';
+import repaymentValidate3 from './validators/repaymentValidate3';
 
 const router = express.Router();
 const {
@@ -28,16 +31,16 @@ const {
 } = loansController;
 const { getLoanRepayments, postClientRepaymentTranx } = repaymentsController;
 
-router.post('/auth/signup', signupValidate, signupValidate2, signupVerify, signup);
+router.post('/auth/signup', loginValidate, signupValidate, signupValidate2, signupVerify, signup);
 router.post('/auth/signin', loginValidate, loginVerify, login);
 router.get('/users', getClients);
 router.get('/users/:userEmail', checkIfClientExists, checkIfClientIsAdmin, getAClient);
 router.patch('/users/:userEmail/verify', checkIfClientExists, checkIfClientIsAdmin, verifyClient);
 router.get('/loans', loansQueryValidate, getLoans);
 router.get('/loans/:loanId', loanIdValidate, checkIfLoanExists, getALoan);
-router.post('/loans', loanValidate, loanValidate2, loanVerify, requestLoan);
+router.post('/loans', loanValidate, loanValidate2, loanValidate3, loanVerify, loanVerify2, requestLoan);
 router.patch('/loans/:loanId', loanIdValidate, checkIfLoanExists, loanResponseValidate, respondToLoanRequest);
 router.get('/loans/:loanId/repayments', loanIdValidate, checkIfLoanExists, getLoanRepayments);
-router.post('/loans/:loanId/repayments', loanIdValidate, checkIfLoanExists, repaymentValidate, repaymentValidate2, postClientRepaymentTranx);
+router.post('/loans/:loanId/repayments', loanIdValidate, checkIfLoanExists, repaymentValidate, repaymentValidate2, repaymentValidate3, postClientRepaymentTranx);
 
 export default router;

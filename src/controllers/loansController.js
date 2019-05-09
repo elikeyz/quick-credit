@@ -1,11 +1,9 @@
 import loans from '../models/loans';
-import roundOfTo2dp from '../utils/roundOfTo2dp';
+import roundOfTo2dp from '../utils/helpers/roundOfTo2dp';
+import sendSuccessResponse from '../utils/helpers/sendSuccessResponse';
 
 const getALoan = (req, res) => {
-  res.status(200).send({
-    status: 200,
-    data: req.loan,
-  });
+  sendSuccessResponse(res, 200, req.loan);
 };
 
 const getLoans = (req, res) => {
@@ -19,10 +17,7 @@ const getLoans = (req, res) => {
   } else {
     loansNeeded = [...loans];
   }
-  res.status(200).send({
-    status: 200,
-    data: loansNeeded,
-  });
+  sendSuccessResponse(res, 200, loansNeeded);
 };
 
 const requestLoan = (req, res) => {
@@ -43,10 +38,7 @@ const requestLoan = (req, res) => {
     interest: roundOfTo2dp(Number(req.body.amount) * 0.05),
   };
   loans.push(newLoan);
-  res.status(201).send({
-    status: 201,
-    data: newLoan,
-  });
+  sendSuccessResponse(res, 201, newLoan);
 };
 
 const respondToLoanRequest = (req, res) => {
@@ -69,10 +61,7 @@ const respondToLoanRequest = (req, res) => {
         interest: req.loan.interest,
       };
       loans.splice(loanIndex, 1, newLoan);
-      res.status(200).send({
-        status: 200,
-        data: newLoan,
-      });
+      sendSuccessResponse(res, 200, newLoan);
     }
   });
 };

@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "An online lending platform that provides short term soft loans to individuals",
   "main": "app.js",
+  "engines": {
+    "node": "12.1.0"
+  },
   "scripts": {
     "start-dev": "cross-env NODE_ENV=development nodemon --exec babel-node ./src/app.js",
     "start": "cross-env-shell NODE_ENV=production \"npm run build && node ./build/app.js\"",

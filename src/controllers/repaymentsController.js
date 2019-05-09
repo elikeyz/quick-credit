@@ -1,13 +1,13 @@
 import repayments from '../models/repayments';
 import loans from '../models/loans';
+import updateLoan from '../utils/helpers/updateLoan';
+import addNewRepayment from '../utils/helpers/addNewRepayment';
+import sendSuccessResponse from '../utils/helpers/sendSuccessResponse';
 
 const getLoanRepayments = (req, res) => {
   const loanRepayments = repayments.filter(repayment => repayment.loanId
                                            === parseInt(req.params.loanId, 10));
-  res.status(200).send({
-    status: 200,
-    data: loanRepayments,
-  });
+  sendSuccessResponse(res, 200, loanRepayments);
 };
 
 const postClientRepaymentTranx = (req, res) => {
@@ -17,45 +17,9 @@ const postClientRepaymentTranx = (req, res) => {
       if (loan.balance === Number(req.body.paidAmount)) {
         repaidStatus = true;
       }
-      const updatedLoan = {
-        id: loan.id,
-        user: loan.user,
-        firstName: loan.firstName,
-        lastName: loan.lastName,
-        createdOn: loan.createdOn,
-        updatedOn: new Date().toLocaleString(),
-        purpose: loan.purpose,
-        status: loan.status,
-        repaid: repaidStatus,
-        tenor: loan.tenor,
-        amount: loan.amount,
-        paymentInstallment: loan.paymentInstallment,
-        balance: loan.balance - Number(req.body.paidAmount),
-        interest: loan.interest,
-      };
-      const newRepayment = {
-        id: repayments.length + 1,
-        createdOn: new Date().toLocaleString(),
-        loanId: loan.id,
-        amount: loan.amount,
-        monthlyInstallment: loan.paymentInstallment,
-        paidAmount: Number(req.body.paidAmount),
-        balance: loan.balance - Number(req.body.paidAmount),
-      };
-      loans.splice(loanIndex, 1, updatedLoan);
-      repayments.push(newRepayment);
-      res.status(201).send({
-        status: 201,
-        data: {
-          id: repayments.length + 1,
-          createdOn: new Date().toLocaleString(),
-          loanId: loan.id,
-          amount: loan.amount,
-          monthlyInstallment: loan.paymentInstallment,
-          paidAmount: Number(req.body.paidAmount),
-          balance: loan.balance - Number(req.body.paidAmount),
-        },
-      });
+      updateLoan(loan, loanIndex, req.body.paidAmount, repaidStatus);
+      const newRepayment = addNewRepayment(loan, req.body.paidAmount);
+      sendSuccessResponse(res, 201, newRepayment);
     }
   });
 };

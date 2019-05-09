@@ -1,19 +1,12 @@
+import sendErrorResponse from '../helpers/sendErrorResponse';
+
 const repaymentValidate = (req, res, next) => {
   if (!req.body.paidAmount) {
-    res.status(400).send({
-      status: 400,
-      error: 'You did not specify the paid amount',
-    });
+    sendErrorResponse(res, 400, 'You did not specify the paid amount');
   } else if (Number.isNaN(Number(req.body.paidAmount))) {
-    res.status(400).send({
-      status: 400,
-      error: 'The paid amount specified must be a valid number',
-    });
+    sendErrorResponse(res, 400, 'The paid amount specified must be a valid number');
   } else if (req.loan.repaid) {
-    res.status(403).send({
-      status: 403,
-      error: 'The loan specified has been fully repaid',
-    });
+    sendErrorResponse(res, 403, 'The loan specified has been fully repaid');
   } else {
     next();
   }

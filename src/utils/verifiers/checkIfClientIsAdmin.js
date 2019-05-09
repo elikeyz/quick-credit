@@ -1,9 +1,8 @@
+import sendErrorResponse from '../helpers/sendErrorResponse';
+
 const checkIfClientIsAdmin = (req, res, next) => {
   if (req.client.isAdmin) {
-    res.status(403).send({
-      status: 403,
-      error: 'You are not authorized to view the user details of an admin account',
-    });
+    sendErrorResponse(res, 403, 'You are not authorized to view the user details of an admin account');
   } else {
     next();
   }

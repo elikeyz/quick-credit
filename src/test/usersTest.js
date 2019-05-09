@@ -39,7 +39,7 @@ describe('Auth/Users', () => {
         .send(user)
         .end((err, res) => {
           res.should.have.status(400);
-          res.body.should.have.property('error').eql('You did not enter the email');
+          res.body.should.have.property('error').eql('You did not enter your email');
           done();
         });
     });
@@ -59,7 +59,28 @@ describe('Auth/Users', () => {
         .send(user)
         .end((err, res) => {
           res.should.have.status(400);
-          res.body.should.have.property('error').eql('You did not enter the email');
+          res.body.should.have.property('error').eql('You did not enter your email');
+          done();
+        });
+    });
+
+    it('it should fail if password is not specified', (done) => {
+      const user = {
+        email: 'koppter.kom@gmail.com',
+        firstName: 'Elijah',
+        lastName: 'Enuem-Udogu',
+        password: '',
+        address: 'No. 11, Elaiho Lane.',
+        workAddress: 'Shopping Complex, EDPA.',
+      };
+
+      chai.request(app)
+        .post('/api/v1/auth/signup')
+        .type('form')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property('error').eql('You did not enter your password');
           done();
         });
     });
@@ -142,27 +163,6 @@ describe('Auth/Users', () => {
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.have.property('error').eql('You did not enter the last name');
-          done();
-        });
-    });
-
-    it('it should fail if password is not specified', (done) => {
-      const user = {
-        email: 'koppter.kom@gmail.com',
-        firstName: 'Elijah',
-        lastName: 'Enuem-Udogu',
-        password: '',
-        address: 'No. 11, Elaiho Lane.',
-        workAddress: 'Shopping Complex, EDPA.',
-      };
-
-      chai.request(app)
-        .post('/api/v1/auth/signup')
-        .type('form')
-        .send(user)
-        .end((err, res) => {
-          res.should.have.status(400);
-          res.body.should.have.property('error').eql('You did not enter the password');
           done();
         });
     });
