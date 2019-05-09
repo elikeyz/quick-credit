@@ -33,7 +33,7 @@
       }
     ],
     "schemes": [
-      "https",
+      "https"
     ],
     "consumes": [
       "application/json"
