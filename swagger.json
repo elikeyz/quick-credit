@@ -12,7 +12,7 @@
         "email": "koppter.kom@gmail.com"
       }
     },
-    "host": "localhost:3000",
+    "host": "https://elikeyz-quick-credit.herokuapp.com",
     "basePath": "/api/v1",
     "tags": [
       {
@@ -34,7 +34,6 @@
     ],
     "schemes": [
       "https",
-      "http"
     ],
     "consumes": [
       "application/json"

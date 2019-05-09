@@ -4,6 +4,9 @@
 
 Quick Credit is an online lending platform that provides short term soft loans to individuals. This helps solve problems of financial inclusion as a way to alleviate poverty and empower low income earners.
 
+## Documentation
+You can view the documentation on this [link](https://elikeyz-quick-credit.herokuapp.com/api-docs)
+
 ## Technologies used
 - Node (Server Environment)
 - Express (Web Framework)
@@ -13,6 +16,7 @@ Quick Credit is an online lending platform that provides short term soft loans t
 - Coveralls (Test Coverage Reporting)
 - Babel
 - ESLint (Code Linting)
+- Swagger (Documentation)
 
 ## Installation
 You can install the application by cloning this repo and running this command.
