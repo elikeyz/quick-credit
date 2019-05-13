@@ -1,6 +1,6 @@
 # quick-credit
 
-[![Build Status](https://travis-ci.org/elikeyz/quick-credit.svg?branch=api)](https://travis-ci.org/elikeyz/quick-credit) [![Coverage Status](https://coveralls.io/repos/github/elikeyz/quick-credit/badge.svg?branch=api)](https://coveralls.io/github/elikeyz/quick-credit?branch=api) [![Maintainability](https://api.codeclimate.com/v1/badges/582a8bfbebe296110d3d/maintainability)](https://codeclimate.com/github/elikeyz/quick-credit/maintainability)
+[![Build Status](https://travis-ci.org/elikeyz/quick-credit.svg?branch=develop)](https://travis-ci.org/elikeyz/quick-credit) [![Coverage Status](https://coveralls.io/repos/github/elikeyz/quick-credit/badge.svg?branch=develop)](https://coveralls.io/github/elikeyz/quick-credit?branch=develop) [![Maintainability](https://api.codeclimate.com/v1/badges/582a8bfbebe296110d3d/maintainability)](https://codeclimate.com/github/elikeyz/quick-credit/maintainability)
 
 Quick Credit is an online lending platform that provides short term soft loans to individuals. This helps solve problems of financial inclusion as a way to alleviate poverty and empower low income earners.
 

@@ -6,9 +6,9 @@ body {
 header {
     background-color: #1A237E;
     color: #FFF8E1;
-    padding: 5px;
     display: flex;
     position: fixed;
+    padding: 5px;
     top: 0;
     left: 0;
     right: 0;
@@ -17,11 +17,12 @@ header {
 }
 
 .onboarding-display {
-    width: 70%;
+    width: 80%;
+    padding-left: 10px;
 }
 
 .onboarding-links {
-    width: 30%;
+    width: 20%;
 }
 
 .header-text {
@@ -75,6 +76,9 @@ main {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+.bg-img-login-register {
     height: 100%;
 }
 
@@ -87,6 +91,16 @@ main {
     font-family: 'Open Sans', sans-serif;
     padding: 150px 20%;
     color: #FFF8E1;
+}
+
+.info-container {
+    padding: 30px 5%;
+    font-family: 'Open Sans', sans-serif;
+    background-color: #FFF8E1;
+}
+
+.info-heading {
+    color: #1A237E;
 }
 
 .form-container {
@@ -178,7 +192,7 @@ textarea {
 }
 
 .client-menu {
-    top: 55px;
+    top: 69px;
 }
 
 .hidden {
@@ -237,7 +251,6 @@ textarea {
     display: none;
     position: fixed;
     z-index: 5;
-    padding-top: 30px;
     left: 0;
     top: 0;
     width: 100%;
@@ -529,10 +542,6 @@ textarea {
 }
 
 @media only screen and (max-width: 1034px) {
-    .client-menu {
-        top: 69px;
-    }
-
     .admin-display {
         width: 30%;
     }
@@ -558,6 +567,14 @@ textarea {
 
     .application-column {
         width: 100%;
+    }
+
+    .onboarding-display {
+        width: 70%;
+    }
+
+    .onboarding-links {
+        width: 30%;
     }
 }
 
