@@ -7,7 +7,7 @@ Quick Credit is an online lending platform that provides short term soft loans t
 ## Documentation
 You can view the documentation on this [link](https://elikeyz-quick-credit.herokuapp.com/api-docs)
 
-## Technologies used
+## Server-Side Technologies used
 - Node (Server Environment)
 - Express (Web Framework)
 - Mocha (Test Framework)
@@ -24,7 +24,7 @@ You can install the application by cloning this repo and running this command.
 npm install
 ```
 
-## Usage
+## API Usage
 Start the application in development mode with this command
 ```
 npm run start-dev
@@ -40,3 +40,12 @@ To run the unit tests, use this command
 ```
 npm test
 ```
+
+## Client-Side Technologies Used
+This app was built with
+- HTML
+- CSS
+- JavaScript
+
+## Ciient App Usage
+Clone this repo and open ```index.html``` in the ```ui``` directory or you can navigate to the online hosted [app here](https://elikeyz.github.io/quick-credit/ui).
