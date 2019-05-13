@@ -8,7 +8,6 @@ header {
     color: #FFF8E1;
     display: flex;
     position: fixed;
-    padding: 5px;
     top: 0;
     left: 0;
     right: 0;
@@ -54,6 +53,10 @@ header {
     width: 50%;
     display: flex;
     text-align: center;
+}
+
+.onboarding-nav-item:hover, .admin-nav-item:hover {
+    background-color: #283593;
 }
 
 .nav-link {
@@ -192,7 +195,7 @@ textarea {
 }
 
 .client-menu {
-    top: 69px;
+    top: 59px;
 }
 
 .hidden {
@@ -361,7 +364,7 @@ textarea {
 }
 
 .admin-menu {
-    top: 55px;
+    top: 45px;
 }
 
 .client-modal-content {
@@ -684,7 +687,7 @@ textarea {
 
 @media only screen and (max-width: 387px) {
     .client-menu {
-        top: 91px;
+        top: 81px;
     }
 
     .record {
@@ -712,12 +715,12 @@ textarea {
 
 @media only screen and (max-width: 249px) {
     .client-menu {
-        top: 113px;
+        top: 103px;
     }
 }
 
 @media only screen and (max-width: 196px) {
     .admin-menu {
-        top: 92px;
+        top: 82px;
     }
 }
