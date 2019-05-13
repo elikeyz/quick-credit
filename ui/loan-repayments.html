@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="An online lending platform that provides short term loans to individuals">
+    <meta name="keywords" content="credit, loan, lending">
+    <meta name="author" content="Elijah Enuem-Udogu">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Quick Credit | Loan Repayment History</title>
+</head>
+<body>
+    <div id="loan-application-form-modal" class="modal">
+        <form class="modal-content card">
+            <div class="form-header">
+                <h1 class="display-text">Apply for a Loan</h1>
+            </div>
+            <div class="form-unit">
+                <label for="amount">How much do you want to borrow?</label>
+                <input type="number" id="amount" placeholder="Amount" required>
+            </div>
+            <div class="form-unit">
+                <label for="reason">Briefly explain reason for loan request. (max. 50 characters)</label>
+                <textarea id="reason" placeholder="Reason for loan request..." maxlength="50" required></textarea>
+            </div>
+            <div class="form-unit">
+                <label for="tenor">Select your preferable loan tenor. (Number of months needed to pay back)</label>
+                <select id="tenor" required>
+                    <option value="1">1 month</option>
+                    <option value="2">2 months</option>
+                    <option value="3">3 months</option>
+                    <option value="4">4 months</option>
+                    <option value="5">5 months</option>
+                    <option value="6">6 months</option>
+                    <option value="7">7 months</option>
+                    <option value="8">8 months</option>
+                    <option value="9">9 months</option>
+                    <option value="10">10 months</option>
+                    <option value="11">11 months</option>
+                    <option value="12">12 months</option>
+                </select>
+            </div>
+            <div class="form-unit" id="btn-container">
+                <input type="submit" class="form-button btn-one" id="submit-btn" value="Apply">
+                <input type="reset" class="form-button btn-two" id="cancel-btn" value="Cancel">
+            </div>
+        </form>
+    </div>
+    <header>
+        <nav class="onboarding-display">
+            <a class="header-text nav-link" href="./index.html"><span class="display-icon"><i class="fas fa-university"></i></span>QUICK CREDIT</a>
+        </nav>
+        <nav class="onboarding-links">
+            <ul class="nav-list">
+                <li class="onboarding-nav-item" id="open-modal">
+                    <a class="nav-link nav-item" href="#">
+                        <span><i class="fas fa-plus"></i></span> Apply for a Loan
+                    </a>
+                </li>
+                <li class="onboarding-nav-item" id="drop-btn">
+                    <a class="nav-link nav-item" href="#">
+                        <span><i class="fas fa-user"></i></span> User
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="dropdown-content client-menu hidden">
+            <a href="./loan-repayments.html"><span><i class="fas fa-history"></i></span> Loan Repayments</a>
+            <a href="./profile.html"><span><i class="fas fa-user"></i></span> Profile</a>
+            <a href="./index.html"><span><i class="fas fa-sign-out-alt"></i></span> Logout</a>
+        </div>
+        <div class="container client-container">
+            <h1><span><i class="fa fa-history"></i></span> Loan Repayments</h1>
+            <div class="cards">
+                <div class="card record">
+                    <div class="record-header">
+                        <h2 class="display-text">N2,000.00</h2>
+                    </div>
+                    <div class="record-body">
+                        <div class="record-unit">
+                            <p class="key">Transaction Date</p>
+                            <p class="value">01/01/2019</p>
+                        </div>
+                        <div class="record-unit">
+                            <p class="key">Transaction Time</p>
+                            <p class="value">08:00:00 GMT+0100</p>
+                        </div>
+                        <div class="record-unit">
+                            <p class="key">Total Debt</p>
+                            <p class="value">N20,000.00</p>
+                        </div>
+                        <div class="record-unit">
+                            <p class="key">Balance</p>
+                            <p class="value">N18,000.00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card record">
+                    <div class="record-header">
+                        <h2 class="display-text">N2,000.00</h2>
+                    </div>
+                    <div class="record-body">
+                        <div class="record-unit">
+                            <p class="key">Transaction Date</p>
+                            <p class="value">01/01/2019</p>
+                        </div>
+                        <div class="record-unit">
+                            <p class="key">Transaction Time</p>
+                            <p class="value">08:00:00 GMT+0100</p>
+                        </div>
+                        <div class="record-unit">
+                            <p class="key">Total Debt</p>
+                            <p class="value">N20,000.00</p>
+                        </div>
+                        <div class="record-unit">
+                            <p class="key">Balance</p>
+                            <p class="value">N18,000.00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card record">
+                    <div class="record-header">
+                        <h2 class="display-text">N2,000.00</h2>
+                    </div>
+                    <div class="record-body">
+                        <div class="record-unit">
+                            <p class="key">Transaction Date</p>
+                            <p class="value">01/01/2019</p>
+                        </div>
+                        <div class="record-unit">
+                            <p class="key">Transaction Time</p>
+                            <p class="value">08:00:00 GMT+0100</p>
+                        </div>
+                        <div class="record-unit">
+                            <p class="key">Total Debt</p>
+                            <p class="value">N20,000.00</p>
+                        </div>
+                        <div class="record-unit">
+                            <p class="key">Balance</p>
+                            <p class="value">N18,000.00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="./js/dropdown.js"></script>
+    <script src="js/loan-apply.js"></script>
+</body>
+</html>
