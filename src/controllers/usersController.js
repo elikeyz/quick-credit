@@ -1,25 +1,30 @@
+import bcrypt from 'bcryptjs';
 import users from '../models/users';
 import sendSuccessResponse from '../utils/helpers/sendSuccessResponse';
+import generateUserToken from '../utils/helpers/generateUserToken';
 
 const signup = (req, res) => {
+  const hashedPassword = bcrypt.hashSync(req.body.password, 10);
   const newUser = {
     id: users.length + 1,
     email: req.body.email.trim(),
     firstName: req.body.firstName.trim(),
     lastName: req.body.lastName.trim(),
-    password: req.body.password,
+    password: hashedPassword,
     address: req.body.address.trim(),
     workAddress: req.body.workAddress.trim(),
     status: 'unverified',
     isAdmin: false,
   };
+  const token = generateUserToken(newUser);
   users.push(newUser);
-  sendSuccessResponse(res, 201, { token: '45erkjherht45495783', ...newUser });
+  sendSuccessResponse(res, 201, { token, ...newUser });
 };
 
 const login = (req, res) => {
+  const token = generateUserToken(req.user);
   const userAccount = {
-    token: '45erkjherht45495783',
+    token,
     id: req.user.id,
     email: req.user.email,
     firstName: req.user.firstName,

@@ -17,6 +17,9 @@ You can view the documentation on this [link](https://elikeyz-quick-credit.herok
 - Babel
 - ESLint (Code Linting)
 - Swagger (Documentation)
+- JSON Web Tokens (Authentication)
+- Bcrypt JS (Password Encryption)
+- Dotenv (Environmental Variables)
 
 ## Installation
 You can install the application by cloning this repo and running this command.
