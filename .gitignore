@@ -59,6 +59,5 @@ typings/
 
 # next.js build output
 .next
-
-# Babel build output
+# Babel output directory
 build/

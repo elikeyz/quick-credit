@@ -1,0 +1,863 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Quick Credit",
+      "description": "Quick Credit is an online lending platform that provides short term soft loans to individuals. This helps solve problems of financial inclusion as a way to alleviate poverty and empower low income earners.",
+      "license": {
+        "name": "ISC",
+        "url": "https://opensource.org/licenses/ISC"
+      },
+      "contact": {
+        "email": "koppter.kom@gmail.com"
+      }
+    },
+    "host": "elikeyz-quick-credit.herokuapp.com",
+    "basePath": "/api/v1",
+    "tags": [
+      {
+        "name": "Auth",
+        "description": "API for authentication and authorization"
+      },
+      {
+        "name": "Users",
+        "description": "API for users in the system"
+      },
+      {
+        "name": "Loans",
+        "description": "API for loans and loan applications"
+      },
+      {
+        "name": "Repayments",
+        "description": "API for loan repayments made"
+      }
+    ],
+    "schemes": [
+      "https"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "paths": {
+      "/auth/signup": {
+        "post": {
+          "tags": [
+            "Auth"
+          ],
+          "summary": "Create a new user account",
+          "description": "Create a new user account",
+          "parameters": [
+            {
+              "name": "Signup Details",
+              "in": "body",
+              "description": "User account that we want to create",
+              "schema": {
+                "required": [
+                  "email",
+                  "firstName",
+                  "lastName",
+                  "password",
+                  "address",
+                  "workAddress"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "uniqueItems": true
+                  },
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password"
+                  },
+                  "address": {
+                    "type": "string"
+                  },
+                  "workAddress": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "201": {
+              "description": "User account created successfully",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "integer"
+                  },
+                  "data": {
+                    "type": "object",
+                    "$ref": "#/definitions/Token"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid input",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            },
+            "409": {
+              "description": "User account already exists",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        }
+      },
+      "/auth/signin": {
+        "post": {
+          "tags": [
+            "Auth"
+          ],
+          "summary": "Login to an existing user account",
+          "description": "Login to an existing user account",
+          "parameters": [
+            {
+              "name": "Login Details",
+              "in": "body",
+              "description": "User account that we want to log in to",
+              "schema": {
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "uniqueItems": true
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                }
+              }
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "User logged in successfully",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "integer"
+                  },
+                  "data": {
+                    "type": "object",
+                    "$ref": "#/definitions/Token"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid input",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            },
+            "401": {
+              "description": "Incorrect login details",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        }
+      },
+      "/users": {
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Get all registered clients' details",
+          "description": "Get all registered client's details",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Clients details gotten successfully",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "integer"
+                  },
+                  "data": {
+                    "type": "array",
+                    "$ref": "#/definitions/Users"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/users/{userEmail}": {
+        "parameters": [
+          {
+            "name": "userEmail",
+            "in": "path",
+            "required": true,
+            "description": "Email of client whose details we want to view",
+            "type": "string"
+          }
+        ],
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Get a client's details with a given email",
+          "description": "Get a client's details with a given email",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Client details gotten successfully",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "integer"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/User"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "You are not authorized to view an admin account",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            },
+            "404": {
+              "description": "Client does not exist",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        }
+      },
+      "/users/{userEmail}/verify": {
+        "parameters": [
+          {
+            "name": "userEmail",
+            "in": "path",
+            "required": true,
+            "description": "Email of client whose details we want to view",
+            "type": "string"
+          }
+        ],
+        "patch": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Mark a client as verified",
+          "description": "Mark a client as verified",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Client has been verified",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "integer"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/User"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "You are not authorized to view an admin account",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            },
+            "404": {
+              "description": "Client does not exist",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        }
+      },
+      "/loans": {
+        "get": {
+          "tags": [
+            "Loans"
+          ],
+          "summary": "Get the details of all the loans",
+          "description": "Get the details of all selected loans",
+          "parameters": [
+            {
+              "name": "status",
+              "in": "query",
+              "description": "Loan Status (pending, approved or rejected)",
+              "type": "string"
+            },
+            {
+              "name": "repaid",
+              "in": "query",
+              "description": "Loan Repayment Status (true or false)",
+              "type": "boolean"
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Loans gotten successfully",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "integer"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/Loans"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid input",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Loans"
+          ],
+          "summary": "Apply for a loan",
+          "description": "Create a loan application",
+          "parameters": [
+            {
+              "name": "Loan Details",
+              "in": "body",
+              "description": "Details of loan that we want to apply for",
+              "schema": {
+                "required": [
+                  "user",
+                  "purpose",
+                  "amount",
+                  "tenor"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "purpose": {
+                    "type": "string"
+                  },
+                  "amount": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "tenor": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 12
+                  }
+                }
+              }
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "201": {
+              "description": "Loan application created successfully",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "integer"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/Loan"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid input",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            },
+            "403": {
+              "description": "Unauthorized",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            },
+            "404": {
+              "description": "Client does not exist",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        }
+      },
+      "/loans/{loanId}": {
+        "parameters": [
+          {
+            "name": "loanId",
+            "in": "path",
+            "required": true,
+            "description": "ID of specific loan",
+            "type": "string"
+          }
+        ],
+        "get": {
+          "tags": [
+            "Loans"
+          ],
+          "summary": "Get the details of a loan",
+          "description": "Get the details of a specified loan",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Loan details gotten successfully",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "integer"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/Loan"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid input",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            },
+            "404": {
+              "description": "Loan does not exist",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        },
+        "patch": {
+          "tags": [
+            "Loans"
+          ],
+          "summary": "Respond to a loan application",
+          "description": "Approve or reject a loan application",
+          "parameters": [
+            {
+              "name": "Loan application response",
+              "in": "body",
+              "description": "Status of loan application",
+              "schema": {
+                "required": [
+                  "status"
+                ],
+                "properties": {
+                  "status": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Loan approved/rejected successfully",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "integer"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/Loan"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid input",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            },
+            "404": {
+              "description": "Loan does not exist",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        }
+      },
+      "/loans/{loanId}/repayments": {
+        "parameters": [
+          {
+            "name": "loanId",
+            "in": "path",
+            "required": true,
+            "description": "ID of specific loan",
+            "type": "string"
+          }
+        ],
+        "get": {
+          "tags": [
+            "Repayments"
+          ],
+          "summary": "View loan repayment history",
+          "description": "View loan repayment history of the specified loan",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Loan repayments gotten successfully",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "integer"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/Repayments"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid input",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            },
+            "404": {
+              "description": "Loan does not exist",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Repayments"
+          ],
+          "summary": "Post client loan repayment transaction",
+          "description": "Post a loan repayment transaction in favour of a client",
+          "parameters": [
+            {
+              "name": "Loan Repayment Transaction",
+              "in": "body",
+              "description": "Loan repayment made to the specified loan",
+              "schema": {
+                "required": [
+                  "paidAmount"
+                ],
+                "properties": {
+                  "paidAmount": {
+                    "type": "number",
+                    "format": "float"
+                  }
+                }
+              }
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "201": {
+              "description": "Loan repayment posted successfully",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "integer"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/Repayment"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid input",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            },
+            "403": {
+              "description": "Forbidden input",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            },
+            "404": {
+              "description": "Loan does not exist",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "Token": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "uniqueItems": true
+          },
+          "id": {
+            "type": "integer",
+            "uniqueItems": true
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "uniqueItems": true
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          },
+          "address": {
+            "type": "string"
+          },
+          "workAddress": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "isAdmin": {
+            "type": "boolean"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "uniqueItems": true
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "uniqueItems": true
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "workAddress": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "isAdmin": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Users": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "Loan": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "uniqueItems": true
+          },
+          "user": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "repaid": {
+            "type": "boolean"
+          },
+          "tenor": {
+            "type": "integer"
+          },
+          "amount": {
+            "type": "number",
+            "format": "float"
+          },
+          "paymentInstallment": {
+            "type": "number",
+            "format": "float"
+          },
+          "balance": {
+            "type": "number",
+            "format": "float"
+          },
+          "interest": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "Loans": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/Loan"
+        }
+      },
+      "Repayment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "uniqueItems": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "loanId": {
+            "type": "integer"
+          },
+          "amount": {
+            "type": "number",
+            "format": "float"
+          },
+          "monthlyInstallment": {
+            "type": "number",
+            "format": "float"
+          },
+          "paidAmount": {
+            "type": "number",
+            "format": "float"
+          },
+          "balance": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "Repayments": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/Repayment"
+        }
+      }
+    }
+  }
