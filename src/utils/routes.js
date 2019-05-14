@@ -4,6 +4,7 @@ import loansController from '../controllers/loansController';
 import repaymentsController from '../controllers/repaymentsController';
 import signupValidate from './validators/signupValidate';
 import signupValidate2 from './validators/signupValidate2';
+import signupValidate3 from './validators/signupValidate3';
 import signupVerify from './verifiers/signupVerify';
 import loginValidate from './validators/loginValidate';
 import loginVerify from './verifiers/loginVerify';
@@ -31,7 +32,7 @@ const {
 } = loansController;
 const { getLoanRepayments, postClientRepaymentTranx } = repaymentsController;
 
-router.post('/auth/signup', loginValidate, signupValidate, signupValidate2, signupVerify, signup);
+router.post('/auth/signup', loginValidate, signupValidate, signupValidate2, signupValidate3, signupVerify, signup);
 router.post('/auth/signin', loginValidate, loginVerify, login);
 router.get('/users', getClients);
 router.get('/users/:userEmail', checkIfClientExists, checkIfClientIsAdmin, getAClient);
