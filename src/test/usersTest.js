@@ -21,6 +21,18 @@ describe('/GET /', () => {
   });
 });
 
+describe('/ALL *', () => {
+  it('it should fail if the route does not exist', (done) => {
+    chai.request(app)
+      .get('/unknown')
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.have.property('error').eql('This route is not available');
+        done();
+      });
+  });
+});
+
 describe('Auth/Users', () => {
   describe('POST /auth/signup', () => {
     it('it should fail if email is not specified', (done) => {
