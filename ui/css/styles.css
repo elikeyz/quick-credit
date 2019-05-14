@@ -15,6 +15,33 @@ header {
     box-shadow: rgba(0,0,0,0.6) 1px 1px 5px 1px, rgba(0,0,0,0.4) 2px 2px 7px 2px;
 }
 
+footer {
+    background-color: #1A237E;
+    color: #FFF8E1;
+    display: flex;
+    font-family: 'Open Sans', sans-serif;
+    padding: 0 10px;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    flex-direction: row;
+    -ms-flex-direction: row;
+}
+
+.logo-list {
+    list-style-type: none;
+    display: flex;
+    padding: 0 10px;
+}
+
+.logo-item {
+    margin: 0 5px;
+}
+
+.logo {
+    color: white;
+}
+
 .onboarding-display {
     width: 80%;
     padding-left: 10px;
@@ -99,11 +126,24 @@ main {
 .info-container {
     padding: 30px 5%;
     font-family: 'Open Sans', sans-serif;
+    background-color: #E8EAF6;
+}
+
+.info {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
     background-color: #FFF8E1;
 }
 
 .info-heading {
     color: #1A237E;
+    text-align: center;
+}
+
+.info-step-text {
+    text-align: center;
+    font-weight: bold;
 }
 
 .form-container {
@@ -224,7 +264,13 @@ textarea {
 .record {
     width: 25%;
     background-color: #FFF8E1;
-    margin: 10px 0;
+    margin: 10px 5px;
+}
+
+.step-record {
+    width: 20%;
+    background-color: #FFF8E1;
+    margin: 10px 5px;
 }
 
 .record-header {
@@ -300,6 +346,14 @@ textarea {
     width: 100%;
     padding: 20px 0;
     margin: 50px 0;
+}
+
+.avatar-container {
+    height: 100px;
+    width: 100px;
+    overflow: hidden;
+    margin: auto;
+    border-radius: 50%;
 }
 
 .avatar {
@@ -539,7 +593,7 @@ textarea {
 }
 
 @media only screen and (min-height: 1016px) {
-    html {
+    .register-page {
         height: 100%;
     }
 }
@@ -561,6 +615,10 @@ textarea {
 
     .record {
         width: 40%;
+    }
+
+    .info {
+        width: 60%;
     }
 
     .columns {
@@ -603,8 +661,12 @@ textarea {
         width: 100%;
     }
 
-    .record {
+    .record, .step-record {
         width: 60%;
+    }
+
+    .info {
+        width: 80%;
     }
 
     .cards {
@@ -627,6 +689,11 @@ textarea {
     .profile-key, .profile-value {
         width: 100%;
     }
+
+    footer {
+        flex-direction: column;
+        -ms-flex-direction: column;
+    }
 }
 
 @media only screen and (max-width: 500px) {
@@ -634,8 +701,12 @@ textarea {
         width: 80%;
     }
 
-    .record {
+    .record, .step-record {
         width: 80%;
+    }
+
+    .info {
+        width: 90%;
     }
 
     .client-container {
@@ -690,8 +761,12 @@ textarea {
         top: 81px;
     }
 
-    .record {
+    .record, .step-record {
         width: 90%;
+    }
+
+    .info {
+        width: 100%;
     }
 }
 
@@ -708,7 +783,7 @@ textarea {
         width: 90%;
     }
 
-    .record {
+    .record, .step-record {
         width: 100%;
     }
 }
