@@ -1,6 +1,6 @@
 import sendErrorResponse from '../helpers/sendErrorResponse';
 
-const signupValidate2 = (req, res, next) => {
+const validateAddresses = (req, res, next) => {
   if (!req.body.address || !req.body.address.trim()) {
     sendErrorResponse(res, 400, 'You did not enter the home address');
   } else if (!req.body.workAddress || !req.body.workAddress.trim()) {
@@ -10,4 +10,4 @@ const signupValidate2 = (req, res, next) => {
   }
 };
 
-export default signupValidate2;
+export default validateAddresses;

@@ -1,6 +1,6 @@
 import sendErrorResponse from '../helpers/sendErrorResponse';
 
-const repaymentValidate2 = (req, res, next) => {
+const checkIfPaidAmountIsLessThanInstallment = (req, res, next) => {
   if (req.loan.balance <= req.loan.paymentInstallment
         && Number(req.body.paidAmount) !== req.loan.balance) {
     sendErrorResponse(res, 403, `The paid amount must equal the loan debt balance of ${req.loan.balance} since the loan debt balance is less than the monthly installment of ${req.loan.paymentInstallment}`);
@@ -12,4 +12,4 @@ const repaymentValidate2 = (req, res, next) => {
   }
 };
 
-export default repaymentValidate2;
+export default checkIfPaidAmountIsLessThanInstallment;

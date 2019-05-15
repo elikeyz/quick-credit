@@ -1,6 +1,6 @@
 import sendErrorResponse from '../helpers/sendErrorResponse';
 
-const repaymentValidate = (req, res, next) => {
+const validateRepaidAndPaidAmount = (req, res, next) => {
   if (!req.body.paidAmount) {
     sendErrorResponse(res, 400, 'You did not specify the paid amount');
   } else if (Number.isNaN(Number(req.body.paidAmount))) {
@@ -12,4 +12,4 @@ const repaymentValidate = (req, res, next) => {
   }
 };
 
-export default repaymentValidate;
+export default validateRepaidAndPaidAmount;

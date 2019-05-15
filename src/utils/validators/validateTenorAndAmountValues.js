@@ -1,6 +1,6 @@
 import sendErrorResponse from '../helpers/sendErrorResponse';
 
-const loanValidate3 = (req, res, next) => {
+const validateTenorAndAmountValues = (req, res, next) => {
   if (Number(req.body.amount) <= 0) {
     sendErrorResponse(res, 400, 'The loan amount specified must be greater than 0');
   } else if (parseInt(req.body.tenor, 10) < 1 || parseInt(req.body.tenor, 10) > 12) {
@@ -10,4 +10,4 @@ const loanValidate3 = (req, res, next) => {
   }
 };
 
-export default loanValidate3;
+export default validateTenorAndAmountValues;

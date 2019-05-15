@@ -1,7 +1,7 @@
 import users from '../../models/users';
 import sendErrorResponse from '../helpers/sendErrorResponse';
 
-const loanVerify = (req, res, next) => {
+const checkClientValidity = (req, res, next) => {
   const userMatch = users.filter(user => user.email === req.body.user);
   if (userMatch.length < 1) {
     sendErrorResponse(res, 404, 'Client does not exist');
@@ -16,4 +16,4 @@ const loanVerify = (req, res, next) => {
   }
 };
 
-export default loanVerify;
+export default checkClientValidity;

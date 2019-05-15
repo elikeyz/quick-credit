@@ -1,6 +1,6 @@
 import sendErrorResponse from '../helpers/sendErrorResponse';
 
-const loanValidate2 = (req, res, next) => {
+const validateTenorAndAmount = (req, res, next) => {
   if (!req.body.tenor) {
     sendErrorResponse(res, 400, 'You did not specify the number of months in the tenor period');
   } else if (Number.isNaN(Number(req.body.amount))) {
@@ -12,4 +12,4 @@ const loanValidate2 = (req, res, next) => {
   }
 };
 
-export default loanValidate2;
+export default validateTenorAndAmount;

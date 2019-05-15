@@ -1,6 +1,6 @@
 import sendErrorResponse from '../helpers/sendErrorResponse';
 
-const signupValidate3 = (req, res, next) => {
+const validateEmailAndPasswordPattern = (req, res, next) => {
   if (!/^.+@[^.].*\.[a-z]{2,}$/.test(req.body.email.trim())) {
     sendErrorResponse(res, 400, 'Your email address must follow the pattern ****@**.**');
   } else if (/\s/g.test(req.body.password)) {
@@ -10,4 +10,4 @@ const signupValidate3 = (req, res, next) => {
   }
 };
 
-export default signupValidate3;
+export default validateEmailAndPasswordPattern;
