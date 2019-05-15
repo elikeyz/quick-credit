@@ -59,7 +59,7 @@
                 <div class="modal-btn-unit">
                     <button class="application-button accept-btn">Approve</button>
                     <button class="application-button reject-btn">Reject</button>
-                    <button class="application-button btn-two" id="cancel-btn">Cancel</button>
+                    <button class="application-button btn-two" id="loan-application-cancel-btn">Cancel</button>
                 </div>
             </div>
         </div>
@@ -87,80 +87,44 @@
         </div>
         <div class="container">
             <h1><span><i class="fas fa-briefcase"></i></span> Loan Applications</h1>
-            <div class="cards">
-                <div class="card record">
-                    <div class="record-header">
-                        <img class="avatar" src="./images/avatar.png" alt="Avatar">
-                        <p><strong>John Doe</strong></p>
-                        <p>johndoe25@gmail.com</p>
-                    </div>
-                    <div class="record-body">
-                        <div class="record-unit">
-                            <p class="key">Application Date</p>
-                            <p class="value">01/01/2019, 08:00:00 GMT+0100</p>
-                        </div>
-                        <div class="record-unit">
-                            <p class="key">Amount</p>
-                            <p class="value">N100,000.00</p>
-                        </div>
-                        <div class="record-unit">
-                            <p class="key">Status</p>
-                            <p class="value">Pending <span class="unverified"><i class="fas fa-exclamation-triangle"></i></span></p>
-                        </div>
-                    </div>
-                    <div class="modal-btn-unit">
-                        <button class="form-button" id="open-modal-1"><span><i class="fas fa-eye"></i></span> View</button>
-                    </div>
-                </div>
-                <div class="card record">
-                    <div class="record-header">
-                        <img class="avatar" src="./images/avatar.png" alt="Avatar">
-                        <p><strong>John Doe</strong></p>
-                        <p>johndoe25@gmail.com</p>
-                    </div>
-                    <div class="record-body">
-                        <div class="record-unit">
-                            <p class="key">Application Date</p>
-                            <p class="value">01/01/2019, 08:00:00 GMT+0100</p>
-                        </div>
-                        <div class="record-unit">
-                            <p class="key">Amount</p>
-                            <p class="value">N100,000.00</p>
-                        </div>
-                        <div class="record-unit">
-                            <p class="key">Status</p>
-                            <p class="value">Pending <span class="unverified"><i class="fas fa-exclamation-triangle"></i></span></p>
-                        </div>
-                    </div>
-                    <div class="modal-btn-unit">
-                        <button class="form-button" id="open-modal-2"><span><i class="fas fa-eye"></i></span> View</button>
-                    </div>
-                </div>
-                <div class="card record">
-                    <div class="record-header">
-                        <img class="avatar" src="./images/avatar.png" alt="Avatar">
-                        <p><strong>John Doe</strong></p>
-                        <p>johndoe25@gmail.com</p>
-                    </div>
-                    <div class="record-body">
-                        <div class="record-unit">
-                            <p class="key">Application Date</p>
-                            <p class="value">01/01/2019, 08:00:00 GMT+0100</p>
-                        </div>
-                        <div class="record-unit">
-                            <p class="key">Amount</p>
-                            <p class="value">N100,000.00</p>
-                        </div>
-                        <div class="record-unit">
-                            <p class="key">Status</p>
-                            <p class="value">Pending <span class="unverified"><i class="fas fa-exclamation-triangle"></i></span></p>
-                        </div>
-                    </div>
-                    <div class="modal-btn-unit">
-                        <button class="form-button" id="open-modal-3"><span><i class="fas fa-eye"></i></span> View</button>
-                    </div>
-                </div>
-            </div>
+            <table class="card">
+                <thead>
+                    <tr>
+                        <th class="loan-applications-table-unit">Client Name</th>
+                        <th class="loan-applications-table-unit">Client Email</th>
+                        <th class="loan-applications-table-unit">Application Date</th>
+                        <th class="loan-applications-table-unit">Amount</th>
+                        <th class="loan-applications-table-unit">Status</th>
+                        <th class="loan-applications-table-unit">View</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="loan-applications-table-unit">John Doe</td>
+                        <td class="loan-applications-table-unit">johndoe25@gmail.com</td>
+                        <td class="loan-applications-table-unit">01/01/2019, 08:00:00 GMT+0100</td>
+                        <td class="loan-applications-table-unit">N100,000.00</td>
+                        <td class="loan-applications-table-unit">Pending <span class="unverified"><i class="fas fa-exclamation-triangle"></i></span></td>
+                        <td class="loan-applications-table-unit"><button class="table-button" id="open-loan-application-modal-1"><span><i class="fas fa-eye"></i></span> View</button></td>
+                    </tr>
+                    <tr>
+                        <td class="loan-applications-table-unit">John Doe</td>
+                        <td class="loan-applications-table-unit">johndoe25@gmail.com</td>
+                        <td class="loan-applications-table-unit">01/01/2019, 08:00:00 GMT+0100</td>
+                        <td class="loan-applications-table-unit">N100,000.00</td>
+                        <td class="loan-applications-table-unit">Pending <span class="unverified"><i class="fas fa-exclamation-triangle"></i></span></td>
+                        <td class="loan-applications-table-unit"><button class="table-button" id="open-loan-application-modal-2"><span><i class="fas fa-eye"></i></span> View</button></td>
+                    </tr>
+                    <tr>
+                        <td class="loan-applications-table-unit">John Doe</td>
+                        <td class="loan-applications-table-unit">johndoe25@gmail.com</td>
+                        <td class="loan-applications-table-unit">01/01/2019, 08:00:00 GMT+0100</td>
+                        <td class="loan-applications-table-unit">N100,000.00</td>
+                        <td class="loan-applications-table-unit">Pending <span class="unverified"><i class="fas fa-exclamation-triangle"></i></span></td>
+                        <td class="loan-applications-table-unit"><button class="table-button" id="open-loan-application-modal-3"><span><i class="fas fa-eye"></i></span> View</button></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </main>
     <script src="js/dropdown.js"></script>
