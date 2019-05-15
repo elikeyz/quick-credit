@@ -39,7 +39,7 @@ footer {
 }
 
 .logo {
-    color: white;
+    color: #FFF8E1;
 }
 
 .onboarding-display {
@@ -252,6 +252,52 @@ textarea {
     text-decoration: none;
     display: block;
     cursor: pointer;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    display: flex;
+    flex-direction: column;
+    -ms-flex-direction: column;
+}
+
+thead {
+    color: #FFF8E1;
+}
+
+tbody {
+    color: black;
+}
+
+tr {
+    display: flex;
+    flex-direction: row;
+    -ms-flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.repayments-table-unit {
+    width: 20%;
+}
+
+tr:nth-child(odd) {
+    background-color: #FFF8E1;
+}
+
+tr:nth-child(even) {
+    background-color: #E8EAF6;
+}
+
+td, th {
+    text-align: center;
+    padding: 20px 0;
+}
+
+th {
+    font-weight: bold;
+    background-color: #283593;
 }
 
 .cards {
@@ -748,6 +794,40 @@ textarea {
     .title-button {
         width: 80%;
     }
+
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    td:before {
+        position: absolute;
+        top: 20px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .repayments-table-unit:nth-of-type(1):before { content: "Paid Amount"; }
+    .repayments-table-unit:nth-of-type(2):before { content: "Transaction Date"; }
+    .repayments-table-unit:nth-of-type(3):before { content: "Transaction Time"; }
+    .repayments-table-unit:nth-of-type(4):before { content: "Total Debt"; }
+    .repayments-table-unit:nth-of-type(5):before { content: "Balance"; }
 }
 
 @media only screen and (min-width: 500px) {
