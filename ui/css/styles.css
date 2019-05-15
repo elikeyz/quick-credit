@@ -402,7 +402,7 @@ th {
 }
 
 .profile-container {
-    padding: 50px 15%;
+    padding: 50px 10%;
     font-family: 'Open Sans', sans-serif;
 }
 
@@ -673,6 +673,63 @@ th {
     .admin-links {
         width: 70%;
     }
+
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    td {
+        border: none;
+        position: relative;
+        padding-left: 50%;
+        text-align: left;
+    }
+
+    td:before {
+        position: absolute;
+        top: 20px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .table-button {
+        width: 150%;
+    }
+
+    .repayments-table-unit:nth-of-type(1):before { content: "Paid Amount"; }
+    .repayments-table-unit:nth-of-type(2):before { content: "Transaction Date"; }
+    .repayments-table-unit:nth-of-type(3):before { content: "Transaction Time"; }
+    .repayments-table-unit:nth-of-type(4):before { content: "Total Debt"; }
+    .repayments-table-unit:nth-of-type(5):before { content: "Balance"; }
+
+    .clients-table-unit:nth-of-type(1):before { content: "Name"; }
+    .clients-table-unit:nth-of-type(2):before { content: "Email"; }
+    .clients-table-unit:nth-of-type(3):before { content: "Status"; }
+    .clients-table-unit:nth-of-type(4):before { content: "View"; }
+
+    .loan-applications-table-unit:nth-of-type(1):before { content: "Client Name"; }
+    .loan-applications-table-unit:nth-of-type(2):before { content: "Client Email"; }
+    .loan-applications-table-unit:nth-of-type(3):before { content: "Application Date"; }
+    .loan-applications-table-unit:nth-of-type(4):before { content: "Amount"; }
+    .loan-applications-table-unit:nth-of-type(5):before { content: "Status"; }
+    .loan-applications-table-unit:nth-of-type(6):before { content: "View"; }
+
+    .loans-table-unit:nth-of-type(1):before { content: "Client Name"; }
+    .loans-table-unit:nth-of-type(2):before { content: "Client Email"; }
+    .loans-table-unit:nth-of-type(3):before { content: "Application Date"; }
+    .loans-table-unit:nth-of-type(4):before { content: "Amount"; }
+    .loans-table-unit:nth-of-type(5):before { content: "Balance"; }
+    .loans-table-unit:nth-of-type(6):before { content: "View"; }
 }
 
 @media only screen and (max-width: 900px) {
@@ -761,63 +818,6 @@ th {
         flex-direction: column;
         -ms-flex-direction: column;
     }
-
-    table, thead, tbody, th, td, tr {
-        display: block;
-    }
-
-    thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-    }
-
-    td {
-        border: none;
-        position: relative;
-        padding-left: 50%;
-        text-align: left;
-    }
-
-    td:before {
-        position: absolute;
-        top: 20px;
-        left: 6px;
-        width: 45%;
-        padding-right: 10px;
-        white-space: nowrap;
-        font-weight: bold;
-        text-align: left;
-    }
-
-    .table-button {
-        width: 150%;
-    }
-
-    .repayments-table-unit:nth-of-type(1):before { content: "Paid Amount"; }
-    .repayments-table-unit:nth-of-type(2):before { content: "Transaction Date"; }
-    .repayments-table-unit:nth-of-type(3):before { content: "Transaction Time"; }
-    .repayments-table-unit:nth-of-type(4):before { content: "Total Debt"; }
-    .repayments-table-unit:nth-of-type(5):before { content: "Balance"; }
-
-    .clients-table-unit:nth-of-type(1):before { content: "Name"; }
-    .clients-table-unit:nth-of-type(2):before { content: "Email"; }
-    .clients-table-unit:nth-of-type(3):before { content: "Status"; }
-    .clients-table-unit:nth-of-type(4):before { content: "View"; }
-
-    .loan-applications-table-unit:nth-of-type(1):before { content: "Client Name"; }
-    .loan-applications-table-unit:nth-of-type(2):before { content: "Client Email"; }
-    .loan-applications-table-unit:nth-of-type(3):before { content: "Application Date"; }
-    .loan-applications-table-unit:nth-of-type(4):before { content: "Amount"; }
-    .loan-applications-table-unit:nth-of-type(5):before { content: "Status"; }
-    .loan-applications-table-unit:nth-of-type(6):before { content: "View"; }
-
-    .loans-table-unit:nth-of-type(1):before { content: "Client Name"; }
-    .loans-table-unit:nth-of-type(2):before { content: "Client Email"; }
-    .loans-table-unit:nth-of-type(3):before { content: "Application Date"; }
-    .loans-table-unit:nth-of-type(4):before { content: "Amount"; }
-    .loans-table-unit:nth-of-type(5):before { content: "Balance"; }
-    .loans-table-unit:nth-of-type(6):before { content: "View"; }
 }
 
 @media only screen and (max-width: 500px) {
