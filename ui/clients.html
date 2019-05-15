@@ -64,56 +64,36 @@
         </div>
         <div class="container">
             <h1><span><i class="fas fa-user"></i></span> Clients</h1>
-            <div class="cards">
-                <div class="card record">
-                    <div class="record-header">
-                        <img class="avatar" src="./images/avatar.png" alt="Avatar">
-                        <p><strong>John Doe</strong></p>
-                        <p>johndoe25@gmail.com</p>
-                    </div>
-                    <div class="record-body">
-                        <div class="record-unit">
-                            <p class="profile-key">Status</p>
-                            <p class="profile-value">Unverified <span class="unverified"><i class="fas fa-exclamation-triangle"></i></span></p>
-                        </div>
-                    </div>
-                    <div class="modal-btn-unit">
-                        <button class="form-button" id="open-modal-1"><span><i class="fas fa-eye"></i></span> View</button>
-                    </div>
-                </div>
-                <div class="card record">
-                    <div class="record-header">
-                        <img class="avatar" src="./images/avatar.png" alt="Avatar">
-                        <p><strong>John Doe</strong></p>
-                        <p>johndoe25@gmail.com</p>
-                    </div>
-                    <div class="record-body">
-                        <div class="record-unit">
-                            <p class="profile-key">Status</p>
-                            <p class="profile-value">Unverified <span class="unverified"><i class="fas fa-exclamation-triangle"></i></span></p>
-                        </div>
-                    </div>
-                    <div class="modal-btn-unit">
-                        <button class="form-button" id="open-modal-2"><span><i class="fas fa-eye"></i></span> View</button>
-                    </div>
-                </div>
-                <div class="card record">
-                    <div class="record-header">
-                        <img class="avatar" src="./images/avatar.png" alt="Avatar">
-                        <p><strong>John Doe</strong></p>
-                        <p>johndoe25@gmail.com</p>
-                    </div>
-                    <div class="record-body">
-                        <div class="record-unit">
-                            <p class="profile-key">Status</p>
-                            <p class="profile-value">Unverified <span class="unverified"><i class="fas fa-exclamation-triangle"></i></span></p>
-                        </div>
-                    </div>
-                    <div class="modal-btn-unit">
-                        <button class="form-button" id="open-modal-3"><span><i class="fas fa-eye"></i></span> View</button>
-                    </div>
-                </div>
-            </div>
+            <table class="card">
+                <thead>
+                    <tr>
+                        <th class="clients-table-unit">Name</th>
+                        <th class="clients-table-unit">Email</th>
+                        <th class="clients-table-unit">Status</th>
+                        <th class="clients-table-unit">View</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="clients-table-unit">John Doe</td>
+                        <td class="clients-table-unit">johndoe25@gmail.com</td>
+                        <td class="clients-table-unit">Unverified <span class="unverified"><i class="fas fa-exclamation-triangle"></i></span></td>
+                        <td class="clients-table-unit"><button class="table-button" id="open-modal-1"><span><i class="fas fa-eye"></i></span> View</button></td>
+                    </tr>
+                    <tr>
+                        <td class="clients-table-unit">John Doe</td>
+                        <td class="clients-table-unit">johndoe25@gmail.com</td>
+                        <td class="clients-table-unit">Unverified <span class="unverified"><i class="fas fa-exclamation-triangle"></i></span></td>
+                        <td class="clients-table-unit"><button class="table-button" id="open-modal-2"><span><i class="fas fa-eye"></i></span> View</button></td>
+                    </tr>
+                    <tr>
+                        <td class="clients-table-unit">John Doe</td>
+                        <td class="clients-table-unit">johndoe25@gmail.com</td>
+                        <td class="clients-table-unit">Unverified <span class="unverified"><i class="fas fa-exclamation-triangle"></i></span></td>
+                        <td class="clients-table-unit"><button class="table-button" id="open-modal-3"><span><i class="fas fa-eye"></i></span> View</button></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </main>
     <script src="js/dropdown.js"></script>

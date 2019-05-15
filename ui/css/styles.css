@@ -282,6 +282,10 @@ tr {
     width: 20%;
 }
 
+.clients-table-unit {
+    width: 25%;
+}
+
 tr:nth-child(odd) {
     background-color: #FFF8E1;
 }
@@ -298,6 +302,17 @@ td, th {
 th {
     font-weight: bold;
     background-color: #283593;
+}
+
+.table-button {
+    height: 30px;
+    width: 80%;
+    border: 1px solid #1A237E;
+    border-radius: 15px;
+    background-color: #1A237E;
+    color: #FFF8E1;
+    cursor: pointer;
+    font-size: 15px;
 }
 
 .cards {
@@ -740,6 +755,49 @@ th {
         flex-direction: column;
         -ms-flex-direction: column;
     }
+
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    td {
+        border: none;
+        position: relative;
+        padding-left: 50%;
+        text-align: left;
+    }
+
+    td:before {
+        position: absolute;
+        top: 20px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .table-button {
+        width: 100%;
+    }
+
+    .repayments-table-unit:nth-of-type(1):before { content: "Paid Amount"; }
+    .repayments-table-unit:nth-of-type(2):before { content: "Transaction Date"; }
+    .repayments-table-unit:nth-of-type(3):before { content: "Transaction Time"; }
+    .repayments-table-unit:nth-of-type(4):before { content: "Total Debt"; }
+    .repayments-table-unit:nth-of-type(5):before { content: "Balance"; }
+
+    .clients-table-unit:nth-of-type(1):before { content: "Name"; }
+    .clients-table-unit:nth-of-type(2):before { content: "Email"; }
+    .clients-table-unit:nth-of-type(3):before { content: "Status"; }
+    .clients-table-unit:nth-of-type(4):before { content: "View"; }
 }
 
 @media only screen and (max-width: 500px) {
@@ -794,40 +852,6 @@ th {
     .title-button {
         width: 80%;
     }
-
-    table, thead, tbody, th, td, tr {
-        display: block;
-    }
-
-    thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-    }
-
-    td {
-        border: none;
-        border-bottom: 1px solid #eee;
-        position: relative;
-        padding-left: 50%;
-    }
-
-    td:before {
-        position: absolute;
-        top: 20px;
-        left: 6px;
-        width: 45%;
-        padding-right: 10px;
-        white-space: nowrap;
-        font-weight: bold;
-        text-align: left;
-    }
-
-    .repayments-table-unit:nth-of-type(1):before { content: "Paid Amount"; }
-    .repayments-table-unit:nth-of-type(2):before { content: "Transaction Date"; }
-    .repayments-table-unit:nth-of-type(3):before { content: "Transaction Time"; }
-    .repayments-table-unit:nth-of-type(4):before { content: "Total Debt"; }
-    .repayments-table-unit:nth-of-type(5):before { content: "Balance"; }
 }
 
 @media only screen and (min-width: 500px) {
