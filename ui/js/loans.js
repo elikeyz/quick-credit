@@ -3,23 +3,21 @@ const currentTab = document.getElementById('current-tab');
 const repaidTab = document.getElementById('repaid-tab');
 const tabs = [allTab, currentTab, repaidTab];
 
-allTab.addEventListener('click', () => {
+const openTab = (myTab) => {
   tabs.forEach((tab) => {
     tab.classList.remove('active-tab');
   });
-  allTab.classList.add('active-tab');
+  myTab.classList.add('active-tab');
+};
+
+allTab.addEventListener('click', () => {
+  openTab(allTab);
 });
 
 currentTab.addEventListener('click', () => {
-  tabs.forEach((tab) => {
-    tab.classList.remove('active-tab');
-  });
-  currentTab.classList.add('active-tab');
+  openTab(currentTab);
 });
 
 repaidTab.addEventListener('click', () => {
-  tabs.forEach((tab) => {
-    tab.classList.remove('active-tab');
-  });
-  repaidTab.classList.add('active-tab');
+  openTab(repaidTab);
 });
