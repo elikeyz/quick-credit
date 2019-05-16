@@ -282,6 +282,27 @@ describe('Auth/Users', () => {
         });
     });
 
+    it('it should fail if the password specified contains whitespaces', (done) => {
+      const user = {
+        email: 'koppter.kom@gmail.com',
+        firstName: 'Elijah',
+        lastName: 'Enuem-Udogu',
+        password: 'masta hacka',
+        address: 'No. 11, Elaiho Lane.',
+        workAddress: 'Shopping Complex, EDPA.',
+      };
+
+      chai.request(app)
+        .post('/api/v1/auth/signup')
+        .type('form')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property('error').eql('You must not add whitespaces in your password');
+          done();
+        });
+    });
+
     it('it should fail if a user account with the same email address already exists', (done) => {
       const user = {
         email: 'johndoe25@gmail.com',

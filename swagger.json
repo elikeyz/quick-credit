@@ -694,10 +694,6 @@
           "lastName": {
             "type": "string"
           },
-          "password": {
-            "type": "string",
-            "format": "password"
-          },
           "address": {
             "type": "string"
           },

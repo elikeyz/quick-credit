@@ -1,6 +1,6 @@
 import sendErrorResponse from '../helpers/sendErrorResponse';
 
-const signupValidate = (req, res, next) => {
+const validateName = (req, res, next) => {
   if (!req.body.firstName || !req.body.firstName.trim()) {
     sendErrorResponse(res, 400, 'You did not enter the first name');
   } else if (!req.body.lastName || !req.body.lastName.trim()) {
@@ -10,4 +10,4 @@ const signupValidate = (req, res, next) => {
   }
 };
 
-export default signupValidate;
+export default validateName;

@@ -10,14 +10,13 @@ const signup = (req, res) => {
     email: req.body.email.trim(),
     firstName: req.body.firstName.trim(),
     lastName: req.body.lastName.trim(),
-    password: hashedPassword,
     address: req.body.address.trim(),
     workAddress: req.body.workAddress.trim(),
     status: 'unverified',
     isAdmin: false,
   };
   const token = generateUserToken(newUser);
-  users.push(newUser);
+  users.push({ password: hashedPassword, ...newUser });
   sendSuccessResponse(res, 201, { token, ...newUser });
 };
 
@@ -29,7 +28,6 @@ const login = (req, res) => {
     email: req.user.email,
     firstName: req.user.firstName,
     lastName: req.user.lastName,
-    password: req.user.password,
     address: req.user.address,
     workAddress: req.user.workAddress,
     status: req.user.status,
@@ -46,13 +44,12 @@ const verifyClient = (req, res) => {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
-        password: user.password,
         address: user.address,
         workAddress: user.workAddress,
         status: 'verified',
         isAdmin: user.isAdmin,
       };
-      users.splice(userIndex, 1, client);
+      users.splice(userIndex, 1, { password: user.password, ...client });
       sendSuccessResponse(res, 200, client);
     }
   });
