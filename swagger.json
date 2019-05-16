@@ -330,6 +330,49 @@
           }
         }
       },
+      "/users/me/loans/repayments": {
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "JSON Web Token authorizing the user to visit this route",
+            "type": "string"
+          }
+        ],
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Get the logged in user's loan repayments",
+          "description": "Get the logged in user's loan repayments",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "User's loan repayments gotten successfully",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "integer"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/Repayments"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Authentication error",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        }
+      },
       "/users/{userEmail}": {
         "parameters": [
           {

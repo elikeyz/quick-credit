@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import users from '../models/users';
+import repayments from '../models/repayments';
 import sendSuccessResponse from '../utils/helpers/sendSuccessResponse';
 import generateUserToken from '../utils/helpers/generateUserToken';
 
@@ -94,6 +95,12 @@ const getMyLoans = (req, res) => {
   sendSuccessResponse(res, 200, req.myLoans);
 };
 
+const getMyLoanRepayments = (req, res) => {
+  const myLoanIds = req.myLoans.map(loan => loan.id);
+  const myRepayments = repayments.filter(repayment => myLoanIds.includes(repayment.loanId));
+  sendSuccessResponse(res, 200, myRepayments);
+};
+
 const usersController = {
   signup,
   login,
@@ -102,6 +109,7 @@ const usersController = {
   getAClient,
   getMyUserDetails,
   getMyLoans,
+  getMyLoanRepayments,
 };
 
 export default usersController;

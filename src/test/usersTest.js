@@ -571,7 +571,7 @@ describe('Auth/Users', () => {
   describe('GET /users/me/loans', () => {
     it('it should fail if there is no token in the header', (done) => {
       chai.request(app)
-        .get('/api/v1/users/me')
+        .get('/api/v1/users/me/loans')
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.property('error').eql('You did not enter a token in the header');
@@ -581,7 +581,7 @@ describe('Auth/Users', () => {
 
     it('it should fail if the token in the header is invalid', (done) => {
       chai.request(app)
-        .get('/api/v1/users/me')
+        .get('/api/v1/users/me/loans')
         .set({ token: 'lskjdlksjdflk' })
         .end((err, res) => {
           res.should.have.status(401);
@@ -603,6 +603,51 @@ describe('Auth/Users', () => {
       };
       chai.request(app)
         .get('/api/v1/users/me/loans')
+        .set({ token: generateUserToken(user) })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property('data');
+          res.body.data.should.be.a('array');
+          done();
+        });
+    });
+  });
+
+  describe('GET /users/me/loans/repayments', () => {
+    it('it should fail if there is no token in the header', (done) => {
+      chai.request(app)
+        .get('/api/v1/users/me/loans/repayments')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('error').eql('You did not enter a token in the header');
+          done();
+        });
+    });
+
+    it('it should fail if the token in the header is invalid', (done) => {
+      chai.request(app)
+        .get('/api/v1/users/me/loans/repayments')
+        .set({ token: 'lskjdlksjdflk' })
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('error').eql('Failed to authenticate token');
+          done();
+        });
+    });
+
+    it('it should get the user\'s loan repayments successfully', (done) => {
+      const user = {
+        id: 2,
+        email: 'johndoe25@gmail.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
+      chai.request(app)
+        .get('/api/v1/users/me/loans/repayments')
         .set({ token: generateUserToken(user) })
         .end((err, res) => {
           res.should.have.status(200);

@@ -29,7 +29,14 @@ import filterMyLoans from './verifiers/filterMyLoans';
 
 const router = express.Router();
 const {
-  signup, login, verifyClient, getClients, getAClient, getMyUserDetails, getMyLoans,
+  signup,
+  login,
+  verifyClient,
+  getClients,
+  getAClient,
+  getMyUserDetails,
+  getMyLoans,
+  getMyLoanRepayments,
 } = usersController;
 const {
   getALoan, getLoans, requestLoan, respondToLoanRequest,
@@ -41,6 +48,7 @@ router.post('/auth/signin', validateEmailAndPassword, loginVerify, login);
 router.get('/users', tokenValidate, adminAuth, getClients);
 router.get('/users/me', tokenValidate, getMyUserDetails);
 router.get('/users/me/loans', tokenValidate, filterMyLoans, getMyLoans);
+router.get('/users/me/loans/repayments', tokenValidate, filterMyLoans, getMyLoanRepayments);
 router.get('/users/:userEmail', tokenValidate, adminAuth, checkIfClientExists, checkIfClientIsAdmin, getAClient);
 router.patch('/users/:userEmail/verify', tokenValidate, adminAuth, checkIfClientExists, checkIfClientIsAdmin, verifyClient);
 router.get('/loans', tokenValidate, adminAuth, loansQueryValidate, getLoans);
