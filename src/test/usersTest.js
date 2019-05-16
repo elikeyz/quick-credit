@@ -2,6 +2,7 @@
 import chai, { should } from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../app';
+import generateUserToken from '../utils/helpers/generateUserToken';
 
 should();
 chai.use(chaiHttp);
@@ -456,9 +457,62 @@ describe('Auth/Users', () => {
   });
 
   describe('GET /users', () => {
-    it('it should get all the client details successfully', (done) => {
+    it('it should fail if there is no token in the header', (done) => {
       chai.request(app)
         .get('/api/v1/users')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('error').eql('You did not enter a token in the header');
+          done();
+        });
+    });
+
+    it('it should fail if the token in the header is invalid', (done) => {
+      chai.request(app)
+        .get('/api/v1/users')
+        .set({ token: 'lskjdlksjdflk' })
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('error').eql('Failed to authenticate token');
+          done();
+        });
+    });
+
+    it('it should fail if the user is not an Admin', (done) => {
+      const user = {
+        id: 2,
+        email: 'johndoe25@gmail.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
+      chai.request(app)
+        .get('/api/v1/users')
+        .set({ token: generateUserToken(user) })
+        .end((err, res) => {
+          res.should.have.status(403);
+          res.body.should.have.property('error').eql('This route is for Admin users only');
+          done();
+        });
+    });
+
+    it('it should get all the client details successfully', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
+      chai.request(app)
+        .get('/api/v1/users')
+        .set({ token: generateUserToken(user) })
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.have.property('data');
@@ -469,9 +523,62 @@ describe('Auth/Users', () => {
   });
 
   describe('GET /users/:userEmail', () => {
+    it('it should fail if there is no token in the header', (done) => {
+      chai.request(app)
+        .get('/api/v1/users/johndoe25@gmail.com')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('error').eql('You did not enter a token in the header');
+          done();
+        });
+    });
+
+    it('it should fail if the token in the header is invalid', (done) => {
+      chai.request(app)
+        .get('/api/v1/users/johndoe25@gmail.com')
+        .set({ token: 'lskjdlksjdflk' })
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('error').eql('Failed to authenticate token');
+          done();
+        });
+    });
+
+    it('it should fail if the user is not an Admin', (done) => {
+      const user = {
+        id: 2,
+        email: 'johndoe25@gmail.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
+      chai.request(app)
+        .get('/api/v1/users/johndoe25@gmail.com')
+        .set({ token: generateUserToken(user) })
+        .end((err, res) => {
+          res.should.have.status(403);
+          res.body.should.have.property('error').eql('This route is for Admin users only');
+          done();
+        });
+    });
+
     it('it should fail if the client does not exist', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .get('/api/v1/users/kay1.kom@gmail.com')
+        .set({ token: generateUserToken(user) })
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.have.property('error').eql('Client does not exist');
@@ -480,8 +587,19 @@ describe('Auth/Users', () => {
     });
 
     it('it should fail if the email specified belongs to an admin account', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .get('/api/v1/users/quickcredit2019@gmail.com')
+        .set({ token: generateUserToken(user) })
         .end((err, res) => {
           res.should.have.status(403);
           res.body.should.have.property('error').eql('You are not authorized to view the user details of an admin account');
@@ -490,8 +608,19 @@ describe('Auth/Users', () => {
     });
 
     it('it should get a client\'s user details successfully', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .get('/api/v1/users/johndoe25@gmail.com')
+        .set({ token: generateUserToken(user) })
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.have.property('data');
@@ -504,9 +633,62 @@ describe('Auth/Users', () => {
   });
 
   describe('PATCH /users/:userEmail/verify', () => {
+    it('it should fail if there is no token in the header', (done) => {
+      chai.request(app)
+        .patch('/api/v1/users/hansolo25@gmail.com/verify')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('error').eql('You did not enter a token in the header');
+          done();
+        });
+    });
+
+    it('it should fail if the token in the header is invalid', (done) => {
+      chai.request(app)
+        .patch('/api/v1/users/hansolo25@gmail.com/verify')
+        .set({ token: 'lskjdlksjdflk' })
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('error').eql('Failed to authenticate token');
+          done();
+        });
+    });
+
+    it('it should fail if the user is not an Admin', (done) => {
+      const user = {
+        id: 2,
+        email: 'johndoe25@gmail.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
+      chai.request(app)
+        .patch('/api/v1/users/hansolo25@gmail.com/verify')
+        .set({ token: generateUserToken(user) })
+        .end((err, res) => {
+          res.should.have.status(403);
+          res.body.should.have.property('error').eql('This route is for Admin users only');
+          done();
+        });
+    });
+
     it('it should fail if the client does not exist', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .patch('/api/v1/users/kay1.kom@gmail.com/verify')
+        .set({ token: generateUserToken(user) })
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.have.property('error').eql('Client does not exist');
@@ -515,8 +697,19 @@ describe('Auth/Users', () => {
     });
 
     it('it should fail if the email specified belongs to an admin account', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .patch('/api/v1/users/quickcredit2019@gmail.com/verify')
+        .set({ token: generateUserToken(user) })
         .end((err, res) => {
           res.should.have.status(403);
           res.body.should.have.property('error').eql('You are not authorized to view the user details of an admin account');
@@ -525,8 +718,19 @@ describe('Auth/Users', () => {
     });
 
     it('it should verify a client successfully', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .patch('/api/v1/users/hansolo25@gmail.com/verify')
+        .set({ token: generateUserToken(user) })
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.have.property('data');

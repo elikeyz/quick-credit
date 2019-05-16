@@ -7,7 +7,16 @@ const loginVerify = (req, res, next) => {
     sendErrorResponse(res, 401, 'The email or password you entered is incorrect');
   } else {
     const [loggedInUser] = userMatch;
-    req.user = loggedInUser;
+    req.user = {
+      id: loggedInUser.id,
+      email: loggedInUser.email,
+      firstName: loggedInUser.firstName,
+      lastName: loggedInUser.lastName,
+      address: loggedInUser.address,
+      workAddress: loggedInUser.workAddress,
+      status: loggedInUser.status,
+      isAdmin: loggedInUser.isAdmin,
+    };
     next();
   }
 };
