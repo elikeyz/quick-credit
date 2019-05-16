@@ -376,10 +376,29 @@ th {
     background-color: rgba(0,0,0,0.6);
 }
 
+.close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    color: #1A237E;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.close-alt {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    color: #FFF8E1;
+    font-size: 20px;
+    cursor: pointer;
+}
+
 .modal-content {
     margin: auto;
     background-color: rgb(159, 168, 218);
     font-family: 'Open Sans', sans-serif;
+    position: relative;
 }
 
 .modal-content .form-unit {
@@ -492,6 +511,7 @@ th {
     width: 60%;
     margin: auto;
     font-family: 'Open Sans', sans-serif;
+    position: relative;
 }
 
 .client-modal-content .profile-header{

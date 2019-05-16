@@ -5,8 +5,13 @@ const openLoanModal = (event) => {
   loanModal.style.display = 'flex';
 
   const cancelBtn = document.getElementById('loan-cancel-btn');
+  const closeBtn = document.getElementById('loan-close-btn');
 
   cancelBtn.addEventListener('click', () => {
+    loanModal.style.display = 'none';
+  });
+
+  closeBtn.addEventListener('click', () => {
     loanModal.style.display = 'none';
   });
 };

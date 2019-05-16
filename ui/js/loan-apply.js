@@ -6,8 +6,13 @@ modalBtn.addEventListener('click', (event) => {
   modal.style.display = 'flex';
 
   const cancelBtn = document.getElementById('cancel-btn');
+  const closeBtn = document.getElementById('close-btn');
 
   cancelBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+
+  closeBtn.addEventListener('click', () => {
     modal.style.display = 'none';
   });
 });
