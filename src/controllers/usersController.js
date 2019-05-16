@@ -84,12 +84,19 @@ const getAClient = (req, res) => {
   sendSuccessResponse(res, 200, client);
 };
 
+const getMyUserDetails = (req, res) => {
+  const userMatch = users.filter(user => user.email === req.user.email);
+  const [me] = userMatch;
+  sendSuccessResponse(res, 200, me);
+};
+
 const usersController = {
   signup,
   login,
   verifyClient,
   getClients,
   getAClient,
+  getMyUserDetails,
 };
 
 export default usersController;

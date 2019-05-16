@@ -244,6 +244,49 @@
           }
         }
       },
+      "/users/me": {
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "JSON Web Token authorizing the user to visit this route",
+            "type": "string"
+          }
+        ],
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Get the logged in user's details",
+          "description": "Get the logged in user's details",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "User's details gotten successfully",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "integer"
+                  },
+                  "data": {
+                    "$ref": "#/definitions/User"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Authentication error",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        }
+      },
       "/users/{userEmail}": {
         "parameters": [
           {

@@ -28,7 +28,7 @@ import userAuth from './verifiers/userAuth';
 
 const router = express.Router();
 const {
-  signup, login, verifyClient, getClients, getAClient,
+  signup, login, verifyClient, getClients, getAClient, getMyUserDetails,
 } = usersController;
 const {
   getALoan, getLoans, requestLoan, respondToLoanRequest,
@@ -38,6 +38,7 @@ const { getLoanRepayments, postClientRepaymentTranx } = repaymentsController;
 router.post('/auth/signup', validateEmailAndPassword, validateName, validateAddresses, validateEmailAndPasswordPattern, signupVerify, signup);
 router.post('/auth/signin', validateEmailAndPassword, loginVerify, login);
 router.get('/users', tokenValidate, adminAuth, getClients);
+router.get('/users/me', tokenValidate, getMyUserDetails);
 router.get('/users/:userEmail', tokenValidate, adminAuth, checkIfClientExists, checkIfClientIsAdmin, getAClient);
 router.patch('/users/:userEmail/verify', tokenValidate, adminAuth, checkIfClientExists, checkIfClientIsAdmin, verifyClient);
 router.get('/loans', tokenValidate, adminAuth, loansQueryValidate, getLoans);

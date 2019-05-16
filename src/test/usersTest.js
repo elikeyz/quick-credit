@@ -522,6 +522,52 @@ describe('Auth/Users', () => {
     });
   });
 
+  describe('GET /users/me', () => {
+    it('it should fail if there is no token in the header', (done) => {
+      chai.request(app)
+        .get('/api/v1/users/me')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('error').eql('You did not enter a token in the header');
+          done();
+        });
+    });
+
+    it('it should fail if the token in the header is invalid', (done) => {
+      chai.request(app)
+        .get('/api/v1/users/me')
+        .set({ token: 'lskjdlksjdflk' })
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('error').eql('Failed to authenticate token');
+          done();
+        });
+    });
+
+    it('it should get the user\'s details successfully', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
+      chai.request(app)
+        .get('/api/v1/users/me')
+        .set({ token: generateUserToken(user) })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property('data');
+          res.body.data.should.be.a('object');
+          res.body.data.should.have.property('email').eql('quickcredit2019@gmail.com');
+          done();
+        });
+    });
+  });
+
   describe('GET /users/:userEmail', () => {
     it('it should fail if there is no token in the header', (done) => {
       chai.request(app)
