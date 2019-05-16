@@ -90,6 +90,10 @@ const getMyUserDetails = (req, res) => {
   sendSuccessResponse(res, 200, me);
 };
 
+const getMyLoans = (req, res) => {
+  sendSuccessResponse(res, 200, req.myLoans);
+};
+
 const usersController = {
   signup,
   login,
@@ -97,6 +101,7 @@ const usersController = {
   getClients,
   getAClient,
   getMyUserDetails,
+  getMyLoans,
 };
 
 export default usersController;

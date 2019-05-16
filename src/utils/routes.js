@@ -25,10 +25,11 @@ import checkIfPaidAmountIsGreaterThanBalance from './validators/checkIfPaidAmoun
 import tokenValidate from './validators/tokenValidate';
 import adminAuth from './verifiers/adminAuth';
 import userAuth from './verifiers/userAuth';
+import filterMyLoans from './verifiers/filterMyLoans';
 
 const router = express.Router();
 const {
-  signup, login, verifyClient, getClients, getAClient, getMyUserDetails,
+  signup, login, verifyClient, getClients, getAClient, getMyUserDetails, getMyLoans,
 } = usersController;
 const {
   getALoan, getLoans, requestLoan, respondToLoanRequest,
@@ -39,6 +40,7 @@ router.post('/auth/signup', validateEmailAndPassword, validateName, validateAddr
 router.post('/auth/signin', validateEmailAndPassword, loginVerify, login);
 router.get('/users', tokenValidate, adminAuth, getClients);
 router.get('/users/me', tokenValidate, getMyUserDetails);
+router.get('/users/me/loans', tokenValidate, filterMyLoans, getMyLoans);
 router.get('/users/:userEmail', tokenValidate, adminAuth, checkIfClientExists, checkIfClientIsAdmin, getAClient);
 router.patch('/users/:userEmail/verify', tokenValidate, adminAuth, checkIfClientExists, checkIfClientIsAdmin, verifyClient);
 router.get('/loans', tokenValidate, adminAuth, loansQueryValidate, getLoans);
