@@ -1,9 +1,10 @@
+import bcrypt from 'bcryptjs';
 import users from '../../models/users';
 import sendErrorResponse from '../helpers/sendErrorResponse';
 
 const loginVerify = (req, res, next) => {
   const userMatch = users.filter(user => user.email === req.body.email);
-  if (userMatch.length < 1 || userMatch[0].password !== req.body.password) {
+  if (userMatch.length < 1 || !bcrypt.compareSync(req.body.password, userMatch[0].password)) {
     sendErrorResponse(res, 401, 'The email or password you entered is incorrect');
   } else {
     const [loggedInUser] = userMatch;
