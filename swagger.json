@@ -197,7 +197,7 @@
       "/users": {
         "parameters": [
           {
-            "name": "token",
+            "name": "authorization",
             "in": "header",
             "required": true,
             "description": "JSON Web Token authorizing the user to visit this route",
@@ -247,7 +247,7 @@
       "/users/me": {
         "parameters": [
           {
-            "name": "token",
+            "name": "authorization",
             "in": "header",
             "required": true,
             "description": "JSON Web Token authorizing the user to visit this route",
@@ -290,7 +290,7 @@
       "/users/me/loans": {
         "parameters": [
           {
-            "name": "token",
+            "name": "authorization",
             "in": "header",
             "required": true,
             "description": "JSON Web Token authorizing the user to visit this route",
@@ -333,7 +333,7 @@
       "/users/me/loans/repayments": {
         "parameters": [
           {
-            "name": "token",
+            "name": "authorization",
             "in": "header",
             "required": true,
             "description": "JSON Web Token authorizing the user to visit this route",
@@ -376,7 +376,7 @@
       "/users/{userEmail}": {
         "parameters": [
           {
-            "name": "token",
+            "name": "authorization",
             "in": "header",
             "required": true,
             "description": "JSON Web Token authorizing the user to visit this route",
@@ -438,7 +438,7 @@
       "/users/{userEmail}/verify": {
         "parameters": [
           {
-            "name": "token",
+            "name": "authorization",
             "in": "header",
             "required": true,
             "description": "JSON Web Token authorizing the user to visit this route",
@@ -500,7 +500,7 @@
       "/loans": {
         "parameters": [
           {
-            "name": "token",
+            "name": "authorization",
             "in": "header",
             "required": true,
             "description": "JSON Web Token authorizing the user to visit this route",
@@ -655,7 +655,7 @@
       "/loans/{loanId}": {
         "parameters": [
           {
-            "name": "token",
+            "name": "authorization",
             "in": "header",
             "required": true,
             "description": "JSON Web Token authorizing the user to visit this route",
@@ -793,7 +793,7 @@
       "/loans/{loanId}/repayments": {
         "parameters": [
           {
-            "name": "token",
+            "name": "authorization",
             "in": "header",
             "required": true,
             "description": "JSON Web Token authorizing the user to visit this route",

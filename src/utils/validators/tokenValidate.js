@@ -5,10 +5,12 @@ import sendErrorResponse from '../helpers/sendErrorResponse';
 dotenv.config();
 
 const tokenValidate = (req, res, next) => {
-  if (!req.headers.token || !req.headers.token.trim()) {
+  if (!req.headers.authorization) {
     sendErrorResponse(res, 401, 'You did not enter a token in the header');
   } else {
-    jwt.verify(req.headers.token, process.env.SECRET_KEY, (err, decoded) => {
+    const bearer = req.headers.authorization.split(' ');
+    const [, token] = bearer;
+    jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
       if (err) {
         sendErrorResponse(res, 401, 'Failed to authenticate token');
       } else {
