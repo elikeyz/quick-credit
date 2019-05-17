@@ -2,15 +2,48 @@
 import chai, { should } from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../app';
+import generateUserToken from '../utils/helpers/generateUserToken';
 
 should();
 chai.use(chaiHttp);
 
 describe('Loans', () => {
   describe('GET /loans/:loanId', () => {
-    it('it should fail if a non-numerical character is provided as the Loan ID', (done) => {
+    it('should fail if there is no token in the header', (done) => {
+      chai.request(app)
+        .get('/api/v1/loans/1')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('error').eql('You did not enter a token in the header');
+          done();
+        });
+    });
+
+    it('should fail if the token in the header is invalid', (done) => {
+      chai.request(app)
+        .get('/api/v1/loans/1')
+        .set({ authorization: 'Bearer lskjdlksjdflk' })
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('error').eql('Failed to authenticate token');
+          done();
+        });
+    });
+
+    it('should fail if a non-numerical character is provided as the Loan ID', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .get('/api/v1/loans/a')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.have.property('error').eql('The Loan ID parameter must be an integer');
@@ -18,9 +51,20 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if a floating point number is provided as the Loan ID', (done) => {
+    it('should fail if a floating point number is provided as the Loan ID', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .get('/api/v1/loans/1.1')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.have.property('error').eql('The Loan ID parameter must be an integer');
@@ -28,9 +72,20 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if the loan does not exist', (done) => {
+    it('should fail if the loan does not exist', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .get('/api/v1/loans/50')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.have.property('error').eql('The loan specified does not exist');
@@ -38,9 +93,41 @@ describe('Loans', () => {
         });
     });
 
-    it('it should get a loan successfully', (done) => {
+    it('should fail if anyone except the Admin or the loan requester tries to access the route', (done) => {
+      const user = {
+        id: 3,
+        email: 'janedoe25@gmail.com',
+        firstName: 'Jane',
+        lastName: 'Doe',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
       chai.request(app)
         .get('/api/v1/loans/1')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
+        .end((err, res) => {
+          res.should.have.status(403);
+          res.body.should.have.property('error').eql('You are not authorized to visit this route');
+          done();
+        });
+    });
+
+    it('should get a loan successfully', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
+      chai.request(app)
+        .get('/api/v1/loans/1')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.have.property('data');
@@ -52,9 +139,62 @@ describe('Loans', () => {
   });
 
   describe('GET /loans', () => {
-    it('it should fail if an invalid value is passed to the status query', (done) => {
+    it('should fail if there is no token in the header', (done) => {
+      chai.request(app)
+        .get('/api/v1/loans')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('error').eql('You did not enter a token in the header');
+          done();
+        });
+    });
+
+    it('should fail if the token in the header is invalid', (done) => {
+      chai.request(app)
+        .get('/api/v1/loans')
+        .set({ authorization: 'Bearer lskjdlksjdflk' })
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('error').eql('Failed to authenticate token');
+          done();
+        });
+    });
+
+    it('should fail if the user is not an Admin', (done) => {
+      const user = {
+        id: 2,
+        email: 'johndoe25@gmail.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
+      chai.request(app)
+        .get('/api/v1/loans')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
+        .end((err, res) => {
+          res.should.have.status(403);
+          res.body.should.have.property('error').eql('This route is for Admin users only');
+          done();
+        });
+    });
+
+    it('should fail if an invalid value is passed to the status query', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .get('/api/v1/loans?status=approv')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.have.property('error').eql('The only valid values for the status query are \'approved\', \'rejected\' and \'pending\'');
@@ -62,9 +202,20 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if an invalid value is passed to the repaid query', (done) => {
+    it('should fail if an invalid value is passed to the repaid query', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .get('/api/v1/loans?repaid=fal')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.have.property('error').eql('The only valid values for the repaid query are \'true\' and \'false\'');
@@ -72,9 +223,20 @@ describe('Loans', () => {
         });
     });
 
-    it('it should get all the approved loan applications successfully', (done) => {
+    it('should get all the approved loan applications successfully', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .get('/api/v1/loans?status=approved')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.have.property('data');
@@ -83,9 +245,20 @@ describe('Loans', () => {
         });
     });
 
-    it('it should get all the rejected loan applications and unrepaid loans successfully', (done) => {
+    it('should get all the rejected loan applications and unrepaid loans successfully', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .get('/api/v1/loans?repaid=false')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.have.property('data');
@@ -94,9 +267,20 @@ describe('Loans', () => {
         });
     });
 
-    it('it should get all the current loans successfully', (done) => {
+    it('should get all the current loans successfully', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .get('/api/v1/loans?status=approved&repaid=false')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.have.property('data');
@@ -105,9 +289,20 @@ describe('Loans', () => {
         });
     });
 
-    it('it should get all the repaid loans successfully', (done) => {
+    it('should get all the repaid loans successfully', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .get('/api/v1/loans?status=approved&repaid=true')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.have.property('data');
@@ -116,9 +311,20 @@ describe('Loans', () => {
         });
     });
 
-    it('it should get all the loans successfully', (done) => {
+    it('should get all the loans successfully', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .get('/api/v1/loans')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.have.property('data');
@@ -129,7 +335,7 @@ describe('Loans', () => {
   });
 
   describe('POST /loans', () => {
-    it('it should fail if user email is not defined', (done) => {
+    it('should fail if there is no token in the header', (done) => {
       const loanData = {
         purpose: 'Business capital',
         amount: 10000,
@@ -141,15 +347,14 @@ describe('Loans', () => {
         .type('form')
         .send(loanData)
         .end((err, res) => {
-          res.should.have.status(400);
-          res.body.should.have.property('error').eql('You did not specify the user email');
+          res.should.have.status(401);
+          res.body.should.have.property('error').eql('You did not enter a token in the header');
           done();
         });
     });
 
-    it('it should fail if user email is not specified', (done) => {
+    it('should fail if the token in the header is invalid', (done) => {
       const loanData = {
-        user: '',
         purpose: 'Business capital',
         amount: 10000,
         tenor: 3,
@@ -157,24 +362,35 @@ describe('Loans', () => {
 
       chai.request(app)
         .post('/api/v1/loans')
+        .set({ authorization: 'Bearer lskjdlksjdflk' })
         .type('form')
         .send(loanData)
         .end((err, res) => {
-          res.should.have.status(400);
-          res.body.should.have.property('error').eql('You did not specify the user email');
+          res.should.have.status(401);
+          res.body.should.have.property('error').eql('Failed to authenticate token');
           done();
         });
     });
 
-    it('it should fail if loan purpose is not defined', (done) => {
+    it('should fail if loan purpose is not defined', (done) => {
       const loanData = {
-        user: 'nikobellic25@gmail.com',
         amount: 10000,
         tenor: 3,
+      };
+      const user = {
+        id: 4,
+        email: 'nikobellic25@gmail.com',
+        firstName: 'Niko',
+        lastName: 'Bellic',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
       };
 
       chai.request(app)
         .post('/api/v1/loans')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send(loanData)
         .end((err, res) => {
@@ -184,16 +400,26 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if loan purpose is not specified', (done) => {
+    it('should fail if loan purpose is not specified', (done) => {
       const loanData = {
-        user: 'nikobellic25@gmail.com',
         purpose: '',
         amount: 10000,
         tenor: 3,
       };
+      const user = {
+        id: 4,
+        email: 'nikobellic25@gmail.com',
+        firstName: 'Niko',
+        lastName: 'Bellic',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
 
       chai.request(app)
         .post('/api/v1/loans')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send(loanData)
         .end((err, res) => {
@@ -203,15 +429,25 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if loan amount is not defined', (done) => {
+    it('should fail if loan amount is not defined', (done) => {
       const loanData = {
-        user: 'nikobellic25@gmail.com',
         purpose: 'Business capital',
         tenor: 3,
+      };
+      const user = {
+        id: 4,
+        email: 'nikobellic25@gmail.com',
+        firstName: 'Niko',
+        lastName: 'Bellic',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
       };
 
       chai.request(app)
         .post('/api/v1/loans')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send(loanData)
         .end((err, res) => {
@@ -221,15 +457,25 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if tenor is not defined', (done) => {
+    it('should fail if tenor is not defined', (done) => {
       const loanData = {
-        user: 'nikobellic25@gmail.com',
         purpose: 'Business capital',
         amount: 10000,
+      };
+      const user = {
+        id: 4,
+        email: 'nikobellic25@gmail.com',
+        firstName: 'Niko',
+        lastName: 'Bellic',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
       };
 
       chai.request(app)
         .post('/api/v1/loans')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send(loanData)
         .end((err, res) => {
@@ -239,16 +485,26 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if the loan amount specified is not a valid number', (done) => {
+    it('should fail if the loan amount specified is not a valid number', (done) => {
       const loanData = {
-        user: 'nikobellic25@gmail.com',
         purpose: 'Business capital',
         amount: 'sdkfl-=2',
         tenor: 3,
       };
+      const user = {
+        id: 4,
+        email: 'nikobellic25@gmail.com',
+        firstName: 'Niko',
+        lastName: 'Bellic',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
 
       chai.request(app)
         .post('/api/v1/loans')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send(loanData)
         .end((err, res) => {
@@ -258,16 +514,26 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if the loan amount specified is less than or equal to 0', (done) => {
+    it('should fail if the loan amount specified is less than or equal to 0', (done) => {
       const loanData = {
-        user: 'nikobellic25@gmail.com',
         purpose: 'Business capital',
         amount: 0,
         tenor: 3,
       };
+      const user = {
+        id: 4,
+        email: 'nikobellic25@gmail.com',
+        firstName: 'Niko',
+        lastName: 'Bellic',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
 
       chai.request(app)
         .post('/api/v1/loans')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send(loanData)
         .end((err, res) => {
@@ -277,16 +543,26 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if the tenor specified is not a valid number', (done) => {
+    it('should fail if the tenor specified is not a valid number', (done) => {
       const loanData = {
-        user: 'nikobellic25@gmail.com',
         purpose: 'Business capital',
         amount: 10000,
         tenor: 'sdsjdf',
       };
+      const user = {
+        id: 4,
+        email: 'nikobellic25@gmail.com',
+        firstName: 'Niko',
+        lastName: 'Bellic',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
 
       chai.request(app)
         .post('/api/v1/loans')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send(loanData)
         .end((err, res) => {
@@ -296,16 +572,26 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if the tenor specified is greater than 12', (done) => {
+    it('should fail if the tenor specified is greater than 12', (done) => {
       const loanData = {
-        user: 'nikobellic25@gmail.com',
         purpose: 'Business capital',
         amount: 10000,
         tenor: 234,
       };
+      const user = {
+        id: 4,
+        email: 'nikobellic25@gmail.com',
+        firstName: 'Niko',
+        lastName: 'Bellic',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
 
       chai.request(app)
         .post('/api/v1/loans')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send(loanData)
         .end((err, res) => {
@@ -315,16 +601,26 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if the tenor specified is less than 1', (done) => {
+    it('should fail if the tenor specified is less than 1', (done) => {
       const loanData = {
-        user: 'nikobellic25@gmail.com',
         purpose: 'Business capital',
         amount: 10000,
         tenor: 0,
       };
+      const user = {
+        id: 4,
+        email: 'nikobellic25@gmail.com',
+        firstName: 'Niko',
+        lastName: 'Bellic',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
 
       chai.request(app)
         .post('/api/v1/loans')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send(loanData)
         .end((err, res) => {
@@ -334,35 +630,26 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if the client does not exist', (done) => {
+    it('should fail if the specified email belongs to an admin account', (done) => {
       const loanData = {
-        user: 'unknownclient@gmail.com',
         purpose: 'Business capital',
         amount: 10000,
         tenor: 3,
       };
-
-      chai.request(app)
-        .post('/api/v1/loans')
-        .type('form')
-        .send(loanData)
-        .end((err, res) => {
-          res.should.have.status(404);
-          res.body.should.have.property('error').eql('Client does not exist');
-          done();
-        });
-    });
-
-    it('it should fail if the specified email belongs to an admin account', (done) => {
-      const loanData = {
-        user: 'quickcredit2019@gmail.com',
-        purpose: 'Business capital',
-        amount: 10000,
-        tenor: 3,
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
       };
 
       chai.request(app)
         .post('/api/v1/loans')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send(loanData)
         .end((err, res) => {
@@ -372,16 +659,26 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if the client info has not been verified', (done) => {
+    it('should fail if the client info has not been verified', (done) => {
       const loanData = {
-        user: 'hansolo25@gmail.com',
         purpose: 'Business capital',
         amount: 10000,
         tenor: 3,
       };
+      const user = {
+        id: 6,
+        email: 'carljohnson25@gmail.com',
+        firstName: 'Carl',
+        lastName: 'Johnson',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'unverified',
+        isAdmin: false,
+      };
 
       chai.request(app)
         .post('/api/v1/loans')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send(loanData)
         .end((err, res) => {
@@ -391,16 +688,27 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if the client has an outstanding loan', (done) => {
+    it('should fail if the client has an outstanding loan', (done) => {
       const loanData = {
-        user: 'johndoe25@gmail.com',
         purpose: 'Business capital',
         amount: 10000,
         tenor: 3,
       };
+      const user = {
+        id: 2,
+        email: 'johndoe25@gmail.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        password: 'johndoe25',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
 
       chai.request(app)
         .post('/api/v1/loans')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send(loanData)
         .end((err, res) => {
@@ -410,16 +718,26 @@ describe('Loans', () => {
         });
     });
 
-    it('it should create a new loan successfully', (done) => {
+    it('should create a new loan successfully', (done) => {
       const loanData = {
-        user: 'nikobellic25@gmail.com',
         purpose: 'Business capital',
         amount: 10000,
         tenor: 3,
       };
+      const user = {
+        id: 4,
+        email: 'nikobellic25@gmail.com',
+        firstName: 'Niko',
+        lastName: 'Bellic',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
 
       chai.request(app)
         .post('/api/v1/loans')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send(loanData)
         .end((err, res) => {
@@ -435,9 +753,62 @@ describe('Loans', () => {
   });
 
   describe('PATCH /loans/:loanId', () => {
-    it('it should fail if a non-numerical character is provided as the Loan ID', (done) => {
+    it('should fail if there is no token in the header', (done) => {
+      chai.request(app)
+        .patch('/api/v1/loans/3')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('error').eql('You did not enter a token in the header');
+          done();
+        });
+    });
+
+    it('should fail if the token in the header is invalid', (done) => {
+      chai.request(app)
+        .patch('/api/v1/loans/3')
+        .set({ authorization: 'Bearer lskjdlksjdflk' })
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('error').eql('Failed to authenticate token');
+          done();
+        });
+    });
+
+    it('should fail if the user is not an Admin', (done) => {
+      const user = {
+        id: 2,
+        email: 'johndoe25@gmail.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
+      chai.request(app)
+        .patch('/api/v1/loans/3')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
+        .end((err, res) => {
+          res.should.have.status(403);
+          res.body.should.have.property('error').eql('This route is for Admin users only');
+          done();
+        });
+    });
+
+    it('should fail if a non-numerical character is provided as the Loan ID', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .patch('/api/v1/loans/a')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send({ status: 'approved' })
         .end((err, res) => {
@@ -447,9 +818,20 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if a floating point number is provided as the Loan ID', (done) => {
+    it('should fail if a floating point number is provided as the Loan ID', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .patch('/api/v1/loans/1.1')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send({ status: 'approved' })
         .end((err, res) => {
@@ -459,9 +841,20 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if the loan does not exist', (done) => {
+    it('should fail if the loan does not exist', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .patch('/api/v1/loans/50')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send({ status: 'approved' })
         .end((err, res) => {
@@ -471,9 +864,20 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if the status is not defined', (done) => {
+    it('should fail if the status is not defined', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .patch('/api/v1/loans/3')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send({})
         .end((err, res) => {
@@ -483,9 +887,20 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if the status is not specified', (done) => {
+    it('should fail if the status is not specified', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .patch('/api/v1/loans/3')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send({ status: '' })
         .end((err, res) => {
@@ -495,9 +910,20 @@ describe('Loans', () => {
         });
     });
 
-    it('it should fail if the status passed in the body is neither \'approved\' nor \'rejected\'', (done) => {
+    it('should fail if the status passed in the body is neither \'approved\' nor \'rejected\'', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .patch('/api/v1/loans/3')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send({ status: 'pending' })
         .end((err, res) => {
@@ -507,9 +933,20 @@ describe('Loans', () => {
         });
     });
 
-    it('it should approve the loan application successfully', (done) => {
+    it('should approve the loan application successfully', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .patch('/api/v1/loans/3')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send({ status: 'approved' })
         .end((err, res) => {
@@ -522,9 +959,20 @@ describe('Loans', () => {
         });
     });
 
-    it('it should reject the loan application successfully', (done) => {
+    it('should reject the loan application successfully', (done) => {
+      const user = {
+        id: 1,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
       chai.request(app)
         .patch('/api/v1/loans/3')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send({ status: 'rejected' })
         .end((err, res) => {

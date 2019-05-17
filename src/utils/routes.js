@@ -22,10 +22,21 @@ import loanResponseValidate from './validators/loanResponseValidate';
 import validateRepaidAndPaidAmount from './validators/validateRepaidAndPaidAmount';
 import checkIfPaidAmountIsLessThanInstallment from './validators/checkIfPaidAmountIsLessThanInstallment';
 import checkIfPaidAmountIsGreaterThanBalance from './validators/checkIfPaidAmountIsGreaterThanBalance';
+import tokenValidate from './validators/tokenValidate';
+import adminAuth from './verifiers/adminAuth';
+import userAuth from './verifiers/userAuth';
+import filterMyLoans from './verifiers/filterMyLoans';
 
 const router = express.Router();
 const {
-  signup, login, verifyClient, getClients, getAClient,
+  signup,
+  login,
+  verifyClient,
+  getClients,
+  getAClient,
+  getMyUserDetails,
+  getMyLoans,
+  getMyLoanRepayments,
 } = usersController;
 const {
   getALoan, getLoans, requestLoan, respondToLoanRequest,
@@ -34,14 +45,17 @@ const { getLoanRepayments, postClientRepaymentTranx } = repaymentsController;
 
 router.post('/auth/signup', validateEmailAndPassword, validateName, validateAddresses, validateEmailAndPasswordPattern, signupVerify, signup);
 router.post('/auth/signin', validateEmailAndPassword, loginVerify, login);
-router.get('/users', getClients);
-router.get('/users/:userEmail', checkIfClientExists, checkIfClientIsAdmin, getAClient);
-router.patch('/users/:userEmail/verify', checkIfClientExists, checkIfClientIsAdmin, verifyClient);
-router.get('/loans', loansQueryValidate, getLoans);
-router.get('/loans/:loanId', loanIdValidate, checkIfLoanExists, getALoan);
-router.post('/loans', validatePurposeAndAmount, validateTenorAndAmount, validateTenorAndAmountValues, checkClientValidity, restrictNumberOfLoanApplications, requestLoan);
-router.patch('/loans/:loanId', loanIdValidate, checkIfLoanExists, loanResponseValidate, respondToLoanRequest);
-router.get('/loans/:loanId/repayments', loanIdValidate, checkIfLoanExists, getLoanRepayments);
-router.post('/loans/:loanId/repayments', loanIdValidate, checkIfLoanExists, validateRepaidAndPaidAmount, checkIfPaidAmountIsLessThanInstallment, checkIfPaidAmountIsGreaterThanBalance, postClientRepaymentTranx);
+router.get('/users', tokenValidate, adminAuth, getClients);
+router.get('/users/me', tokenValidate, getMyUserDetails);
+router.get('/users/me/loans', tokenValidate, filterMyLoans, getMyLoans);
+router.get('/users/me/loans/repayments', tokenValidate, filterMyLoans, getMyLoanRepayments);
+router.get('/users/:userEmail', tokenValidate, adminAuth, checkIfClientExists, checkIfClientIsAdmin, getAClient);
+router.patch('/users/:userEmail/verify', tokenValidate, adminAuth, checkIfClientExists, checkIfClientIsAdmin, verifyClient);
+router.get('/loans', tokenValidate, adminAuth, loansQueryValidate, getLoans);
+router.get('/loans/:loanId', tokenValidate, loanIdValidate, checkIfLoanExists, userAuth, getALoan);
+router.post('/loans', tokenValidate, validatePurposeAndAmount, validateTenorAndAmount, validateTenorAndAmountValues, checkClientValidity, restrictNumberOfLoanApplications, requestLoan);
+router.patch('/loans/:loanId', tokenValidate, adminAuth, loanIdValidate, checkIfLoanExists, loanResponseValidate, respondToLoanRequest);
+router.get('/loans/:loanId/repayments', tokenValidate, loanIdValidate, checkIfLoanExists, userAuth, getLoanRepayments);
+router.post('/loans/:loanId/repayments', tokenValidate, adminAuth, loanIdValidate, checkIfLoanExists, validateRepaidAndPaidAmount, checkIfPaidAmountIsLessThanInstallment, checkIfPaidAmountIsGreaterThanBalance, postClientRepaymentTranx);
 
 export default router;
