@@ -73,9 +73,11 @@ const getAClient = (req, res) => {
 };
 
 const getMyUserDetails = (req, res) => {
-  const userMatch = users.filter(user => user.email === req.user.email);
-  const [me] = userMatch;
-  sendSuccessResponse(res, 200, me);
+  const text = 'SELECT id, email, firstname, lastname, address, workaddress, status, isadmin FROM users WHERE email = $1';
+  const values = [req.user.email];
+  dbconnect.query(text, values).then((result) => {
+    sendSuccessResponse(res, 200, result.rows[0]);
+  });
 };
 
 const getMyLoans = (req, res) => {
