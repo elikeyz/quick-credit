@@ -51,18 +51,11 @@ const verifyClient = (req, res) => {
 };
 
 const getClients = (req, res) => {
-  const clients = users.filter(user => !user.isAdmin)
-    .map(client => ({
-      id: client.id,
-      email: client.email,
-      firstName: client.firstName,
-      lastName: client.lastName,
-      address: client.address,
-      workAddress: client.workAddress,
-      status: client.status,
-      isAdmin: client.isAdmin,
-    }));
-  sendSuccessResponse(res, 200, clients);
+  const text = 'SELECT id, email, firstname, lastname, address, workaddress, status, isadmin FROM users WHERE isadmin = $1';
+  const values = [false];
+  dbconnect.query(text, values).then((result) => {
+    sendSuccessResponse(res, 200, result.rows);
+  });
 };
 
 const getAClient = (req, res) => {
