@@ -1,8 +1,10 @@
 /* eslint-env mocha */
 import chai, { should } from 'chai';
 import chaiHttp from 'chai-http';
+import bcrypt from 'bcryptjs';
 import app from '../app';
 import generateUserToken from '../utils/helpers/generateUserToken';
+import dbconnect from '../utils/helpers/dbconnect';
 
 should();
 chai.use(chaiHttp);
@@ -35,6 +37,57 @@ describe('/ALL *', () => {
 });
 
 describe('Auth/Users', () => {
+  beforeEach((done) => {
+    dbconnect.query(`
+      DROP TABLE repayments;
+      DROP TABLE loans;
+      DROP TABLE users;
+      CREATE TABLE users(
+        id SERIAL PRIMARY KEY,
+        email TEXT UNIQUE,
+        firstName TEXT,
+        lastName TEXT,
+        password TEXT,
+        address TEXT,
+        workAddress TEXT,
+        status TEXT,
+        isAdmin BOOLEAN
+    );
+    CREATE TABLE loans(
+        id SERIAL PRIMARY KEY,
+        client TEXT REFERENCES users(email),
+        firstName TEXT,
+        lastName TEXT,
+        createdOn TIMESTAMPTZ,
+        updatedOn TIMESTAMPTZ,
+        purpose TEXT,
+        status TEXT,
+        repaid BOOLEAN,
+        tenor INT,
+        amount FLOAT,
+        paymentInstallment FLOAT,
+        balance FLOAT,
+        interest FLOAT
+    );
+    CREATE TABLE repayments(
+        id SERIAL PRIMARY KEY,
+        createdOn TIMESTAMPTZ,
+        loanId INT REFERENCES loans(id),
+        amount FLOAT,
+        monthlyInstallment FLOAT,
+        paidAmount FLOAT,
+        balance FLOAT
+    );
+    `).then(() => {
+      const hashedPassword = bcrypt.hashSync('quickcredit2019', 10);
+      const text = 'INSERT INTO users(email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8)';
+      const values = ['quickcredit2019@gmail.com', 'Quick', 'Credit', hashedPassword, 'No. 123, Acme Drive, Wakanda District', 'No. 456, Foobar Avenue, Vibranium Valley', 'verified', true];
+      dbconnect.query(text, values).then(() => {
+        done();
+      });
+    });
+  });
+
   describe('POST /auth/signup', () => {
     it('should fail if email is not specified', (done) => {
       const user = {
@@ -313,16 +366,23 @@ describe('Auth/Users', () => {
         address: 'No. 123, Acme Drive, Wakanda District',
         workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
       };
-
-      chai.request(app)
-        .post('/api/v1/auth/signup')
-        .type('form')
-        .send(user)
-        .end((err, res) => {
-          res.should.have.status(409);
-          res.body.should.have.property('error').eql('A user account with the same email already exists');
-          done();
-        });
+      const {
+        email, firstName, lastName, password, address, workAddress,
+      } = user;
+      const hashedPassword = bcrypt.hashSync(password, 10);
+      const text = 'INSERT INTO users(email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8)';
+      const values = [email, firstName, lastName, hashedPassword, address, workAddress, 'unverified', false];
+      dbconnect.query(text, values).then(() => {
+        chai.request(app)
+          .post('/api/v1/auth/signup')
+          .type('form')
+          .send(user)
+          .end((err, res) => {
+            res.should.have.status(409);
+            res.body.should.have.property('error').eql('A user account with the same email already exists');
+            done();
+          });
+      });
     });
 
     it('should signup the user successfully', (done) => {
@@ -613,10 +673,10 @@ describe('Auth/Users', () => {
     });
   });
 
-  describe('GET /users/me/loans/repayments', () => {
+  describe('GET /users/me/repayments', () => {
     it('should fail if there is no token in the header', (done) => {
       chai.request(app)
-        .get('/api/v1/users/me/loans/repayments')
+        .get('/api/v1/users/me/repayments')
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.property('error').eql('You did not enter a token in the header');
@@ -626,7 +686,7 @@ describe('Auth/Users', () => {
 
     it('should fail if the token in the header is invalid', (done) => {
       chai.request(app)
-        .get('/api/v1/users/me/loans/repayments')
+        .get('/api/v1/users/me/repayments')
         .set({ authorization: 'Bearer lskjdlksjdflk' })
         .end((err, res) => {
           res.should.have.status(401);
@@ -647,7 +707,7 @@ describe('Auth/Users', () => {
         isAdmin: false,
       };
       chai.request(app)
-        .get('/api/v1/users/me/loans/repayments')
+        .get('/api/v1/users/me/repayments')
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(200);

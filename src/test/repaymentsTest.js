@@ -1,13 +1,66 @@
 /* eslint-env mocha */
 import chai, { should } from 'chai';
 import chaiHttp from 'chai-http';
+import bcrypt from 'bcryptjs';
 import app from '../app';
 import generateUserToken from '../utils/helpers/generateUserToken';
+import dbconnect from '../utils/helpers/dbconnect';
 
 should();
 chai.use(chaiHttp);
 
 describe('Repayments', () => {
+  beforeEach((done) => {
+    dbconnect.query(`
+      DROP TABLE repayments;
+      DROP TABLE loans;
+      DROP TABLE users;
+      CREATE TABLE users(
+        id SERIAL PRIMARY KEY,
+        email TEXT UNIQUE,
+        firstName TEXT,
+        lastName TEXT,
+        password TEXT,
+        address TEXT,
+        workAddress TEXT,
+        status TEXT,
+        isAdmin BOOLEAN
+    );
+    CREATE TABLE loans(
+        id SERIAL PRIMARY KEY,
+        client TEXT REFERENCES users(email),
+        firstName TEXT,
+        lastName TEXT,
+        createdOn TIMESTAMPTZ,
+        updatedOn TIMESTAMPTZ,
+        purpose TEXT,
+        status TEXT,
+        repaid BOOLEAN,
+        tenor INT,
+        amount FLOAT,
+        paymentInstallment FLOAT,
+        balance FLOAT,
+        interest FLOAT
+    );
+    CREATE TABLE repayments(
+        id SERIAL PRIMARY KEY,
+        createdOn TIMESTAMPTZ,
+        loanId INT REFERENCES loans(id),
+        amount FLOAT,
+        monthlyInstallment FLOAT,
+        paidAmount FLOAT,
+        balance FLOAT
+    );
+    `).then(() => {
+      const hashedPassword = bcrypt.hashSync('quickcredit2019', 10);
+      const text = 'INSERT INTO users(email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8)';
+      const values = ['quickcredit2019@gmail.com', 'Quick', 'Credit', hashedPassword, 'No. 123, Acme Drive, Wakanda District', 'No. 456, Foobar Avenue, Vibranium Valley', 'verified', true];
+      dbconnect.query(text, values).then(() => {
+        done();
+      });
+    });
+  });
+
   describe('GET /loans/:loanId/repayments', () => {
     it('should fail if there is no token in the header', (done) => {
       chai.request(app)
