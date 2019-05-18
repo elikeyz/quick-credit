@@ -411,6 +411,25 @@ describe('Auth/Users', () => {
   });
 
   describe('POST /auth/signin', () => {
+    beforeEach((done) => {
+      const user = {
+        email: 'johndoe25@gmail.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        password: 'johndoe25',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+      };
+      const {
+        email, firstName, lastName, password, address, workAddress,
+      } = user;
+      const hashedPassword = bcrypt.hashSync(password, 10);
+      const text = 'INSERT INTO users(email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8)';
+      const values = [email, firstName, lastName, hashedPassword, address, workAddress, 'unverified', false];
+      dbconnect.query(text, values).then(() => {
+        done();
+      });
+    });
     it('should fail if the email is not provided', (done) => {
       const userData = {
         email: '',
