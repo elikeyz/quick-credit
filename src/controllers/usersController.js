@@ -3,22 +3,16 @@ import users from '../models/users';
 import repayments from '../models/repayments';
 import sendSuccessResponse from '../utils/helpers/sendSuccessResponse';
 import generateUserToken from '../utils/helpers/generateUserToken';
+import dbconnect from '../utils/helpers/dbconnect';
 
 const signup = (req, res) => {
   const hashedPassword = bcrypt.hashSync(req.body.password, 10);
-  const newUser = {
-    id: users.length + 1,
-    email: req.body.email.trim(),
-    firstName: req.body.firstName.trim(),
-    lastName: req.body.lastName.trim(),
-    address: req.body.address.trim(),
-    workAddress: req.body.workAddress.trim(),
-    status: 'unverified',
-    isAdmin: false,
-  };
-  const token = generateUserToken(newUser);
-  users.push({ password: hashedPassword, ...newUser });
-  sendSuccessResponse(res, 201, { token, ...newUser });
+  const text = 'INSERT INTO users(email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, email, firstName, lastName, address, workAddress, status, isAdmin';
+  const values = [req.body.email.trim(), req.body.firstName.trim(), req.body.lastName.trim(), hashedPassword, req.body.address, req.body.workAddress, 'verified', false];
+  dbconnect.query(text, values).then((result) => {
+    const token = generateUserToken(result.rows[0]);
+    sendSuccessResponse(res, 201, { token, ...result.rows[0] });
+  });
 };
 
 const login = (req, res) => {

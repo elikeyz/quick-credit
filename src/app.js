@@ -5,12 +5,14 @@ import router from './utils/routes';
 import swaggerDocument from '../swagger.json';
 import sendSuccessResponse from './utils/helpers/sendSuccessResponse';
 import sendErrorResponse from './utils/helpers/sendErrorResponse';
+import createTables from './models/createTables';
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+createTables();
 app.use('/api/v1', router);
 
 app.get('/', (req, res) => {

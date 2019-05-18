@@ -330,7 +330,7 @@
           }
         }
       },
-      "/users/me/loans/repayments": {
+      "/users/me/repayments": {
         "parameters": [
           {
             "name": "authorization",

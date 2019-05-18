@@ -48,7 +48,7 @@ router.post('/auth/signin', validateEmailAndPassword, loginVerify, login);
 router.get('/users', tokenValidate, adminAuth, getClients);
 router.get('/users/me', tokenValidate, getMyUserDetails);
 router.get('/users/me/loans', tokenValidate, filterMyLoans, getMyLoans);
-router.get('/users/me/loans/repayments', tokenValidate, filterMyLoans, getMyLoanRepayments);
+router.get('/users/me/repayments', tokenValidate, filterMyLoans, getMyLoanRepayments);
 router.get('/users/:userEmail', tokenValidate, adminAuth, checkIfClientExists, checkIfClientIsAdmin, getAClient);
 router.patch('/users/:userEmail/verify', tokenValidate, adminAuth, checkIfClientExists, checkIfClientIsAdmin, verifyClient);
 router.get('/loans', tokenValidate, adminAuth, loansQueryValidate, getLoans);
