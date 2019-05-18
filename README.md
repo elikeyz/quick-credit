@@ -4,8 +4,8 @@
 
 Quick Credit is an online lending platform that provides short term soft loans to individuals. This helps solve problems of financial inclusion as a way to alleviate poverty and empower low income earners.
 
-## Documentation
-You can view the documentation on this [link](https://elikeyz-quick-credit.herokuapp.com/api-docs)
+## API Documentation
+You can view the API documentation on this [link](https://elikeyz-quick-credit.herokuapp.com/api-docs)
 
 ## Server-Side Technologies used
 - Node (Server Environment)
@@ -20,9 +20,10 @@ You can view the documentation on this [link](https://elikeyz-quick-credit.herok
 - JSON Web Tokens (Authentication)
 - Bcrypt JS (Password Encryption)
 - Dotenv (Environmental Variables)
+- PostgreSQL (Database)
 
-## Installation
-You can install the application by cloning this repo and running this command.
+## API Installation
+You can install the API by cloning this repo and running this command.
 ```
 npm install
 ```
@@ -37,8 +38,11 @@ Or start it in production mode with this command
 ```
 npm start
 ```
+Then navigate to `localhost:3000` on your browser or Postman.
 
-## Testing
+Or you can navigate to the online hosted API [here](https://elikeyz-quick-credit.herokuapp.com)
+
+## API Testing
 To run the unit tests, use this command
 ```
 npm test
