@@ -80,8 +80,30 @@ const getMyUserDetails = (req, res) => {
   });
 };
 
+const sendLoansResponse = (res, text, values) => {
+  dbconnect.query(text, values).then((result) => {
+    sendSuccessResponse(res, 200, result.rows);
+  });
+};
+
 const getMyLoans = (req, res) => {
-  sendSuccessResponse(res, 200, req.myLoans);
+  if (req.query.status && req.query.repaid) {
+    const statusAndRepaidText = 'SELECT * FROM loans WHERE client = $1 AND status = $2 AND repaid = $3';
+    const statusAndRepaidValues = [req.user.email, req.query.status, req.query.repaid];
+    sendLoansResponse(res, statusAndRepaidText, statusAndRepaidValues);
+  } else if (req.query.status) {
+    const statusText = 'SELECT * FROM loans WHERE client = $1 AND status = $2';
+    const statusValues = [req.user.email, req.query.status];
+    sendLoansResponse(res, statusText, statusValues);
+  } else if (req.query.repaid) {
+    const repaidText = 'SELECT * FROM loans WHERE client = $1 AND repaid = $2';
+    const repaidValues = [req.user.email, req.query.repaid];
+    sendLoansResponse(res, repaidText, repaidValues);
+  } else {
+    const allText = 'SELECT * FROM loans WHERE client = $1';
+    const allValues = [req.user.email];
+    sendLoansResponse(res, allText, allValues);
+  }
 };
 
 const getMyLoanRepayments = (req, res) => {

@@ -667,6 +667,14 @@ describe('Auth/Users', () => {
   });
 
   describe('GET /users/me/loans', () => {
+    beforeEach((done) => {
+      const hashedPassword = bcrypt.hashSync('johndoe25', 10);
+      const text = 'INSERT INTO users(email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8)';
+      const values = ['johndoe25@gmail.com', 'John', 'Doe', hashedPassword, 'No. 123, Acme Drive, Wakanda District', 'No. 456, Foobar Avenue, Vibranium Valley', 'verified', false];
+      dbconnect.query(text, values).then(() => {
+        done();
+      });
+    });
     it('should fail if there is no token in the header', (done) => {
       chai.request(app)
         .get('/api/v1/users/me/loans')
@@ -684,6 +692,136 @@ describe('Auth/Users', () => {
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.property('error').eql('Failed to authenticate token');
+          done();
+        });
+    });
+
+    it('should fail if an invalid value is passed to the status query', (done) => {
+      const user = {
+        id: 2,
+        email: 'johndoe25@gmail.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
+      chai.request(app)
+        .get('/api/v1/users/me/loans?status=approv')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property('error').eql('The only valid values for the status query are \'approved\', \'rejected\' and \'pending\'');
+          done();
+        });
+    });
+
+    it('should fail if an invalid value is passed to the repaid query', (done) => {
+      const user = {
+        id: 2,
+        email: 'johndoe25@gmail.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
+      chai.request(app)
+        .get('/api/v1/users/me/loans?repaid=fal')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property('error').eql('The only valid values for the repaid query are \'true\' and \'false\'');
+          done();
+        });
+    });
+
+    it('should get the user\'s approved loan applications successfully', (done) => {
+      const user = {
+        id: 2,
+        email: 'johndoe25@gmail.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
+      chai.request(app)
+        .get('/api/v1/users/me/loans?status=approved')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property('data');
+          res.body.data.should.be.a('array');
+          done();
+        });
+    });
+
+    it('should get the user\'s unapproved loan applications and unrepaid loans successfully', (done) => {
+      const user = {
+        id: 2,
+        email: 'johndoe25@gmail.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
+      chai.request(app)
+        .get('/api/v1/users/me/loans?repaid=false')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property('data');
+          res.body.data.should.be.a('array');
+          done();
+        });
+    });
+
+    it('should get the user\'s current loans successfully', (done) => {
+      const user = {
+        id: 2,
+        email: 'johndoe25@gmail.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
+      chai.request(app)
+        .get('/api/v1/users/me/loans?status=approved&repaid=false')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property('data');
+          res.body.data.should.be.a('array');
+          done();
+        });
+    });
+
+    it('should get the user\'s repaid loans successfully', (done) => {
+      const user = {
+        id: 2,
+        email: 'johndoe25@gmail.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: false,
+      };
+      chai.request(app)
+        .get('/api/v1/users/me/loans?status=approved&repaid=true')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property('data');
+          res.body.data.should.be.a('array');
           done();
         });
     });

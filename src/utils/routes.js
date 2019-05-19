@@ -63,7 +63,7 @@ router.get('/users/me',
   getMyUserDetails);
 router.get('/users/me/loans',
   tokenValidate,
-  filterMyLoans,
+  loansQueryValidate,
   getMyLoans);
 router.get('/users/me/repayments',
   tokenValidate,
