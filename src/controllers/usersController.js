@@ -1,9 +1,9 @@
 import bcrypt from 'bcryptjs';
 import users from '../models/users';
-import repayments from '../models/repayments';
 import sendSuccessResponse from '../utils/helpers/sendSuccessResponse';
 import generateUserToken from '../utils/helpers/generateUserToken';
 import dbconnect from '../utils/helpers/dbconnect';
+import sendDbResponse from '../utils/helpers/sendDbResponse';
 
 const signup = (req, res) => {
   const hashedPassword = bcrypt.hashSync(req.body.password, 10);
@@ -80,36 +80,32 @@ const getMyUserDetails = (req, res) => {
   });
 };
 
-const sendLoansResponse = (res, text, values) => {
-  dbconnect.query(text, values).then((result) => {
-    sendSuccessResponse(res, 200, result.rows);
-  });
-};
-
 const getMyLoans = (req, res) => {
   if (req.query.status && req.query.repaid) {
     const statusAndRepaidText = 'SELECT * FROM loans WHERE client = $1 AND status = $2 AND repaid = $3';
     const statusAndRepaidValues = [req.user.email, req.query.status, req.query.repaid];
-    sendLoansResponse(res, statusAndRepaidText, statusAndRepaidValues);
+    sendDbResponse(res, 200, statusAndRepaidText, statusAndRepaidValues);
   } else if (req.query.status) {
     const statusText = 'SELECT * FROM loans WHERE client = $1 AND status = $2';
     const statusValues = [req.user.email, req.query.status];
-    sendLoansResponse(res, statusText, statusValues);
+    sendDbResponse(res, 200, statusText, statusValues);
   } else if (req.query.repaid) {
     const repaidText = 'SELECT * FROM loans WHERE client = $1 AND repaid = $2';
     const repaidValues = [req.user.email, req.query.repaid];
-    sendLoansResponse(res, repaidText, repaidValues);
+    sendDbResponse(res, 200, repaidText, repaidValues);
   } else {
     const allText = 'SELECT * FROM loans WHERE client = $1';
     const allValues = [req.user.email];
-    sendLoansResponse(res, allText, allValues);
+    sendDbResponse(res, 200, allText, allValues);
   }
 };
 
 const getMyLoanRepayments = (req, res) => {
   const myLoanIds = req.myLoans.map(loan => loan.id);
-  const myRepayments = repayments.filter(repayment => myLoanIds.includes(repayment.loanId));
-  sendSuccessResponse(res, 200, myRepayments);
+  dbconnect.query('SELECT * FROM repayments').then((result) => {
+    const myRepayments = result.rows.filter(repayment => myLoanIds.includes(repayment.loanId));
+    sendSuccessResponse(res, 200, myRepayments);
+  });
 };
 
 const usersController = {

@@ -303,6 +303,20 @@
           ],
           "summary": "Get the logged in user's loans",
           "description": "Get the logged in user's loans",
+          "parameters": [
+            {
+              "name": "status",
+              "in": "query",
+              "description": "Loan Status (pending, approved or rejected)",
+              "type": "string"
+            },
+            {
+              "name": "repaid",
+              "in": "query",
+              "description": "Loan Repayment Status (true or false)",
+              "type": "boolean"
+            }
+          ],
           "produces": [
             "application/json"
           ],

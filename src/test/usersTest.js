@@ -850,6 +850,15 @@ describe('Auth/Users', () => {
   });
 
   describe('GET /users/me/repayments', () => {
+    beforeEach((done) => {
+      const hashedPassword = bcrypt.hashSync('johndoe25', 10);
+      const text = 'INSERT INTO users(email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8)';
+      const values = ['johndoe25@gmail.com', 'John', 'Doe', hashedPassword, 'No. 123, Acme Drive, Wakanda District', 'No. 456, Foobar Avenue, Vibranium Valley', 'verified', false];
+      dbconnect.query(text, values).then(() => {
+        done();
+      });
+    });
+
     it('should fail if there is no token in the header', (done) => {
       chai.request(app)
         .get('/api/v1/users/me/repayments')
