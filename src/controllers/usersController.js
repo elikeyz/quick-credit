@@ -1,5 +1,4 @@
 import bcrypt from 'bcryptjs';
-import users from '../models/users';
 import sendSuccessResponse from '../utils/helpers/sendSuccessResponse';
 import generateUserToken from '../utils/helpers/generateUserToken';
 import dbconnect from '../utils/helpers/dbconnect';
@@ -32,21 +31,10 @@ const login = (req, res) => {
 };
 
 const verifyClient = (req, res) => {
-  users.forEach((user, userIndex) => {
-    if (user.email === req.params.userEmail) {
-      const client = {
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        address: user.address,
-        workAddress: user.workAddress,
-        status: 'verified',
-        isAdmin: user.isAdmin,
-      };
-      users.splice(userIndex, 1, { password: user.password, ...client });
-      sendSuccessResponse(res, 200, client);
-    }
+  const text = 'UPDATE users SET status = $1 WHERE email = $2 RETURNING id, email, firstname, lastname, address, workaddress, status, isadmin';
+  const values = ['verified', req.params.userEmail];
+  dbconnect.query(text, values).then((result) => {
+    sendSuccessResponse(res, 200, result.rows[0]);
   });
 };
 
