@@ -1,15 +1,18 @@
-import users from '../../models/users';
 import sendErrorResponse from '../helpers/sendErrorResponse';
+import dbconnect from '../helpers/dbconnect';
 
 const checkIfClientExists = (req, res, next) => {
-  const clientMatch = users.filter(user => user.email === req.params.userEmail);
-  if (clientMatch.length < 1) {
-    sendErrorResponse(res, 404, 'Client does not exist');
-  } else {
-    const [client] = clientMatch;
-    req.client = client;
-    next();
-  }
+  const text = 'SELECT * FROM users WHERE email = $1';
+  const values = [req.params.userEmail];
+  dbconnect.query(text, values).then((result) => {
+    if (result.rowCount < 1) {
+      sendErrorResponse(res, 404, 'Client does not exist');
+    } else {
+      const [client] = result.rows;
+      req.client = client;
+      next();
+    }
+  });
 };
 
 export default checkIfClientExists;
