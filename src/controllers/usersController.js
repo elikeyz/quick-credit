@@ -62,12 +62,12 @@ const getAClient = (req, res) => {
   const client = {
     id: req.client.id,
     email: req.client.email,
-    firstName: req.client.firstName,
-    lastName: req.client.lastName,
+    firstName: req.client.firstname,
+    lastName: req.client.lastname,
     address: req.client.address,
-    workAddress: req.client.workAddress,
+    workAddress: req.client.workaddress,
     status: req.client.status,
-    isAdmin: req.client.isAdmin,
+    isAdmin: req.client.isadmin,
   };
   sendSuccessResponse(res, 200, client);
 };
