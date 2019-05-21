@@ -429,6 +429,7 @@ describe('Auth/Users', () => {
           res.body.data.should.be.a('object');
           res.body.data.should.have.property('token');
           res.body.data.should.have.property('email').eql('koppter.kom@gmail.com');
+          res.body.data.should.have.property('status').eql('unverified');
           done();
         });
     });
@@ -985,6 +986,27 @@ describe('Auth/Users', () => {
         });
     });
 
+    it('should fail if the client ID specified is not a valid UUID', (done) => {
+      const user = {
+        id: adminId,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
+      chai.request(app)
+        .get('/api/v1/users/sldflskjdfljksdlfkj')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property('error').eql('The Client ID specified is not a valid UUID');
+          done();
+        });
+    });
+
     it('should fail if the client does not exist', (done) => {
       const user = {
         id: adminId,
@@ -1102,6 +1124,27 @@ describe('Auth/Users', () => {
         .end((err, res) => {
           res.should.have.status(403);
           res.body.should.have.property('error').eql('This route is for Admin users only');
+          done();
+        });
+    });
+
+    it('should fail if the client ID specified is not a valid UUID', (done) => {
+      const user = {
+        id: adminId,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
+      chai.request(app)
+        .patch('/api/v1/users/sldflskjdfljksdlfkj/verify')
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property('error').eql('The Client ID specified is not a valid UUID');
           done();
         });
     });

@@ -65,9 +65,50 @@ describe('Loans', () => {
   });
 
   describe('GET /loans/:loanId', () => {
+    let loanId = '';
+    beforeEach((done) => {
+      const user = {
+        email: 'nikobellic25@gmail.com',
+        firstName: 'Niko',
+        lastName: 'Bellic',
+        password: 'nikobellic25',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+      };
+      const {
+        email, firstName, lastName, password, address, workAddress,
+      } = user;
+      const hashedPassword = bcrypt.hashSync(password, 10);
+      const userText = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+      const userValues = [uuidv4(), email, firstName, lastName, hashedPassword, address, workAddress, 'verified', false];
+      dbconnect.query(userText, userValues).then(() => {
+        const loanText = 'INSERT INTO loans(id, client, firstName, lastName, createdOn, updatedOn, purpose, status, repaid, tenor, amount, paymentInstallment, balance, interest) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *';
+        const loanValues = [
+          uuidv4(),
+          user.email,
+          user.firstName,
+          user.lastName,
+          new Date(),
+          new Date(),
+          'Business purposes',
+          'pending',
+          false,
+          10,
+          100000,
+          10500,
+          105000,
+          5000,
+        ];
+        dbconnect.query(loanText, loanValues).then((result) => {
+          loanId = result.rows[0].id;
+          done();
+        });
+      });
+    });
+
     it('should fail if there is no token in the header', (done) => {
       chai.request(app)
-        .get('/api/v1/loans/1')
+        .get(`/api/v1/loans/${loanId}`)
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.property('error').eql('You did not enter a token in the header');
@@ -77,7 +118,7 @@ describe('Loans', () => {
 
     it('should fail if the token in the header is invalid', (done) => {
       chai.request(app)
-        .get('/api/v1/loans/1')
+        .get(`/api/v1/loans/${loanId}`)
         .set({ authorization: 'Bearer lskjdlksjdflk' })
         .end((err, res) => {
           res.should.have.status(401);
@@ -86,9 +127,9 @@ describe('Loans', () => {
         });
     });
 
-    it('should fail if a non-numerical character is provided as the Loan ID', (done) => {
+    it('should fail if the loan ID specified is not a valid UUID', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -98,39 +139,18 @@ describe('Loans', () => {
         isAdmin: true,
       };
       chai.request(app)
-        .get('/api/v1/loans/a')
+        .get('/api/v1/loans/sdfksdfljsdjfls')
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(400);
-          res.body.should.have.property('error').eql('The Loan ID parameter must be an integer');
-          done();
-        });
-    });
-
-    it('should fail if a floating point number is provided as the Loan ID', (done) => {
-      const user = {
-        id: 1,
-        email: 'quickcredit2019@gmail.com',
-        firstName: 'Quick',
-        lastName: 'Credit',
-        address: 'No. 123, Acme Drive, Wakanda District',
-        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
-        status: 'verified',
-        isAdmin: true,
-      };
-      chai.request(app)
-        .get('/api/v1/loans/1.1')
-        .set({ authorization: `Bearer ${generateUserToken(user)}` })
-        .end((err, res) => {
-          res.should.have.status(400);
-          res.body.should.have.property('error').eql('The Loan ID parameter must be an integer');
+          res.body.should.have.property('error').eql('The Loan ID specified is not a valid UUID');
           done();
         });
     });
 
     it('should fail if the loan does not exist', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -140,7 +160,7 @@ describe('Loans', () => {
         isAdmin: true,
       };
       chai.request(app)
-        .get('/api/v1/loans/50')
+        .get(`/api/v1/loans/${uuidv4()}`)
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(404);
@@ -151,7 +171,7 @@ describe('Loans', () => {
 
     it('should fail if anyone except the Admin or the loan requester tries to access the route', (done) => {
       const user = {
-        id: 3,
+        id: uuidv4(),
         email: 'janedoe25@gmail.com',
         firstName: 'Jane',
         lastName: 'Doe',
@@ -160,19 +180,29 @@ describe('Loans', () => {
         status: 'verified',
         isAdmin: false,
       };
-      chai.request(app)
-        .get('/api/v1/loans/1')
-        .set({ authorization: `Bearer ${generateUserToken(user)}` })
-        .end((err, res) => {
-          res.should.have.status(403);
-          res.body.should.have.property('error').eql('You are not authorized to visit this route');
-          done();
-        });
+      const {
+        id, email, firstName, lastName, address, workAddress, status, isAdmin,
+      } = user;
+      const hashedPassword = bcrypt.hashSync('janedoe25', 10);
+      const text = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+      const values = [
+        id, email, firstName, lastName, hashedPassword, address, workAddress, status, isAdmin,
+      ];
+      dbconnect.query(text, values).then(() => {
+        chai.request(app)
+          .get(`/api/v1/loans/${loanId}`)
+          .set({ authorization: `Bearer ${generateUserToken(user)}` })
+          .end((err, res) => {
+            res.should.have.status(403);
+            res.body.should.have.property('error').eql('You are not authorized to visit this route');
+            done();
+          });
+      });
     });
 
     it('should get a loan successfully', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -182,13 +212,13 @@ describe('Loans', () => {
         isAdmin: true,
       };
       chai.request(app)
-        .get('/api/v1/loans/1')
+        .get(`/api/v1/loans/${loanId}`)
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.have.property('data');
           res.body.data.should.be.a('object');
-          res.body.data.should.have.property('id').eql(1);
+          res.body.data.should.have.property('id').eql(loanId);
           done();
         });
     });
