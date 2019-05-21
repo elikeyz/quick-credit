@@ -161,7 +161,7 @@ describe('Repayments', () => {
         isAdmin: false,
       };
       chai.request(app)
-        .get('/api/v1/loans/1')
+        .get('/api/v1/loans/1/repayments')
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(403);

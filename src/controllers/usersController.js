@@ -15,7 +15,6 @@ const signup = (req, res) => {
       email: result.rows[0].email,
       firstName: result.rows[0].firstname,
       lastName: result.rows[0].lastname,
-      password: hashedPassword,
       address: result.rows[0].address,
       workAddress: result.rows[0].workaddress,
       status: result.rows[0].status,
