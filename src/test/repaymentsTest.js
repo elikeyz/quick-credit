@@ -2,6 +2,7 @@
 import chai, { should } from 'chai';
 import chaiHttp from 'chai-http';
 import bcrypt from 'bcryptjs';
+import uuidv4 from 'uuid/v4';
 import app from '../app';
 import generateUserToken from '../utils/helpers/generateUserToken';
 import dbconnect from '../utils/helpers/dbconnect';
@@ -10,13 +11,14 @@ should();
 chai.use(chaiHttp);
 
 describe('Repayments', () => {
+  let adminId = '';
   beforeEach((done) => {
     dbconnect.query(`
       DROP TABLE repayments;
       DROP TABLE loans;
       DROP TABLE users;
       CREATE TABLE users(
-        id SERIAL PRIMARY KEY,
+        id UUID PRIMARY KEY,
         email TEXT UNIQUE,
         firstName TEXT,
         lastName TEXT,
@@ -27,7 +29,7 @@ describe('Repayments', () => {
         isAdmin BOOLEAN
     );
     CREATE TABLE loans(
-        id SERIAL PRIMARY KEY,
+        id UUID PRIMARY KEY,
         client TEXT REFERENCES users(email),
         firstName TEXT,
         lastName TEXT,
@@ -43,9 +45,9 @@ describe('Repayments', () => {
         interest FLOAT
     );
     CREATE TABLE repayments(
-        id SERIAL PRIMARY KEY,
+        id UUID PRIMARY KEY,
         createdOn TIMESTAMPTZ,
-        loanId INT REFERENCES loans(id),
+        loanId UUID REFERENCES loans(id),
         amount FLOAT,
         monthlyInstallment FLOAT,
         paidAmount FLOAT,
@@ -53,9 +55,10 @@ describe('Repayments', () => {
     );
     `).then(() => {
       const hashedPassword = bcrypt.hashSync('quickcredit2019', 10);
-      const text = 'INSERT INTO users(email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8)';
-      const values = ['quickcredit2019@gmail.com', 'Quick', 'Credit', hashedPassword, 'No. 123, Acme Drive, Wakanda District', 'No. 456, Foobar Avenue, Vibranium Valley', 'verified', true];
-      dbconnect.query(text, values).then(() => {
+      const text = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
+      const values = [uuidv4(), 'quickcredit2019@gmail.com', 'Quick', 'Credit', hashedPassword, 'No. 123, Acme Drive, Wakanda District', 'No. 456, Foobar Avenue, Vibranium Valley', 'verified', true];
+      dbconnect.query(text, values).then((result) => {
+        adminId = result.rows[0].id;
         done();
       });
     });
