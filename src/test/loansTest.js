@@ -217,8 +217,9 @@ describe('Loans', () => {
     });
 
     it('should fail if the user is not an Admin', (done) => {
+      const hashedPassword = bcrypt.hashSync('johndoe25', 10);
       const user = {
-        id: 2,
+        id: uuidv4(),
         email: 'johndoe25@gmail.com',
         firstName: 'John',
         lastName: 'Doe',
@@ -227,19 +228,23 @@ describe('Loans', () => {
         status: 'verified',
         isAdmin: false,
       };
-      chai.request(app)
-        .get('/api/v1/loans')
-        .set({ authorization: `Bearer ${generateUserToken(user)}` })
-        .end((err, res) => {
-          res.should.have.status(403);
-          res.body.should.have.property('error').eql('This route is for Admin users only');
-          done();
-        });
+      const text = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+      const values = [user.id, user.email, user.firstName, user.lastName, hashedPassword, user.address, user.workAddress, 'verified', false];
+      dbconnect.query(text, values).then(() => {
+        chai.request(app)
+          .get('/api/v1/loans')
+          .set({ authorization: `Bearer ${generateUserToken(user)}` })
+          .end((err, res) => {
+            res.should.have.status(403);
+            res.body.should.have.property('error').eql('This route is for Admin users only');
+            done();
+          });
+      });
     });
 
     it('should fail if an invalid value is passed to the status query', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -260,7 +265,7 @@ describe('Loans', () => {
 
     it('should fail if an invalid value is passed to the repaid query', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -281,7 +286,7 @@ describe('Loans', () => {
 
     it('should get all the approved loan applications successfully', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -303,7 +308,7 @@ describe('Loans', () => {
 
     it('should get all the rejected loan applications and unrepaid loans successfully', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -325,7 +330,7 @@ describe('Loans', () => {
 
     it('should get all the current loans successfully', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -347,7 +352,7 @@ describe('Loans', () => {
 
     it('should get all the repaid loans successfully', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -369,7 +374,7 @@ describe('Loans', () => {
 
     it('should get all the loans successfully', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',

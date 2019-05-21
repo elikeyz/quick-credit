@@ -10,7 +10,18 @@ const signup = (req, res) => {
   const text = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id, email, firstName, lastName, address, workAddress, status, isAdmin';
   const values = [uuidv4(), req.body.email.trim(), req.body.firstName.trim(), req.body.lastName.trim(), hashedPassword, req.body.address, req.body.workAddress, 'unverified', false];
   dbconnect.query(text, values).then((result) => {
-    const token = generateUserToken(result.rows[0]);
+    const userAccount = {
+      id: result.rows[0].id,
+      email: result.rows[0].email,
+      firstName: result.rows[0].firstname,
+      lastName: result.rows[0].lastname,
+      password: hashedPassword,
+      address: result.rows[0].address,
+      workAddress: result.rows[0].workaddress,
+      status: result.rows[0].status,
+      isAdmin: result.rows[0].isadmin,
+    };
+    const token = generateUserToken(userAccount);
     sendSuccessResponse(res, 201, { token, ...result.rows[0] });
   });
 };
@@ -21,12 +32,12 @@ const login = (req, res) => {
     token,
     id: req.user.id,
     email: req.user.email,
-    firstName: req.user.firstName,
-    lastName: req.user.lastName,
+    firstname: req.user.firstName,
+    lastname: req.user.lastName,
     address: req.user.address,
-    workAddress: req.user.workAddress,
+    workaddress: req.user.workAddress,
     status: req.user.status,
-    isAdmin: req.user.isAdmin,
+    isadmin: req.user.isAdmin,
   };
   sendSuccessResponse(res, 200, userAccount);
 };
@@ -42,9 +53,7 @@ const verifyClient = (req, res) => {
 const getClients = (req, res) => {
   const text = 'SELECT id, email, firstname, lastname, address, workaddress, status, isadmin FROM users WHERE isadmin = $1';
   const values = [false];
-  dbconnect.query(text, values).then((result) => {
-    sendSuccessResponse(res, 200, result.rows);
-  });
+  sendDbResponse(res, 200, text, values);
 };
 
 const getAClient = (req, res) => {
@@ -53,7 +62,7 @@ const getAClient = (req, res) => {
     email: req.client.email,
     firstName: req.client.firstname,
     lastName: req.client.lastname,
-    address: req.client.address,
+    Address: req.client.address,
     workAddress: req.client.workaddress,
     status: req.client.status,
     isAdmin: req.client.isadmin,
