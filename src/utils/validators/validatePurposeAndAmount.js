@@ -1,13 +1,11 @@
-import sendErrorResponse from '../helpers/sendErrorResponse';
-
-const validatePurposeAndAmount = (req, res, next) => {
+const validatePurposeAndAmount = (req) => {
   if (!req.body.purpose || !req.body.purpose.trim()) {
-    sendErrorResponse(res, 400, 'You did not specify the purpose of loan request');
-  } else if (!req.body.amount) {
-    sendErrorResponse(res, 400, 'You did not specify the loan amount requested');
-  } else {
-    next();
+    return [400, 'You did not specify the purpose of loan request'];
   }
+  if (!req.body.amount) {
+    return [400, 'You did not specify the loan amount requested'];
+  }
+  return null;
 };
 
 export default validatePurposeAndAmount;

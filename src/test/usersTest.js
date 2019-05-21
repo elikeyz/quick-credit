@@ -2,6 +2,7 @@
 import chai, { should } from 'chai';
 import chaiHttp from 'chai-http';
 import bcrypt from 'bcryptjs';
+import uuidv4 from 'uuid/v4';
 import app from '../app';
 import generateUserToken from '../utils/helpers/generateUserToken';
 import dbconnect from '../utils/helpers/dbconnect';
@@ -37,13 +38,14 @@ describe('/ALL *', () => {
 });
 
 describe('Auth/Users', () => {
+  let adminId = '';
   beforeEach((done) => {
     dbconnect.query(`
       DROP TABLE repayments;
       DROP TABLE loans;
       DROP TABLE users;
       CREATE TABLE users(
-        id SERIAL PRIMARY KEY,
+        id UUID PRIMARY KEY,
         email TEXT UNIQUE,
         firstName TEXT,
         lastName TEXT,
@@ -80,9 +82,10 @@ describe('Auth/Users', () => {
     );
     `).then(() => {
       const hashedPassword = bcrypt.hashSync('quickcredit2019', 10);
-      const text = 'INSERT INTO users(email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8)';
-      const values = ['quickcredit2019@gmail.com', 'Quick', 'Credit', hashedPassword, 'No. 123, Acme Drive, Wakanda District', 'No. 456, Foobar Avenue, Vibranium Valley', 'verified', true];
-      dbconnect.query(text, values).then(() => {
+      const text = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
+      const values = [uuidv4(), 'quickcredit2019@gmail.com', 'Quick', 'Credit', hashedPassword, 'No. 123, Acme Drive, Wakanda District', 'No. 456, Foobar Avenue, Vibranium Valley', 'verified', true];
+      dbconnect.query(text, values).then((result) => {
+        adminId = result.rows[0].id;
         done();
       });
     });
@@ -357,6 +360,27 @@ describe('Auth/Users', () => {
         });
     });
 
+    it('should fail if the password specified contains less than 6 alphanumeric characters', (done) => {
+      const user = {
+        email: 'koppter.kom@gmail.com',
+        firstName: 'Elijah',
+        lastName: 'Enuem-Udogu',
+        password: 'm\\\\#%$$%^a',
+        address: 'No. 11, Elaiho Lane.',
+        workAddress: 'Shopping Complex, EDPA.',
+      };
+
+      chai.request(app)
+        .post('/api/v1/auth/signup')
+        .type('form')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property('error').eql('Your password must contain at least 6 alphanumeric characters');
+          done();
+        });
+    });
+
     it('should fail if a user account with the same email address already exists', (done) => {
       const user = {
         email: 'johndoe25@gmail.com',
@@ -370,8 +394,8 @@ describe('Auth/Users', () => {
         email, firstName, lastName, password, address, workAddress,
       } = user;
       const hashedPassword = bcrypt.hashSync(password, 10);
-      const text = 'INSERT INTO users(email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8)';
-      const values = [email, firstName, lastName, hashedPassword, address, workAddress, 'unverified', false];
+      const text = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+      const values = [uuidv4(), email, firstName, lastName, hashedPassword, address, workAddress, 'unverified', false];
       dbconnect.query(text, values).then(() => {
         chai.request(app)
           .post('/api/v1/auth/signup')
@@ -424,8 +448,8 @@ describe('Auth/Users', () => {
         email, firstName, lastName, password, address, workAddress,
       } = user;
       const hashedPassword = bcrypt.hashSync(password, 10);
-      const text = 'INSERT INTO users(email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8)';
-      const values = [email, firstName, lastName, hashedPassword, address, workAddress, 'unverified', false];
+      const text = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+      const values = [uuidv4(), email, firstName, lastName, hashedPassword, address, workAddress, 'unverified', false];
       dbconnect.query(text, values).then(() => {
         done();
       });
@@ -549,8 +573,8 @@ describe('Auth/Users', () => {
         email, firstName, lastName, password, address, workAddress,
       } = user;
       const hashedPassword = bcrypt.hashSync(password, 10);
-      const text = 'INSERT INTO users(email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8)';
-      const values = [email, firstName, lastName, hashedPassword, address, workAddress, 'unverified', false];
+      const text = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+      const values = [uuidv4(), email, firstName, lastName, hashedPassword, address, workAddress, 'unverified', false];
       dbconnect.query(text, values).then(() => {
         done();
       });
@@ -578,13 +602,13 @@ describe('Auth/Users', () => {
 
     it('should fail if the user is not an Admin', (done) => {
       const user = {
-        id: 2,
+        id: adminId,
         email: 'johndoe25@gmail.com',
         firstName: 'John',
         lastName: 'Doe',
         address: 'No. 123, Acme Drive, Wakanda District',
         workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
-        status: 'verified',
+        status: 'unverified',
         isAdmin: false,
       };
       chai.request(app)
@@ -599,7 +623,7 @@ describe('Auth/Users', () => {
 
     it('should get all the client details successfully', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -644,7 +668,7 @@ describe('Auth/Users', () => {
 
     it('should get the user\'s details successfully', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -667,11 +691,13 @@ describe('Auth/Users', () => {
   });
 
   describe('GET /users/me/loans', () => {
+    let clientId = '';
     beforeEach((done) => {
       const hashedPassword = bcrypt.hashSync('johndoe25', 10);
-      const text = 'INSERT INTO users(email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8)';
-      const values = ['johndoe25@gmail.com', 'John', 'Doe', hashedPassword, 'No. 123, Acme Drive, Wakanda District', 'No. 456, Foobar Avenue, Vibranium Valley', 'verified', false];
-      dbconnect.query(text, values).then(() => {
+      const text = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
+      const values = [uuidv4(), 'johndoe25@gmail.com', 'John', 'Doe', hashedPassword, 'No. 123, Acme Drive, Wakanda District', 'No. 456, Foobar Avenue, Vibranium Valley', 'unverified', false];
+      dbconnect.query(text, values).then((result) => {
+        clientId = result.rows[0].id;
         done();
       });
     });
@@ -698,13 +724,13 @@ describe('Auth/Users', () => {
 
     it('should fail if an invalid value is passed to the status query', (done) => {
       const user = {
-        id: 2,
+        id: clientId,
         email: 'johndoe25@gmail.com',
         firstName: 'John',
         lastName: 'Doe',
         address: 'No. 123, Acme Drive, Wakanda District',
         workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
-        status: 'verified',
+        status: 'unverified',
         isAdmin: false,
       };
       chai.request(app)
@@ -719,13 +745,13 @@ describe('Auth/Users', () => {
 
     it('should fail if an invalid value is passed to the repaid query', (done) => {
       const user = {
-        id: 2,
+        id: clientId,
         email: 'johndoe25@gmail.com',
         firstName: 'John',
         lastName: 'Doe',
         address: 'No. 123, Acme Drive, Wakanda District',
         workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
-        status: 'verified',
+        status: 'unverified',
         isAdmin: false,
       };
       chai.request(app)
@@ -740,13 +766,13 @@ describe('Auth/Users', () => {
 
     it('should get the user\'s approved loan applications successfully', (done) => {
       const user = {
-        id: 2,
+        id: clientId,
         email: 'johndoe25@gmail.com',
         firstName: 'John',
         lastName: 'Doe',
         address: 'No. 123, Acme Drive, Wakanda District',
         workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
-        status: 'verified',
+        status: 'unverified',
         isAdmin: false,
       };
       chai.request(app)
@@ -762,13 +788,13 @@ describe('Auth/Users', () => {
 
     it('should get the user\'s unapproved loan applications and unrepaid loans successfully', (done) => {
       const user = {
-        id: 2,
+        id: clientId,
         email: 'johndoe25@gmail.com',
         firstName: 'John',
         lastName: 'Doe',
         address: 'No. 123, Acme Drive, Wakanda District',
         workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
-        status: 'verified',
+        status: 'unverified',
         isAdmin: false,
       };
       chai.request(app)
@@ -784,13 +810,13 @@ describe('Auth/Users', () => {
 
     it('should get the user\'s current loans successfully', (done) => {
       const user = {
-        id: 2,
+        id: clientId,
         email: 'johndoe25@gmail.com',
         firstName: 'John',
         lastName: 'Doe',
         address: 'No. 123, Acme Drive, Wakanda District',
         workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
-        status: 'verified',
+        status: 'unverified',
         isAdmin: false,
       };
       chai.request(app)
@@ -806,13 +832,13 @@ describe('Auth/Users', () => {
 
     it('should get the user\'s repaid loans successfully', (done) => {
       const user = {
-        id: 2,
+        id: clientId,
         email: 'johndoe25@gmail.com',
         firstName: 'John',
         lastName: 'Doe',
         address: 'No. 123, Acme Drive, Wakanda District',
         workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
-        status: 'verified',
+        status: 'unverified',
         isAdmin: false,
       };
       chai.request(app)
@@ -828,13 +854,13 @@ describe('Auth/Users', () => {
 
     it('should get the user\'s loans successfully', (done) => {
       const user = {
-        id: 2,
+        id: clientId,
         email: 'johndoe25@gmail.com',
         firstName: 'John',
         lastName: 'Doe',
         address: 'No. 123, Acme Drive, Wakanda District',
         workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
-        status: 'verified',
+        status: 'unverified',
         isAdmin: false,
       };
       chai.request(app)
@@ -850,11 +876,13 @@ describe('Auth/Users', () => {
   });
 
   describe('GET /users/me/repayments', () => {
+    let clientId = '';
     beforeEach((done) => {
       const hashedPassword = bcrypt.hashSync('johndoe25', 10);
-      const text = 'INSERT INTO users(email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8)';
-      const values = ['johndoe25@gmail.com', 'John', 'Doe', hashedPassword, 'No. 123, Acme Drive, Wakanda District', 'No. 456, Foobar Avenue, Vibranium Valley', 'verified', false];
-      dbconnect.query(text, values).then(() => {
+      const text = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
+      const values = [uuidv4(), 'johndoe25@gmail.com', 'John', 'Doe', hashedPassword, 'No. 123, Acme Drive, Wakanda District', 'No. 456, Foobar Avenue, Vibranium Valley', 'unverified', false];
+      dbconnect.query(text, values).then((result) => {
+        clientId = result.rows[0].id;
         done();
       });
     });
@@ -882,13 +910,13 @@ describe('Auth/Users', () => {
 
     it('should get the user\'s loan repayments successfully', (done) => {
       const user = {
-        id: 2,
+        id: clientId,
         email: 'johndoe25@gmail.com',
         firstName: 'John',
         lastName: 'Doe',
         address: 'No. 123, Acme Drive, Wakanda District',
         workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
-        status: 'verified',
+        status: 'unverified',
         isAdmin: false,
       };
       chai.request(app)
@@ -903,19 +931,21 @@ describe('Auth/Users', () => {
     });
   });
 
-  describe('GET /users/:userEmail', () => {
+  describe('GET /users/:userId', () => {
+    let clientId = '';
     beforeEach((done) => {
       const hashedPassword = bcrypt.hashSync('johndoe25', 10);
-      const text = 'INSERT INTO users(email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8)';
-      const values = ['johndoe25@gmail.com', 'John', 'Doe', hashedPassword, 'No. 123, Acme Drive, Wakanda District', 'No. 456, Foobar Avenue, Vibranium Valley', 'verified', false];
-      dbconnect.query(text, values).then(() => {
+      const text = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
+      const values = [uuidv4(), 'johndoe25@gmail.com', 'John', 'Doe', hashedPassword, 'No. 123, Acme Drive, Wakanda District', 'No. 456, Foobar Avenue, Vibranium Valley', 'unverified', false];
+      dbconnect.query(text, values).then((result) => {
+        clientId = result.rows[0].id;
         done();
       });
     });
 
     it('should fail if there is no token in the header', (done) => {
       chai.request(app)
-        .get('/api/v1/users/johndoe25@gmail.com')
+        .get(`/api/v1/users/${clientId}`)
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.property('error').eql('You did not enter a token in the header');
@@ -925,7 +955,7 @@ describe('Auth/Users', () => {
 
     it('should fail if the token in the header is invalid', (done) => {
       chai.request(app)
-        .get('/api/v1/users/johndoe25@gmail.com')
+        .get(`/api/v1/users/${clientId}`)
         .set({ authorization: 'Bearer lskjdlksjdflk' })
         .end((err, res) => {
           res.should.have.status(401);
@@ -936,17 +966,17 @@ describe('Auth/Users', () => {
 
     it('should fail if the user is not an Admin', (done) => {
       const user = {
-        id: 2,
+        id: clientId,
         email: 'johndoe25@gmail.com',
         firstName: 'John',
         lastName: 'Doe',
         address: 'No. 123, Acme Drive, Wakanda District',
         workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
-        status: 'verified',
+        status: 'unverified',
         isAdmin: false,
       };
       chai.request(app)
-        .get('/api/v1/users/johndoe25@gmail.com')
+        .get(`/api/v1/users/${clientId}`)
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(403);
@@ -957,7 +987,7 @@ describe('Auth/Users', () => {
 
     it('should fail if the client does not exist', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -967,7 +997,7 @@ describe('Auth/Users', () => {
         isAdmin: true,
       };
       chai.request(app)
-        .get('/api/v1/users/kay1.kom@gmail.com')
+        .get(`/api/v1/users/${uuidv4()}`)
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(404);
@@ -976,9 +1006,9 @@ describe('Auth/Users', () => {
         });
     });
 
-    it('should fail if the email specified belongs to an admin account', (done) => {
+    it('should fail if the user ID specified belongs to an admin account', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -988,7 +1018,7 @@ describe('Auth/Users', () => {
         isAdmin: true,
       };
       chai.request(app)
-        .get('/api/v1/users/quickcredit2019@gmail.com')
+        .get(`/api/v1/users/${adminId}`)
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(403);
@@ -999,7 +1029,7 @@ describe('Auth/Users', () => {
 
     it('should get a client\'s user details successfully', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -1009,7 +1039,7 @@ describe('Auth/Users', () => {
         isAdmin: true,
       };
       chai.request(app)
-        .get('/api/v1/users/johndoe25@gmail.com')
+        .get(`/api/v1/users/${clientId}`)
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(200);
@@ -1023,18 +1053,20 @@ describe('Auth/Users', () => {
   });
 
   describe('PATCH /users/:userEmail/verify', () => {
+    let clientId = '';
     beforeEach((done) => {
       const hashedPassword = bcrypt.hashSync('hansolo25', 10);
-      const text = 'INSERT INTO users(email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8)';
-      const values = ['hansolo25@gmail.com', 'Han', 'Solo', hashedPassword, 'No. 123, Acme Drive, Wakanda District', 'No. 456, Foobar Avenue, Vibranium Valley', 'verified', false];
-      dbconnect.query(text, values).then(() => {
+      const text = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
+      const values = [uuidv4(), 'hansolo25@gmail.com', 'Han', 'Solo', hashedPassword, 'No. 123, Acme Drive, Wakanda District', 'No. 456, Foobar Avenue, Vibranium Valley', 'unverified', false];
+      dbconnect.query(text, values).then((result) => {
+        clientId = result.rows[0].id;
         done();
       });
     });
 
     it('should fail if there is no token in the header', (done) => {
       chai.request(app)
-        .patch('/api/v1/users/hansolo25@gmail.com/verify')
+        .patch(`/api/v1/users/${clientId}/verify`)
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.property('error').eql('You did not enter a token in the header');
@@ -1044,7 +1076,7 @@ describe('Auth/Users', () => {
 
     it('should fail if the token in the header is invalid', (done) => {
       chai.request(app)
-        .patch('/api/v1/users/hansolo25@gmail.com/verify')
+        .patch(`/api/v1/users/${clientId}/verify`)
         .set({ authorization: 'Bearer lskjdlksjdflk' })
         .end((err, res) => {
           res.should.have.status(401);
@@ -1055,17 +1087,17 @@ describe('Auth/Users', () => {
 
     it('should fail if the user is not an Admin', (done) => {
       const user = {
-        id: 2,
-        email: 'johndoe25@gmail.com',
-        firstName: 'John',
-        lastName: 'Doe',
+        id: clientId,
+        email: 'hansolo25@gmail.com',
+        firstName: 'Han',
+        lastName: 'Solo',
         address: 'No. 123, Acme Drive, Wakanda District',
         workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
-        status: 'verified',
+        status: 'unverified',
         isAdmin: false,
       };
       chai.request(app)
-        .patch('/api/v1/users/hansolo25@gmail.com/verify')
+        .patch(`/api/v1/users/${clientId}/verify`)
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(403);
@@ -1076,7 +1108,7 @@ describe('Auth/Users', () => {
 
     it('should fail if the client does not exist', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -1086,7 +1118,7 @@ describe('Auth/Users', () => {
         isAdmin: true,
       };
       chai.request(app)
-        .patch('/api/v1/users/kay1.kom@gmail.com/verify')
+        .patch(`/api/v1/users/${uuidv4()}/verify`)
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(404);
@@ -1095,9 +1127,9 @@ describe('Auth/Users', () => {
         });
     });
 
-    it('should fail if the email specified belongs to an admin account', (done) => {
+    it('should fail if the user ID specified belongs to an admin account', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -1107,7 +1139,7 @@ describe('Auth/Users', () => {
         isAdmin: true,
       };
       chai.request(app)
-        .patch('/api/v1/users/quickcredit2019@gmail.com/verify')
+        .patch(`/api/v1/users/${adminId}/verify`)
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(403);
@@ -1118,7 +1150,7 @@ describe('Auth/Users', () => {
 
     it('should verify a client successfully', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -1128,7 +1160,7 @@ describe('Auth/Users', () => {
         isAdmin: true,
       };
       chai.request(app)
-        .patch('/api/v1/users/hansolo25@gmail.com/verify')
+        .patch(`/api/v1/users/${clientId}/verify`)
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .end((err, res) => {
           res.should.have.status(200);

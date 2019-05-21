@@ -387,7 +387,7 @@
           }
         }
       },
-      "/users/{userEmail}": {
+      "/users/{userId}": {
         "parameters": [
           {
             "name": "authorization",
@@ -397,19 +397,20 @@
             "type": "string"
           },
           {
-            "name": "userEmail",
+            "name": "userId",
             "in": "path",
             "required": true,
-            "description": "Email of client whose details we want to view",
-            "type": "string"
+            "description": "ID of client whose details we want to view",
+            "type": "string",
+            "format": "uuid"
           }
         ],
         "get": {
           "tags": [
             "Users"
           ],
-          "summary": "Get a client's details with a given email",
-          "description": "Get a client's details with a given email",
+          "summary": "Get a client's details with a given ID",
+          "description": "Get a client's details with a given ID",
           "produces": [
             "application/json"
           ],
@@ -449,7 +450,7 @@
           }
         }
       },
-      "/users/{userEmail}/verify": {
+      "/users/{userId}/verify": {
         "parameters": [
           {
             "name": "authorization",
@@ -459,11 +460,12 @@
             "type": "string"
           },
           {
-            "name": "userEmail",
+            "name": "userId",
             "in": "path",
             "required": true,
-            "description": "Email of client whose details we want to view",
-            "type": "string"
+            "description": "ID of client whose details we want to view",
+            "type": "string",
+            "format": "uuid"
           }
         ],
         "patch": {
@@ -659,6 +661,12 @@
             },
             "404": {
               "description": "Client does not exist",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            },
+            "422": {
+              "description": "Unprocessable input",
               "schema": {
                 "$ref": "#/definitions/Error"
               }
@@ -939,6 +947,12 @@
               "schema": {
                 "$ref": "#/definitions/Error"
               }
+            },
+            "422": {
+              "description": "Unprocessable input",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
             }
           }
         }
@@ -953,7 +967,8 @@
             "uniqueItems": true
           },
           "id": {
-            "type": "integer",
+            "type": "string",
+            "format": "uuid",
             "uniqueItems": true
           },
           "email": {
@@ -985,7 +1000,8 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
+            "type": "string",
+            "format": "uuid",
             "uniqueItems": true
           },
           "email": {
