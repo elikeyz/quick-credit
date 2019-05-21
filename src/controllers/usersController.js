@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import uuidv4 from 'uuid/v4';
 import sendSuccessResponse from '../utils/helpers/sendSuccessResponse';
 import generateUserToken from '../utils/helpers/generateUserToken';
 import dbconnect from '../utils/helpers/dbconnect';
@@ -6,8 +7,8 @@ import sendDbResponse from '../utils/helpers/sendDbResponse';
 
 const signup = (req, res) => {
   const hashedPassword = bcrypt.hashSync(req.body.password, 10);
-  const text = 'INSERT INTO users(email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, email, firstName, lastName, address, workAddress, status, isAdmin';
-  const values = [req.body.email.trim(), req.body.firstName.trim(), req.body.lastName.trim(), hashedPassword, req.body.address, req.body.workAddress, 'verified', false];
+  const text = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id, email, firstName, lastName, address, workAddress, status, isAdmin';
+  const values = [uuidv4(), req.body.email.trim(), req.body.firstName.trim(), req.body.lastName.trim(), hashedPassword, req.body.address, req.body.workAddress, 'unverified', false];
   dbconnect.query(text, values).then((result) => {
     const token = generateUserToken(result.rows[0]);
     sendSuccessResponse(res, 201, { token, ...result.rows[0] });
@@ -31,8 +32,8 @@ const login = (req, res) => {
 };
 
 const verifyClient = (req, res) => {
-  const text = 'UPDATE users SET status = $1 WHERE email = $2 RETURNING id, email, firstname, lastname, address, workaddress, status, isadmin';
-  const values = ['verified', req.params.userEmail];
+  const text = 'UPDATE users SET status = $1 WHERE id = $2 RETURNING id, email, firstname, lastname, address, workaddress, status, isadmin';
+  const values = ['verified', req.params.userId];
   dbconnect.query(text, values).then((result) => {
     sendSuccessResponse(res, 200, result.rows[0]);
   });

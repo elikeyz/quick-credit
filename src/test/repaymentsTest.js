@@ -388,7 +388,7 @@ describe('Repayments', () => {
         .type('form')
         .send({ paidAmount: 9000 })
         .end((err, res) => {
-          res.should.have.status(403);
+          res.should.have.status(422);
           res.body.should.have.property('error').eql('The paid amount must equal the loan debt balance of 4500 since the loan debt balance is less than the monthly installment of 5250');
           done();
         });
@@ -411,7 +411,7 @@ describe('Repayments', () => {
         .type('form')
         .send({ paidAmount: 5000 })
         .end((err, res) => {
-          res.should.have.status(403);
+          res.should.have.status(422);
           res.body.should.have.property('error').eql('The paid amount must not be less than the monthly installment of 8750');
           done();
         });
@@ -434,7 +434,7 @@ describe('Repayments', () => {
         .type('form')
         .send({ paidAmount: 100000 })
         .end((err, res) => {
-          res.should.have.status(403);
+          res.should.have.status(422);
           res.body.should.have.property('error').eql('The paid amount must not exceed the loan debt balance of 73750');
           done();
         });

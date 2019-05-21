@@ -590,7 +590,7 @@ describe('Loans', () => {
         .type('form')
         .send(loanData)
         .end((err, res) => {
-          res.should.have.status(400);
+          res.should.have.status(422);
           res.body.should.have.property('error').eql('The loan amount specified must be greater than 0');
           done();
         });
@@ -648,7 +648,7 @@ describe('Loans', () => {
         .type('form')
         .send(loanData)
         .end((err, res) => {
-          res.should.have.status(400);
+          res.should.have.status(422);
           res.body.should.have.property('error').eql('The tenor specified must be in the range of 1 to 12');
           done();
         });
@@ -677,7 +677,7 @@ describe('Loans', () => {
         .type('form')
         .send(loanData)
         .end((err, res) => {
-          res.should.have.status(400);
+          res.should.have.status(422);
           res.body.should.have.property('error').eql('The tenor specified must be in the range of 1 to 12');
           done();
         });

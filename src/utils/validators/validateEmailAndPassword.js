@@ -1,13 +1,11 @@
-import sendErrorResponse from '../helpers/sendErrorResponse';
-
-const validateEmailAndPassword = (req, res, next) => {
+const validateEmailAndPassword = (req) => {
   if (!req.body.email || !req.body.email.trim()) {
-    sendErrorResponse(res, 400, 'You did not enter your email');
-  } else if (!req.body.password) {
-    sendErrorResponse(res, 400, 'You did not enter your password');
-  } else {
-    next();
+    return [400, 'You did not enter your email'];
   }
+  if (!req.body.password) {
+    return [400, 'You did not enter your password'];
+  }
+  return null;
 };
 
 export default validateEmailAndPassword;

@@ -3,7 +3,7 @@ import dbconnect from '../utils/helpers/dbconnect';
 const createTables = () => {
   dbconnect.query(`
     CREATE TABLE IF NOT EXISTS users(
-        id SERIAL PRIMARY KEY,
+        id UUID PRIMARY KEY,
         email TEXT UNIQUE,
         firstName TEXT,
         lastName TEXT,
@@ -14,7 +14,7 @@ const createTables = () => {
         isAdmin BOOLEAN
     );
     CREATE TABLE IF NOT EXISTS loans(
-        id SERIAL PRIMARY KEY,
+        id UUID PRIMARY KEY,
         client TEXT REFERENCES users(email),
         firstName TEXT,
         lastName TEXT,
@@ -30,9 +30,9 @@ const createTables = () => {
         interest FLOAT
     );
     CREATE TABLE IF NOT EXISTS repayments(
-        id SERIAL PRIMARY KEY,
+        id UUID PRIMARY KEY,
         createdOn TIMESTAMPTZ,
-        loanId INT REFERENCES loans(id),
+        loanId UUID REFERENCES loans(id),
         amount FLOAT,
         monthlyInstallment FLOAT,
         paidAmount FLOAT,
