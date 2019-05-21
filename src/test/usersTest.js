@@ -1052,7 +1052,7 @@ describe('Auth/Users', () => {
     });
   });
 
-  describe('PATCH /users/:userEmail/verify', () => {
+  describe('PATCH /users/:userId/verify', () => {
     let clientId = '';
     beforeEach((done) => {
       const hashedPassword = bcrypt.hashSync('hansolo25', 10);
