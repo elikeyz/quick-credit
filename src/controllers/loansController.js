@@ -1,6 +1,8 @@
+import uuidv4 from 'uuid/v4';
 import loans from '../models/loans';
 import roundOfTo2dp from '../utils/helpers/roundOfTo2dp';
 import sendSuccessResponse from '../utils/helpers/sendSuccessResponse';
+import dbconnect from '../utils/helpers/dbconnect';
 
 const getALoan = (req, res) => {
   sendSuccessResponse(res, 200, req.loan);
@@ -21,24 +23,26 @@ const getLoans = (req, res) => {
 };
 
 const requestLoan = (req, res) => {
-  const newLoan = {
-    id: loans.length + 1,
-    user: req.user.email,
-    firstName: req.user.firstName,
-    lastName: req.user.lastName,
-    createdOn: new Date().toLocaleString(),
-    updatedOn: new Date().toLocaleString(),
-    purpose: req.body.purpose,
-    status: 'pending',
-    repaid: false,
-    tenor: parseInt(req.body.tenor, 10),
-    amount: roundOfTo2dp(req.body.amount),
-    paymentInstallment: roundOfTo2dp(Number(req.body.amount) * 1.05 / parseInt(req.body.tenor, 10)),
-    balance: roundOfTo2dp(Number(req.body.amount) * 1.05),
-    interest: roundOfTo2dp(Number(req.body.amount) * 0.05),
-  };
-  loans.push(newLoan);
-  sendSuccessResponse(res, 201, newLoan);
+  const text = 'INSERT INTO loans(id, client, firstName, lastName, createdOn, updatedOn, purpose, status, repaid, tenor, amount, paymentInstallment, balance, interest) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *';
+  const values = [
+    uuidv4(),
+    req.user.email,
+    req.user.firstName,
+    req.user.lastName,
+    new Date(),
+    new Date(),
+    req.body.purpose,
+    'pending',
+    false,
+    parseInt(req.body.tenor, 10),
+    roundOfTo2dp(req.body.amount),
+    roundOfTo2dp(Number(req.body.amount) * 1.05 / parseInt(req.body.tenor, 10)),
+    roundOfTo2dp(Number(req.body.amount) * 1.05),
+    roundOfTo2dp(Number(req.body.amount) * 0.05),
+  ];
+  dbconnect.query(text, values).then((result) => {
+    sendSuccessResponse(res, 201, result.rows[0]);
+  });
 };
 
 const respondToLoanRequest = (req, res) => {

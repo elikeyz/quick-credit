@@ -1,13 +1,16 @@
-import loans from '../../models/loans';
 import sendErrorResponse from '../helpers/sendErrorResponse';
+import dbconnect from '../helpers/dbconnect';
 
 const restrictNumberOfLoanApplications = (req, res, next) => {
-  const unpaidLoans = loans.filter(loan => loan.user === req.user.email && !loan.repaid);
-  if (unpaidLoans.length > 0) {
-    sendErrorResponse(res, 403, 'You cannot apply for more than one loan at a time');
-  } else {
-    next();
-  }
+  const text = 'SELECT * FROM loans WHERE client = $1 AND repaid = $2';
+  const values = [req.user.email, false];
+  dbconnect.query(text, values).then((result) => {
+    if (result.rowCount > 0) {
+      sendErrorResponse(res, 403, 'You cannot apply for more than one loan at a time');
+    } else {
+      next();
+    }
+  });
 };
 
 export default restrictNumberOfLoanApplications;

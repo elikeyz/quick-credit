@@ -2,6 +2,7 @@
 import chai, { should } from 'chai';
 import chaiHttp from 'chai-http';
 import bcrypt from 'bcryptjs';
+import uuidv4 from 'uuid/v4';
 import app from '../app';
 import generateUserToken from '../utils/helpers/generateUserToken';
 import dbconnect from '../utils/helpers/dbconnect';
@@ -10,13 +11,14 @@ should();
 chai.use(chaiHttp);
 
 describe('Loans', () => {
+  let adminId = '';
   beforeEach((done) => {
     dbconnect.query(`
       DROP TABLE repayments;
       DROP TABLE loans;
       DROP TABLE users;
       CREATE TABLE users(
-        id SERIAL PRIMARY KEY,
+        id UUID PRIMARY KEY,
         email TEXT UNIQUE,
         firstName TEXT,
         lastName TEXT,
@@ -27,7 +29,7 @@ describe('Loans', () => {
         isAdmin BOOLEAN
     );
     CREATE TABLE loans(
-        id SERIAL PRIMARY KEY,
+        id UUID PRIMARY KEY,
         client TEXT REFERENCES users(email),
         firstName TEXT,
         lastName TEXT,
@@ -43,9 +45,9 @@ describe('Loans', () => {
         interest FLOAT
     );
     CREATE TABLE repayments(
-        id SERIAL PRIMARY KEY,
+        id UUID PRIMARY KEY,
         createdOn TIMESTAMPTZ,
-        loanId INT REFERENCES loans(id),
+        loanId UUID REFERENCES loans(id),
         amount FLOAT,
         monthlyInstallment FLOAT,
         paidAmount FLOAT,
@@ -53,9 +55,10 @@ describe('Loans', () => {
     );
     `).then(() => {
       const hashedPassword = bcrypt.hashSync('quickcredit2019', 10);
-      const text = 'INSERT INTO users(email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8)';
-      const values = ['quickcredit2019@gmail.com', 'Quick', 'Credit', hashedPassword, 'No. 123, Acme Drive, Wakanda District', 'No. 456, Foobar Avenue, Vibranium Valley', 'verified', true];
-      dbconnect.query(text, values).then(() => {
+      const text = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
+      const values = [uuidv4(), 'quickcredit2019@gmail.com', 'Quick', 'Credit', hashedPassword, 'No. 123, Acme Drive, Wakanda District', 'No. 456, Foobar Avenue, Vibranium Valley', 'verified', true];
+      dbconnect.query(text, values).then((result) => {
+        adminId = result.rows[0].id;
         done();
       });
     });
@@ -388,6 +391,28 @@ describe('Loans', () => {
   });
 
   describe('POST /loans', () => {
+    let verifiedUserId = '';
+    beforeEach((done) => {
+      const user = {
+        email: 'nikobellic25@gmail.com',
+        firstName: 'Niko',
+        lastName: 'Bellic',
+        password: 'nikobellic25',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+      };
+      const {
+        email, firstName, lastName, password, address, workAddress,
+      } = user;
+      const hashedPassword = bcrypt.hashSync(password, 10);
+      const text = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
+      const values = [uuidv4(), email, firstName, lastName, hashedPassword, address, workAddress, 'verified', false];
+      dbconnect.query(text, values).then((result) => {
+        verifiedUserId = result.rows[0].id;
+        done();
+      });
+    });
+
     it('should fail if there is no token in the header', (done) => {
       const loanData = {
         purpose: 'Business capital',
@@ -431,7 +456,7 @@ describe('Loans', () => {
         tenor: 3,
       };
       const user = {
-        id: 4,
+        id: verifiedUserId,
         email: 'nikobellic25@gmail.com',
         firstName: 'Niko',
         lastName: 'Bellic',
@@ -460,7 +485,7 @@ describe('Loans', () => {
         tenor: 3,
       };
       const user = {
-        id: 4,
+        id: verifiedUserId,
         email: 'nikobellic25@gmail.com',
         firstName: 'Niko',
         lastName: 'Bellic',
@@ -488,7 +513,7 @@ describe('Loans', () => {
         tenor: 3,
       };
       const user = {
-        id: 4,
+        id: verifiedUserId,
         email: 'nikobellic25@gmail.com',
         firstName: 'Niko',
         lastName: 'Bellic',
@@ -516,7 +541,7 @@ describe('Loans', () => {
         amount: 10000,
       };
       const user = {
-        id: 4,
+        id: verifiedUserId,
         email: 'nikobellic25@gmail.com',
         firstName: 'Niko',
         lastName: 'Bellic',
@@ -545,7 +570,7 @@ describe('Loans', () => {
         tenor: 3,
       };
       const user = {
-        id: 4,
+        id: verifiedUserId,
         email: 'nikobellic25@gmail.com',
         firstName: 'Niko',
         lastName: 'Bellic',
@@ -574,7 +599,7 @@ describe('Loans', () => {
         tenor: 3,
       };
       const user = {
-        id: 4,
+        id: verifiedUserId,
         email: 'nikobellic25@gmail.com',
         firstName: 'Niko',
         lastName: 'Bellic',
@@ -603,7 +628,7 @@ describe('Loans', () => {
         tenor: 'sdsjdf',
       };
       const user = {
-        id: 4,
+        id: verifiedUserId,
         email: 'nikobellic25@gmail.com',
         firstName: 'Niko',
         lastName: 'Bellic',
@@ -632,7 +657,7 @@ describe('Loans', () => {
         tenor: 234,
       };
       const user = {
-        id: 4,
+        id: verifiedUserId,
         email: 'nikobellic25@gmail.com',
         firstName: 'Niko',
         lastName: 'Bellic',
@@ -661,7 +686,7 @@ describe('Loans', () => {
         tenor: 0,
       };
       const user = {
-        id: 4,
+        id: verifiedUserId,
         email: 'nikobellic25@gmail.com',
         firstName: 'Niko',
         lastName: 'Bellic',
@@ -690,7 +715,7 @@ describe('Loans', () => {
         tenor: 3,
       };
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -718,8 +743,9 @@ describe('Loans', () => {
         amount: 10000,
         tenor: 3,
       };
+      const hashedPassword = bcrypt.hashSync('carljohnson25', 10);
       const user = {
-        id: 6,
+        id: uuidv4(),
         email: 'carljohnson25@gmail.com',
         firstName: 'Carl',
         lastName: 'Johnson',
@@ -728,17 +754,29 @@ describe('Loans', () => {
         status: 'unverified',
         isAdmin: false,
       };
-
-      chai.request(app)
-        .post('/api/v1/loans')
-        .set({ authorization: `Bearer ${generateUserToken(user)}` })
-        .type('form')
-        .send(loanData)
-        .end((err, res) => {
-          res.should.have.status(403);
-          res.body.should.have.property('error').eql('You cannot apply for a loan until your user details are verified');
-          done();
-        });
+      const text = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+      const values = [
+        user.id,
+        user.email,
+        user.firstName,
+        user.lastName,
+        hashedPassword,
+        user.address,
+        user.workAddress,
+        user.status,
+        user.isAdmin];
+      dbconnect.query(text, values).then(() => {
+        chai.request(app)
+          .post('/api/v1/loans')
+          .set({ authorization: `Bearer ${generateUserToken(user)}` })
+          .type('form')
+          .send(loanData)
+          .end((err, res) => {
+            res.should.have.status(403);
+            res.body.should.have.property('error').eql('You cannot apply for a loan until your user details are verified');
+            done();
+          });
+      });
     });
 
     it('should fail if the client has an outstanding loan', (done) => {
@@ -748,27 +786,45 @@ describe('Loans', () => {
         tenor: 3,
       };
       const user = {
-        id: 2,
-        email: 'johndoe25@gmail.com',
-        firstName: 'John',
-        lastName: 'Doe',
-        password: 'johndoe25',
+        id: verifiedUserId,
+        email: 'nikobellic25@gmail.com',
+        firstName: 'Niko',
+        lastName: 'Bellic',
+        password: 'nikobellic25',
         address: 'No. 123, Acme Drive, Wakanda District',
         workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
         status: 'verified',
         isAdmin: false,
       };
-
-      chai.request(app)
-        .post('/api/v1/loans')
-        .set({ authorization: `Bearer ${generateUserToken(user)}` })
-        .type('form')
-        .send(loanData)
-        .end((err, res) => {
-          res.should.have.status(403);
-          res.body.should.have.property('error').eql('You cannot apply for more than one loan at a time');
-          done();
-        });
+      const text = 'INSERT INTO loans(id, client, firstName, lastName, createdOn, updatedOn, purpose, status, repaid, tenor, amount, paymentInstallment, balance, interest) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *';
+      const values = [
+        uuidv4(),
+        user.email,
+        user.firstName,
+        user.lastName,
+        new Date(),
+        new Date(),
+        'Business purposes',
+        'pending',
+        false,
+        10,
+        100000,
+        10500,
+        105000,
+        5000,
+      ];
+      dbconnect.query(text, values).then(() => {
+        chai.request(app)
+          .post('/api/v1/loans')
+          .set({ authorization: `Bearer ${generateUserToken(user)}` })
+          .type('form')
+          .send(loanData)
+          .end((err, res) => {
+            res.should.have.status(403);
+            res.body.should.have.property('error').eql('You cannot apply for more than one loan at a time');
+            done();
+          });
+      });
     });
 
     it('should create a new loan successfully', (done) => {
@@ -778,7 +834,7 @@ describe('Loans', () => {
         tenor: 3,
       };
       const user = {
-        id: 4,
+        id: verifiedUserId,
         email: 'nikobellic25@gmail.com',
         firstName: 'Niko',
         lastName: 'Bellic',
@@ -797,7 +853,7 @@ describe('Loans', () => {
           res.should.have.status(201);
           res.body.should.have.property('data');
           res.body.data.should.be.a('object');
-          res.body.data.should.have.property('user').eql('nikobellic25@gmail.com');
+          res.body.data.should.have.property('client').eql('nikobellic25@gmail.com');
           res.body.data.should.have.property('amount').eql(10000);
           res.body.data.should.have.property('tenor').eql(3);
           done();

@@ -56,7 +56,7 @@ describe('Auth/Users', () => {
         isAdmin BOOLEAN
     );
     CREATE TABLE loans(
-        id SERIAL PRIMARY KEY,
+        id UUID PRIMARY KEY,
         client TEXT REFERENCES users(email),
         firstName TEXT,
         lastName TEXT,
@@ -72,9 +72,9 @@ describe('Auth/Users', () => {
         interest FLOAT
     );
     CREATE TABLE repayments(
-        id SERIAL PRIMARY KEY,
+        id UUID PRIMARY KEY,
         createdOn TIMESTAMPTZ,
-        loanId INT REFERENCES loans(id),
+        loanId UUID REFERENCES loans(id),
         amount FLOAT,
         monthlyInstallment FLOAT,
         paidAmount FLOAT,

@@ -600,10 +600,6 @@
                   "tenor"
                 ],
                 "properties": {
-                  "email": {
-                    "type": "string",
-                    "format": "email"
-                  },
                   "purpose": {
                     "type": "string"
                   },
@@ -1050,7 +1046,8 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
+            "type": "string",
+            "format": "uuid",
             "uniqueItems": true
           },
           "user": {
