@@ -1,7 +1,6 @@
 import express from 'express';
 import loansController from '../controllers/loansController';
 import repaymentsController from '../controllers/repaymentsController';
-import loanIdValidate from '../utils/validators/loanIdValidate';
 import checkIfLoanExists from '../utils/verifiers/checkIfLoanExists';
 import loansQueryValidate from '../utils/validators/loansQueryValidate';
 import loanValidate from '../utils/validators/loanValidate';
@@ -14,6 +13,7 @@ import checkIfPaidAmountIsGreaterThanBalance from '../utils/validators/checkIfPa
 import tokenValidate from '../utils/validators/tokenValidate';
 import adminAuth from '../utils/verifiers/adminAuth';
 import userAuth from '../utils/verifiers/userAuth';
+import checkLoanValidity from '../utils/verifiers/checkLoanValidity';
 
 const loansRouter = express.Router();
 const {
@@ -45,13 +45,14 @@ loansRouter.patch('/loans/:loanId',
   respondToLoanRequest);
 loansRouter.get('/loans/:loanId/repayments',
   tokenValidate,
-  loanIdValidate,
+  checkIfLoanExists,
   userAuth,
   getLoanRepayments);
 loansRouter.post('/loans/:loanId/repayments',
   tokenValidate,
   adminAuth,
-  loanIdValidate,
+  checkIfLoanExists,
+  checkLoanValidity,
   validateRepaidAndPaidAmount,
   checkIfPaidAmountIsLessThanInstallment,
   checkIfPaidAmountIsGreaterThanBalance,
