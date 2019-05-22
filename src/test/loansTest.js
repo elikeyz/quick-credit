@@ -148,6 +148,27 @@ describe('Loans', () => {
         });
     });
 
+    it('should fail if the loan ID specified is not a valid UUID', (done) => {
+      const user = {
+        id: adminId,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
+      chai.request(app)
+        .get(`/api/v1/loans/${uuidv4()}khjgjg`)
+        .set({ authorization: `Bearer ${generateUserToken(user)}` })
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property('error').eql('The Loan ID specified is not a valid UUID');
+          done();
+        });
+    });
+
     it('should fail if the loan does not exist', (done) => {
       const user = {
         id: adminId,
@@ -891,15 +912,59 @@ describe('Loans', () => {
           res.body.data.should.have.property('client').eql('nikobellic25@gmail.com');
           res.body.data.should.have.property('amount').eql(10000);
           res.body.data.should.have.property('tenor').eql(3);
+          res.body.data.should.have.property('status').eql('pending');
           done();
         });
     });
   });
 
   describe('PATCH /loans/:loanId', () => {
+    let loanId = '';
+    beforeEach((done) => {
+      const user = {
+        email: 'nikobellic25@gmail.com',
+        firstName: 'Niko',
+        lastName: 'Bellic',
+        password: 'nikobellic25',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+      };
+      const {
+        email, firstName, lastName, password, address, workAddress,
+      } = user;
+      const hashedPassword = bcrypt.hashSync(password, 10);
+      const userText = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+      const userValues = [uuidv4(), email, firstName, lastName, hashedPassword, address, workAddress, 'verified', false];
+      dbconnect.query(userText, userValues).then(() => {
+        const loanText = 'INSERT INTO loans(id, client, firstName, lastName, createdOn, updatedOn, purpose, status, repaid, tenor, amount, paymentInstallment, balance, interest) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *';
+        const loanValues = [
+          uuidv4(),
+          user.email,
+          user.firstName,
+          user.lastName,
+          new Date(),
+          new Date(),
+          'Business purposes',
+          'pending',
+          false,
+          10,
+          100000,
+          10500,
+          105000,
+          5000,
+        ];
+        dbconnect.query(loanText, loanValues).then((result) => {
+          loanId = result.rows[0].id;
+          done();
+        });
+      });
+    });
+
     it('should fail if there is no token in the header', (done) => {
       chai.request(app)
-        .patch('/api/v1/loans/3')
+        .patch(`/api/v1/loans/${loanId}`)
+        .type('form')
+        .send({ status: 'approved' })
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.property('error').eql('You did not enter a token in the header');
@@ -909,8 +974,10 @@ describe('Loans', () => {
 
     it('should fail if the token in the header is invalid', (done) => {
       chai.request(app)
-        .patch('/api/v1/loans/3')
+        .patch(`/api/v1/loans/${loanId}`)
         .set({ authorization: 'Bearer lskjdlksjdflk' })
+        .type('form')
+        .send({ status: 'approved' })
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.property('error').eql('Failed to authenticate token');
@@ -919,8 +986,9 @@ describe('Loans', () => {
     });
 
     it('should fail if the user is not an Admin', (done) => {
+      const hashedPassword = bcrypt.hashSync('johndoe25', 10);
       const user = {
-        id: 2,
+        id: uuidv4(),
         email: 'johndoe25@gmail.com',
         firstName: 'John',
         lastName: 'Doe',
@@ -929,19 +997,25 @@ describe('Loans', () => {
         status: 'verified',
         isAdmin: false,
       };
-      chai.request(app)
-        .patch('/api/v1/loans/3')
-        .set({ authorization: `Bearer ${generateUserToken(user)}` })
-        .end((err, res) => {
-          res.should.have.status(403);
-          res.body.should.have.property('error').eql('This route is for Admin users only');
-          done();
-        });
+      const text = 'INSERT INTO users(id, email, firstName, lastName, password, address, workAddress, status, isAdmin) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+      const values = [user.id, user.email, user.firstName, user.lastName, hashedPassword, user.address, user.workAddress, 'verified', false];
+      dbconnect.query(text, values).then(() => {
+        chai.request(app)
+          .patch(`/api/v1/loans/${loanId}`)
+          .set({ authorization: `Bearer ${generateUserToken(user)}` })
+          .type('form')
+          .send({ status: 'approved' })
+          .end((err, res) => {
+            res.should.have.status(403);
+            res.body.should.have.property('error').eql('This route is for Admin users only');
+            done();
+          });
+      });
     });
 
-    it('should fail if a non-numerical character is provided as the Loan ID', (done) => {
+    it('should fail if the loan ID specified is not a valid UUID', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -951,20 +1025,20 @@ describe('Loans', () => {
         isAdmin: true,
       };
       chai.request(app)
-        .patch('/api/v1/loans/a')
+        .patch('/api/v1/loans/sdfsdfsdf')
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send({ status: 'approved' })
         .end((err, res) => {
           res.should.have.status(400);
-          res.body.should.have.property('error').eql('The Loan ID parameter must be an integer');
+          res.body.should.have.property('error').eql('The Loan ID specified is not a valid UUID');
           done();
         });
     });
 
-    it('should fail if a floating point number is provided as the Loan ID', (done) => {
+    it('should fail if the loan ID specified is not a valid UUID', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -974,20 +1048,20 @@ describe('Loans', () => {
         isAdmin: true,
       };
       chai.request(app)
-        .patch('/api/v1/loans/1.1')
+        .patch(`/api/v1/loans/${uuidv4}sdfss`)
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send({ status: 'approved' })
         .end((err, res) => {
           res.should.have.status(400);
-          res.body.should.have.property('error').eql('The Loan ID parameter must be an integer');
+          res.body.should.have.property('error').eql('The Loan ID specified is not a valid UUID');
           done();
         });
     });
 
     it('should fail if the loan does not exist', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -997,7 +1071,7 @@ describe('Loans', () => {
         isAdmin: true,
       };
       chai.request(app)
-        .patch('/api/v1/loans/50')
+        .patch(`/api/v1/loans/${uuidv4()}`)
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send({ status: 'approved' })
@@ -1010,7 +1084,7 @@ describe('Loans', () => {
 
     it('should fail if the status is not defined', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -1020,7 +1094,7 @@ describe('Loans', () => {
         isAdmin: true,
       };
       chai.request(app)
-        .patch('/api/v1/loans/3')
+        .patch(`/api/v1/loans/${loanId}`)
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send({})
@@ -1033,7 +1107,7 @@ describe('Loans', () => {
 
     it('should fail if the status is not specified', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -1043,7 +1117,7 @@ describe('Loans', () => {
         isAdmin: true,
       };
       chai.request(app)
-        .patch('/api/v1/loans/3')
+        .patch(`/api/v1/loans/${loanId}`)
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send({ status: '' })
@@ -1056,7 +1130,7 @@ describe('Loans', () => {
 
     it('should fail if the status passed in the body is neither \'approved\' nor \'rejected\'', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -1066,7 +1140,7 @@ describe('Loans', () => {
         isAdmin: true,
       };
       chai.request(app)
-        .patch('/api/v1/loans/3')
+        .patch(`/api/v1/loans/${loanId}`)
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send({ status: 'pending' })
@@ -1079,7 +1153,7 @@ describe('Loans', () => {
 
     it('should approve the loan application successfully', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -1089,7 +1163,7 @@ describe('Loans', () => {
         isAdmin: true,
       };
       chai.request(app)
-        .patch('/api/v1/loans/3')
+        .patch(`/api/v1/loans/${loanId}`)
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send({ status: 'approved' })
@@ -1097,7 +1171,7 @@ describe('Loans', () => {
           res.should.have.status(200);
           res.body.should.have.property('data');
           res.body.data.should.be.a('object');
-          res.body.data.should.have.property('id').eql(3);
+          res.body.data.should.have.property('id').eql(loanId);
           res.body.data.should.have.property('status').eql('approved');
           done();
         });
@@ -1105,7 +1179,7 @@ describe('Loans', () => {
 
     it('should reject the loan application successfully', (done) => {
       const user = {
-        id: 1,
+        id: adminId,
         email: 'quickcredit2019@gmail.com',
         firstName: 'Quick',
         lastName: 'Credit',
@@ -1115,7 +1189,7 @@ describe('Loans', () => {
         isAdmin: true,
       };
       chai.request(app)
-        .patch('/api/v1/loans/3')
+        .patch(`/api/v1/loans/${loanId}`)
         .set({ authorization: `Bearer ${generateUserToken(user)}` })
         .type('form')
         .send({ status: 'rejected' })
@@ -1123,7 +1197,7 @@ describe('Loans', () => {
           res.should.have.status(200);
           res.body.should.have.property('data');
           res.body.data.should.be.a('object');
-          res.body.data.should.have.property('id').eql(3);
+          res.body.data.should.have.property('id').eql(loanId);
           res.body.data.should.have.property('status').eql('rejected');
           done();
         });
