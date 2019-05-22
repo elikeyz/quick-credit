@@ -1,5 +1,4 @@
 import uuidv4 from 'uuid/v4';
-import loans from '../models/loans';
 import roundOfTo2dp from '../utils/helpers/roundOfTo2dp';
 import sendSuccessResponse from '../utils/helpers/sendSuccessResponse';
 import dbconnect from '../utils/helpers/dbconnect';
@@ -54,27 +53,10 @@ const requestLoan = (req, res) => {
 };
 
 const respondToLoanRequest = (req, res) => {
-  loans.forEach((loan, loanIndex) => {
-    if (loan.id === parseInt(req.params.loanId, 10)) {
-      const newLoan = {
-        id: req.loan.id,
-        user: req.loan.email,
-        firstName: req.loan.firstName,
-        lastName: req.loan.lastName,
-        createdOn: req.loan.createdOn,
-        updatedOn: new Date().toLocaleString(),
-        purpose: req.loan.purpose,
-        status: req.body.status,
-        repaid: req.loan.repaid,
-        tenor: req.loan.tenor,
-        amount: req.loan.amount,
-        paymentInstallment: req.loan.paymentInstallment,
-        balance: req.loan.balance,
-        interest: req.loan.interest,
-      };
-      loans.splice(loanIndex, 1, newLoan);
-      sendSuccessResponse(res, 200, newLoan);
-    }
+  const text = 'UPDATE loans SET status = $1, updatedon = $2 WHERE id = $3 RETURNING *';
+  const values = [req.body.status, new Date(), req.params.loanId];
+  dbconnect.query(text, values).then((result) => {
+    sendSuccessResponse(res, 200, result.rows[0]);
   });
 };
 

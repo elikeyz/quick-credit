@@ -40,7 +40,7 @@ loansRouter.post('/loans',
 loansRouter.patch('/loans/:loanId',
   tokenValidate,
   adminAuth,
-  loanIdValidate,
+  checkIfLoanExists,
   loanResponseValidate,
   respondToLoanRequest);
 loansRouter.get('/loans/:loanId/repayments',
