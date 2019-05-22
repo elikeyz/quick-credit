@@ -972,22 +972,22 @@
             "format": "email",
             "uniqueItems": true
           },
-          "firstName": {
+          "firstname": {
             "type": "string"
           },
-          "lastName": {
+          "lastname": {
             "type": "string"
           },
           "address": {
             "type": "string"
           },
-          "workAddress": {
+          "workaddress": {
             "type": "string"
           },
           "status": {
             "type": "string"
           },
-          "isAdmin": {
+          "isadmin": {
             "type": "boolean"
           }
         }
@@ -1053,17 +1053,17 @@
           "user": {
             "type": "string"
           },
-          "firstName": {
+          "firstname": {
             "type": "string"
           },
-          "lastName": {
+          "lastname": {
             "type": "string"
           },
-          "createdOn": {
+          "createdon": {
             "type": "string",
             "format": "date-time"
           },
-          "updatedOn": {
+          "updatedon": {
             "type": "string",
             "format": "date-time"
           },
@@ -1083,7 +1083,7 @@
             "type": "number",
             "format": "float"
           },
-          "paymentInstallment": {
+          "paymentinstallment": {
             "type": "number",
             "format": "float"
           },
@@ -1111,22 +1111,22 @@
             "format": "uuid",
             "uniqueItems": true
           },
-          "createdOn": {
+          "createdon": {
             "type": "string",
             "format": "date-time"
           },
-          "loanId": {
+          "loanid": {
             "type": "integer"
           },
           "amount": {
             "type": "number",
             "format": "float"
           },
-          "monthlyInstallment": {
+          "monthlyinstallment": {
             "type": "number",
             "format": "float"
           },
-          "paidAmount": {
+          "paidamount": {
             "type": "number",
             "format": "float"
           },
