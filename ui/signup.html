@@ -29,41 +29,42 @@
         <div class="bg-img bg-img-login-register">
             <div class="overlay">
                 <div class="form-container">
-                    <form class="card">
+                    <form class="card" id="signup-form">
                         <div class="form-header">
                             <h1 class="display-text">Join Us</h1>
                         </div>
                         <div class="form-unit">
-                            <label for="first-name">First Name</label>
+                            <label for="first-name">First Name <span class="rejected">*</span></label>
                             <input type="text" id="first-name" placeholder="First Name" required>
                         </div>
                         <div class="form-unit">
-                            <label for="last-name">Last Name</label>
+                            <label for="last-name">Last Name <span class="rejected">*</span></label>
                             <input type="text" id="last-name" placeholder="Last Name" required>
                         </div>
                         <div class="form-unit">
-                            <label for="home-address">Residential Address</label>
+                            <label for="home-address">Residential Address <span class="rejected">*</span></label>
                             <textarea id="home-address" placeholder="Residential address" required></textarea>
                         </div>
                         <div class="form-unit">
-                            <label for="work-address">Office Address</label>
+                            <label for="work-address">Office Address <span class="rejected">*</span></label>
                             <textarea id="work-address" placeholder="Office address" required></textarea>
                         </div>
                         <div class="form-unit">
-                            <label for="email-signup">Email</label>
+                            <label for="email-signup">Email <span class="rejected">*</span></label>
                             <input type="email" id="email-signup" placeholder="Email" required>
                         </div>
                         <div class="form-unit">
-                            <label for="password-signup">Password</label>
+                            <label for="password-signup">Password <span class="rejected">*</span></label>
                             <input type="password" id="password-signup" placeholder="Password" required>
                         </div>
                         <div class="form-unit">
-                            <label for="confirm-password-signup">Confirm Password</label>
+                            <label for="confirm-password-signup">Confirm Password <span class="rejected">*</span></label>
                             <input type="password" id="confirm-password-signup" placeholder="Confirm Password" required>
                         </div>
                         <div class="form-unit">
                             <input type="submit" class="form-button" id="signup-btn" value="Register">
                         </div>
+                        <div class="form-feedback" id="feedback"></div>
                     </form>
                 </div>
             </div>
