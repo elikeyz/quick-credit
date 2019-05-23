@@ -5,6 +5,14 @@ dropBtn.addEventListener('click', (event) => {
   event.stopImmediatePropagation();
   if (dropdownContent.classList.contains('hidden')) {
     dropdownContent.classList.remove('hidden');
+    const logoutBtn = document.getElementById('drop-down-logout-btn');
+
+    logoutBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      localStorage.removeItem('quick-credit-access-data');
+      location = './index.html';
+    });
   } else {
     dropdownContent.classList.add('hidden');
   }
