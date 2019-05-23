@@ -5,7 +5,7 @@ adminLoginBtn.addEventListener('click', (event) => {
   feedbackDiv.innerHTML = '<p class="unverified">Verifying your credentials</p>';
   login().then((data) => {
     if (data.status === 200 && data.data.isadmin) {
-      feedbackDiv.innerHTML = '';
+      feedbackDiv.innerHTML = '<p class="verified">Credentials verified</p>';
       localStorage.setItem('quick-credit-access-data', JSON.stringify(data.data));
       location = './clients.html';
     } else if (data.status === 200) {

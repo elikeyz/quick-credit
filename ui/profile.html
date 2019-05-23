@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="css/styles.css">
-    <title>Quick Credit | Loan Repayment History</title>
+    <title>Quick Credit | Profile</title>
 </head>
 <body>
     <div id="loan-application-modal" class="modal">
@@ -127,15 +127,15 @@
                 <h1 class="display-text">Apply for a Loan</h1>
             </div>
             <div class="form-unit">
-                <label for="amount">How much do you want to borrow?</label>
+                <label for="amount">How much do you want to borrow? <span class="rejected">*</span></label>
                 <input type="number" id="amount" placeholder="Amount" required>
             </div>
             <div class="form-unit">
-                <label for="reason">Briefly explain reason for loan request. (max. 50 characters)</label>
+                <label for="reason">Briefly explain reason for loan request. (max. 50 characters) <span class="rejected">*</span></label>
                 <textarea id="reason" placeholder="Reason for loan request..." maxlength="50" required></textarea>
             </div>
             <div class="form-unit">
-                <label for="tenor">Select your preferable loan tenor. (Number of months needed to pay back)</label>
+                <label for="tenor">Select your preferable loan tenor. (Number of months needed to pay back) <span class="rejected">*</span></label>
                 <select id="tenor" required>
                     <option value="1">1 month</option>
                     <option value="2">2 months</option>
