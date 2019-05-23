@@ -181,6 +181,13 @@ form {
     justify-content: center;
 }
 
+.form-feedback {
+    background-color: rgb(159, 168, 218);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+}
+
 label {
     font-weight: bold;
     width: 30%;
@@ -297,7 +304,7 @@ tr:nth-child(odd) {
 }
 
 tr:nth-child(even) {
-    background-color: #E8EAF6;
+    background-color: rgb(159, 168, 218);
 }
 
 td, th {
