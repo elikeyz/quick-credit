@@ -34,8 +34,8 @@ const requestLoan = (req, res) => {
   const values = [
     uuidv4(),
     req.user.email,
-    req.user.firstname,
-    req.user.lastname,
+    req.user.firstName,
+    req.user.lastName,
     new Date(),
     new Date(),
     req.body.purpose,
