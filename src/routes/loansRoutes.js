@@ -14,6 +14,7 @@ import tokenValidate from '../utils/validators/tokenValidate';
 import adminAuth from '../utils/verifiers/adminAuth';
 import userAuth from '../utils/verifiers/userAuth';
 import checkLoanValidity from '../utils/verifiers/checkLoanValidity';
+import checkIfLoanHasReceivedRepayment from '../utils/verifiers/checkIfLoanHasReceivedRepayment';
 
 const loansRouter = express.Router();
 const {
@@ -41,6 +42,7 @@ loansRouter.patch('/loans/:loanId',
   tokenValidate,
   adminAuth,
   checkIfLoanExists,
+  checkIfLoanHasReceivedRepayment,
   loanResponseValidate,
   respondToLoanRequest);
 loansRouter.get('/loans/:loanId/repayments',

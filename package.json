@@ -9,7 +9,7 @@
   "scripts": {
     "start-dev": "cross-env NODE_ENV=development nodemon --exec babel-node ./src/app.js",
     "start": "cross-env-shell NODE_ENV=production \"npm run build && node ./build/app.js\"",
-    "test": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha ./src/test/*.js --require @babel/register --timeout 25000 --exit",
+    "test": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha ./src/test/*.js --require @babel/register --timeout 30000 --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "build-src": "babel -d ./build ./src -s",
     "build": "npm run clean && npm run build-src",

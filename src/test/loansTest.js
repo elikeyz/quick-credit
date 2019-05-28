@@ -1082,6 +1082,49 @@ describe('Loans', () => {
         });
     });
 
+    it('should fail if the loan is already being repaid', (done) => {
+      const user = {
+        id: adminId,
+        email: 'quickcredit2019@gmail.com',
+        firstName: 'Quick',
+        lastName: 'Credit',
+        address: 'No. 123, Acme Drive, Wakanda District',
+        workAddress: 'No. 456, Foobar Avenue, Vibranium Valley',
+        status: 'verified',
+        isAdmin: true,
+      };
+      const repaidLoanId = uuidv4();
+      const loanText = 'INSERT INTO loans(id, client, firstName, lastName, createdOn, updatedOn, purpose, status, repaid, tenor, amount, paymentInstallment, balance, interest) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)';
+      const loanValues = [
+        repaidLoanId,
+        'nikobellic25@gmail.com',
+        'Niko',
+        'Bellic',
+        new Date(),
+        new Date(),
+        'Business purposes',
+        'pending',
+        false,
+        10,
+        100000,
+        10500,
+        0,
+        5000,
+      ];
+      dbconnect.query(loanText, loanValues).then(() => {
+        chai.request(app)
+          .patch(`/api/v1/loans/${repaidLoanId}`)
+          .set({ authorization: `Bearer ${generateUserToken(user)}` })
+          .type('form')
+          .send({ status: 'approved' })
+          .end((err, res) => {
+            res.should.have.status(403);
+            res.body.should.have.property('error').eql('This loan is already being repaid');
+            done();
+          });
+      });
+    });
+
     it('should fail if the status is not defined', (done) => {
       const user = {
         id: adminId,
