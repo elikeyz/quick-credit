@@ -10,5 +10,4 @@ const login = () => fetch('https://elikeyz-quick-credit.herokuapp.com/api/v1/aut
     email: emailField.value,
     password: passwordField.value,
   }),
-})
-  .then(response => response.json());
+}).then(response => response.json());
