@@ -100,7 +100,7 @@ const getMyLoans = (req, res) => {
 const getMyLoanRepayments = (req, res) => {
   const myLoanIds = req.myLoans.map(loan => loan.id);
   dbconnect.query('SELECT * FROM repayments').then((result) => {
-    const myRepayments = result.rows.filter(repayment => myLoanIds.includes(repayment.loanId));
+    const myRepayments = result.rows.filter(repayment => myLoanIds.includes(repayment.loanid));
     sendSuccessResponse(res, 200, myRepayments);
   });
 };

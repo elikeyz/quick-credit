@@ -10,10 +10,7 @@ const getLoanRepayments = (req, res) => {
 };
 
 const postClientRepaymentTranx = (req, res) => {
-  let repaidStatus = false;
-  if (req.loan.balance === Number(req.body.paidAmount)) {
-    repaidStatus = true;
-  }
+  const repaidStatus = (req.loan.balance === Number(req.body.paidAmount));
   const updateLoanText = 'UPDATE loans SET updatedon = $1, repaid = $2, balance = $3 WHERE id = $4';
   const updateLoanValues = [
     new Date(), repaidStatus, req.loan.balance - Number(req.body.paidAmount), req.params.loanId,
