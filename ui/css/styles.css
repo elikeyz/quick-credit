@@ -226,6 +226,7 @@ textarea {
     color: #FFF8E1;
     cursor: pointer;
     font-size: 15px;
+    outline: none;
 }
 
 .btn-two {
@@ -553,6 +554,7 @@ th {
     border-radius: 20px;
     cursor: pointer;
     font-size: 15px;
+    outline: none;
 }
 
 .accept-btn {

@@ -78,7 +78,8 @@
         </div>
         <div class="container client-container">
             <h1><span><i class="fa fa-history"></i></span> Loan Repayments</h1>
-            <table class="card">
+            <div id="feedback"></div>
+            <table class="card" id="my-repayments-table">
                 <thead>
                     <tr>
                         <th class="repayments-table-unit">Paid Amount</th>
@@ -88,42 +89,15 @@
                         <th class="repayments-table-unit">Balance</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td class="repayments-table-unit">N2,000.00</td>
-                        <td class="repayments-table-unit">01/01/2019</td>
-                        <td class="repayments-table-unit">08:00:00 GMT+0100</td>
-                        <td class="repayments-table-unit">N20,000.00</td>
-                        <td class="repayments-table-unit">N18,000.00</td>
-                    </tr>
-                    <tr>
-                        <td class="repayments-table-unit">N2,000.00</td>
-                        <td class="repayments-table-unit">01/01/2019</td>
-                        <td class="repayments-table-unit">08:00:00 GMT+0100</td>
-                        <td class="repayments-table-unit">N20,000.00</td>
-                        <td class="repayments-table-unit">N18,000.00</td>
-                    </tr>
-                    <tr>
-                        <td class="repayments-table-unit">N2,000.00</td>
-                        <td class="repayments-table-unit">01/01/2019</td>
-                        <td class="repayments-table-unit">08:00:00 GMT+0100</td>
-                        <td class="repayments-table-unit">N20,000.00</td>
-                        <td class="repayments-table-unit">N18,000.00</td>
-                    </tr>
-                    <tr>
-                        <td class="repayments-table-unit">N2,000.00</td>
-                        <td class="repayments-table-unit">01/01/2019</td>
-                        <td class="repayments-table-unit">08:00:00 GMT+0100</td>
-                        <td class="repayments-table-unit">N20,000.00</td>
-                        <td class="repayments-table-unit">N18,000.00</td>
-                    </tr>
-                </tbody>
+                <tbody id="my-repayments-container"></tbody>
             </table>
         </div>
     </main>
+    <script src="js/fetch.js"></script>
     <script src="js/client-first-name.js"></script>
     <script src="./js/dropdown.js"></script>
     <script src="js/display-modal.js"></script>
     <script src="js/loan-apply.js"></script>
+    <script src="./js/loan-repayments.js"></script>
 </body>
 </html>
