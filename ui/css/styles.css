@@ -864,12 +864,8 @@ th {
         width: 90%;
     }
 
-    .client-container {
-        padding: 100px 50px;
-    }
-
     .profile-container {
-        padding: 100px 10%;
+        padding: 100px 5%;
     }
 
     .admin-links {
@@ -902,6 +898,10 @@ th {
 
     .title-button {
         width: 80%;
+    }
+
+    .table-button {
+        width: 200%;
     }
 }
 
@@ -946,6 +946,10 @@ th {
 @media only screen and (max-width: 249px) {
     .client-menu {
         top: 103px;
+    }
+
+    .table-button {
+        width: 250%;
     }
 }
 

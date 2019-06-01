@@ -11,7 +11,7 @@ clientLoginBtn.addEventListener('click', (event) => {
     if (data.status === 200 && !data.data.isadmin) {
       feedbackDiv.innerHTML = '<p class="verified">Credentials verified</p>';
       localStorage.setItem('quick-credit-access-data', JSON.stringify(data.data));
-      location = './loan-repayments.html';
+      location.assign('./loan-repayments.html');
     } else if (data.status === 200) {
       feedbackDiv.innerHTML = '<p class="rejected">You are not authorized to enter the Client Interface</p>';
       clientLoginBtn.removeAttribute('disabled');

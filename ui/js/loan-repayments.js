@@ -18,6 +18,10 @@ const renderRepaymentHistory = (data) => {
                           </tr>`;
       myRepaymentsContainer.insertAdjacentHTML('beforeend', repaymentHtml);
     });
+  } else if (data.status === 401) {
+    location.assign('./login.html');
+  } else {
+    feedbackDiv.innerHTML = `<p class="rejected">${data.error}</p>`;
   }
 };
 
