@@ -1,5 +1,5 @@
 const setModalBtnClickEvent = (
-  modalOpenBtn, modalCancelBtnId, modalCloseBtnId, modalId, id, setupModalContent,
+  modalOpenBtn, modalCancelBtnId, modalCloseBtnId, modalId, setupModalContent, id,
 ) => {
   const modal = document.getElementById(modalId);
   const modalBtn = document.getElementById(modalOpenBtn);
@@ -28,15 +28,19 @@ const displayModal = (
   modalId, modalCancelBtnId, modalCloseBtnId, modalOpenBtnId, ids, setupModalContent,
 ) => {
   const modal = document.getElementById(modalId);
-
-  if (ids) {
+  if (ids.length > 0) {
     ids.forEach((id) => {
-      setModalBtnClickEvent(`${modalOpenBtnId}-${id}`, modalCancelBtnId, modalCloseBtnId, modalId, id, setupModalContent);
+      setModalBtnClickEvent(`${modalOpenBtnId}-${id}`, modalCancelBtnId, modalCloseBtnId, modalId, setupModalContent, id);
     });
   } else {
-    setModalBtnClickEvent(modalOpenBtnId, modalCancelBtnId, modalCloseBtnId, modalId);
+    setModalBtnClickEvent(
+      modalOpenBtnId,
+      modalCancelBtnId,
+      modalCloseBtnId,
+      modalId,
+      setupModalContent,
+    );
   }
-
   window.addEventListener('click', (event) => {
     if (event.target === modal) {
       modal.style.display = 'none';

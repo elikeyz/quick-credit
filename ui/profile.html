@@ -1,167 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="description" content="An online lending platform that provides short term loans to individuals">
-    <meta name="keywords" content="credit, loan, lending">
-    <meta name="author" content="Elijah Enuem-Udogu">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/styles.css">
-    <title>Quick Credit | Profile</title>
-</head>
-<body>
-    <div id="loan-application-modal" class="modal">
-        <div class="client-modal-content card">
-            <span class="close-alt" id="loan-application-close-btn"><i class="fa fa-times" aria-hidden="true"></i></span>
-            <div class="profile-header" id="loan-application-username-container"></div>
-            <div class="application-body">
-                <div class="columns">
-                    <div class="application-column" id="loan-application-first-column"></div>
-                    <div class="application-column" id="loan-application-second-column"></div>
-                </div>
-                <div class="modal-btn-unit">
-                    <button class="form-button" id="loan-application-cancel-btn">Back</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="loan-modal" class="modal">
-        <div class="client-modal-content card">
-            <span class="close-alt" id="loan-close-btn"><i class="fa fa-times" aria-hidden="true"></i></span>
-            <div class="profile-header" id="loan-username-container"></div>
-            <div class="application-body">
-                <div class="columns">
-                    <div class="application-column" id="loan-first-column"></div>
-                    <div class="application-column" id="loan-second-column"></div>
-                </div>
-                <div class="modal-btn-unit">
-                    <button class="form-button" id="loan-cancel-btn">Back</button>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description" content="An online lending platform that provides short term loans to individuals">
+        <meta name="keywords" content="credit, loan, lending">
+        <meta name="author" content="Elijah Enuem-Udogu">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        <link rel="stylesheet" href="css/styles.css">
+        <title>Quick Credit | Profile</title>
+    </head>
+    <body>
+        <div id="loan-application-modal" class="modal">
+            <div class="client-modal-content card">
+                <span class="close-alt" id="loan-application-close-btn"><i class="fa fa-times" aria-hidden="true"></i></span>
+                <div class="profile-header" id="loan-application-username-container"></div>
+                <div class="application-body">
+                    <div class="columns">
+                        <div class="application-column" id="loan-application-first-column"></div>
+                        <div class="application-column" id="loan-application-second-column"></div>
+                    </div>
+                    <div class="modal-btn-unit">
+                        <button class="form-button" id="loan-application-cancel-btn">Back</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div id="loan-application-form-modal" class="modal">
-        <form class="modal-content card">
-            <span class="close" id="close-btn"><i class="fa fa-times" aria-hidden="true"></i></span>
-            <div class="form-header">
-                <h1 class="display-text">Apply for a Loan</h1>
+        <div id="loan-modal" class="modal">
+            <div class="client-modal-content card">
+                <span class="close-alt" id="loan-close-btn"><i class="fa fa-times" aria-hidden="true"></i></span>
+                <div class="profile-header" id="loan-username-container"></div>
+                <div class="application-body">
+                    <div class="columns">
+                        <div class="application-column" id="loan-first-column"></div>
+                        <div class="application-column" id="loan-second-column"></div>
+                    </div>
+                    <div class="modal-btn-unit">
+                        <button class="form-button" id="loan-cancel-btn">Back</button>
+                    </div>
+                </div>
             </div>
-            <div class="form-unit">
-                <label for="amount">How much do you want to borrow? <span class="rejected">*</span></label>
-                <input type="number" id="amount" placeholder="Amount" required>
-            </div>
-            <div class="form-unit">
-                <label for="reason">Briefly explain reason for loan request. (max. 50 characters) <span class="rejected">*</span></label>
-                <textarea id="reason" placeholder="Reason for loan request..." maxlength="50" required></textarea>
-            </div>
-            <div class="form-unit">
-                <label for="tenor">Select your preferable loan tenor. (Number of months needed to pay back) <span class="rejected">*</span></label>
-                <select id="tenor" required>
-                    <option value="1">1 month</option>
-                    <option value="2">2 months</option>
-                    <option value="3">3 months</option>
-                    <option value="4">4 months</option>
-                    <option value="5">5 months</option>
-                    <option value="6">6 months</option>
-                    <option value="7">7 months</option>
-                    <option value="8">8 months</option>
-                    <option value="9">9 months</option>
-                    <option value="10">10 months</option>
-                    <option value="11">11 months</option>
-                    <option value="12">12 months</option>
-                </select>
-            </div>
-            <div class="form-unit" id="btn-container">
-                <input type="submit" class="form-button btn-one" id="submit-btn" value="Apply">
-                <input type="reset" class="form-button btn-two" id="cancel-btn" value="Cancel">
-            </div>
-        </form>
-    </div>
-    <header>
-        <nav class="onboarding-display">
-            <a class="header-text nav-link" href="./index.html"><span class="display-icon"><i class="fas fa-university"></i></span>QUICK CREDIT</a>
-        </nav>
-        <nav class="onboarding-links">
-            <ul class="nav-list">
-                <li class="onboarding-nav-item" id="open-modal">
-                    <a class="nav-link nav-item" href="#">
-                        <span><i class="fas fa-plus"></i></span> Apply for a Loan
-                    </a>
-                </li>
-                <li class="onboarding-nav-item" id="drop-btn">
-                    <a class="nav-link nav-item" href="#" id="user-first-name">
-                        <span><i class="fas fa-user"></i></span> User
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <div class="dropdown-content client-menu hidden">
-            <a href="./loan-repayments.html"><span><i class="fas fa-history"></i></span> Loan Repayments</a>
-            <a href="./profile.html"><span><i class="fas fa-user"></i></span> Profile</a>
-            <a href="./index.html" id="drop-down-logout-btn"><span><i class="fas fa-sign-out-alt"></i></span> Logout</a>
         </div>
-        <div class="profile-container">
-            <h1><span><i class="fas fa-user"></i></span> Profile</h1>
-            <div class="profile-header card" id="username-container">
-                <img class="avatar" src="./images/avatar.png" alt="Avatar">
-            </div>
-            <div class="profile-body card" id="userdata-container">
-                <div class="profile-unit">
-                    <p class="profile-key display-text"><span><i class="fas fa-home"></i></span> Residential Address</p>
-                    <p class="profile-value display-text">123, Acme Drive, Wakanda District.</p>
+        <div id="loan-application-form-modal" class="modal">
+            <form class="modal-content card" id="loan-application-form">
+                <span class="close" id="close-btn"><i class="fa fa-times" aria-hidden="true"></i></span>
+                <div class="form-header">
+                    <h1 class="display-text">Apply for a Loan</h1>
                 </div>
-                <div class="profile-unit">
-                    <p class="profile-key display-text"><span><i class="fas fa-city"></i></span> Office Address</p>
-                    <p class="profile-value display-text">456, Foobar Avenue, Vibranium Valley.</p>
+                <div class="form-unit">
+                    <label for="amount">How much do you want to borrow? <span class="rejected">*</span></label>
+                    <input type="number" id="amount" placeholder="Amount" required>
                 </div>
-                <div class="profile-unit">
-                    <p class="profile-key display-text"><span><i class="fas fa-user"></i></span> Verification Status</p>
-                    <p class="profile-value display-text">Verified <span class="verified"><i class="fas fa-check"></i></span></p>
+                <div class="form-unit">
+                    <label for="reason">Briefly explain reason for loan request. (max. 50 characters) <span class="rejected">*</span></label>
+                    <textarea id="reason" placeholder="Reason for loan request..." maxlength="50" required></textarea>
                 </div>
-            </div>
-            <h2><span><i class="fas fa-briefcase"></i></span> My Loan Applications</h2>
-            <div id="loan-applications-feedback"></div>
-            <table class="card">
-                <thead>
-                    <tr>
-                        <th class="loan-applications-table-unit">Client Name</th>
-                        <th class="loan-applications-table-unit">Client Email</th>
-                        <th class="loan-applications-table-unit">Application Date</th>
-                        <th class="loan-applications-table-unit">Amount</th>
-                        <th class="loan-applications-table-unit">Status</th>
-                        <th class="loan-applications-table-unit">View</th>
-                    </tr>
-                </thead>
-                <tbody id="my-loan-applications-table"></tbody>
-            </table>
-            <h2><span><i class="fas fa-money-check-alt"></i></span> My Loans</h2>
-            <div id="loans-feedback"></div>
-            <table class="card">
-                <thead>
-                    <tr>
-                        <th class="loans-table-unit">Client Name</th>
-                        <th class="loans-table-unit">Client Email</th>
-                        <th class="loans-table-unit">Application Date</th>
-                        <th class="loans-table-unit">Amount</th>
-                        <th class="loans-table-unit">Balance</th>
-                        <th class="loans-table-unit">View</th>
-                    </tr>
-                </thead>
-                <tbody id="my-loans-table"></tbody>
-            </table>
+                <div class="form-unit">
+                    <label for="tenor">Select your preferable loan tenor. (Number of months needed to pay back) <span class="rejected">*</span></label>
+                    <select id="tenor" required>
+                        <option value="1">1 month</option>
+                        <option value="2">2 months</option>
+                        <option value="3">3 months</option>
+                        <option value="4">4 months</option>
+                        <option value="5">5 months</option>
+                        <option value="6">6 months</option>
+                        <option value="7">7 months</option>
+                        <option value="8">8 months</option>
+                        <option value="9">9 months</option>
+                        <option value="10">10 months</option>
+                        <option value="11">11 months</option>
+                        <option value="12">12 months</option>
+                    </select>
+                </div>
+                <div class="form-unit" id="btn-container">
+                    <input type="submit" class="form-button btn-one" id="submit-btn" value="Apply">
+                    <input type="reset" class="form-button btn-two" id="cancel-btn" value="Cancel">
+                </div>
+                <div class="form-feedback" id="loan-application-form-feedback"></div>
+            </form>
         </div>
-    </main>
-    <script src="js/client-first-name.js"></script>
-    <script src="js/fetch.js"></script>
-    <script src="./js/dropdown.js"></script>
-    <script src="./js/display-modal.js"></script>
-    <script src="js/profile.js"></script>
-    <script src="./js/loan-apply.js"></script>
-</body>
+        <header>
+            <nav class="onboarding-display">
+                <a class="header-text nav-link" href="./index.html"><span class="display-icon"><i class="fas fa-university"></i></span>QUICK CREDIT</a>
+            </nav>
+            <nav class="onboarding-links">
+                <ul class="nav-list">
+                    <li class="onboarding-nav-item" id="open-modal">
+                        <a class="nav-link nav-item" href="#">
+                            <span><i class="fas fa-plus"></i></span> Apply for a Loan
+                        </a>
+                    </li>
+                    <li class="onboarding-nav-item" id="drop-btn">
+                        <a class="nav-link nav-item" href="#" id="user-first-name">
+                            <span><i class="fas fa-user"></i></span> User
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="dropdown-content client-menu hidden">
+                <a href="./loan-repayments.html"><span><i class="fas fa-history"></i></span> Loan Repayments</a>
+                <a href="./profile.html"><span><i class="fas fa-user"></i></span> Profile</a>
+                <a href="./index.html" id="drop-down-logout-btn"><span><i class="fas fa-sign-out-alt"></i></span> Logout</a>
+            </div>
+            <div class="profile-container">
+                <h1><span><i class="fas fa-user"></i></span> Profile</h1>
+                <div class="profile-header card" id="username-container">
+                    <img class="avatar" src="./images/avatar.png" alt="Avatar">
+                </div>
+                <div class="profile-body card" id="userdata-container">
+                    <div class="profile-unit">
+                        <p class="profile-key display-text"><span><i class="fas fa-home"></i></span> Residential Address</p>
+                        <p class="profile-value display-text">123, Acme Drive, Wakanda District.</p>
+                    </div>
+                    <div class="profile-unit">
+                        <p class="profile-key display-text"><span><i class="fas fa-city"></i></span> Office Address</p>
+                        <p class="profile-value display-text">456, Foobar Avenue, Vibranium Valley.</p>
+                    </div>
+                    <div class="profile-unit">
+                        <p class="profile-key display-text"><span><i class="fas fa-user"></i></span> Verification Status</p>
+                        <p class="profile-value display-text">Verified <span class="verified"><i class="fas fa-check"></i></span></p>
+                    </div>
+                </div>
+                <h2><span><i class="fas fa-briefcase"></i></span> My Loan Applications</h2>
+                <div id="loan-applications-feedback"></div>
+                <table class="card">
+                    <thead>
+                        <tr>
+                            <th class="loan-applications-table-unit">Client Name</th>
+                            <th class="loan-applications-table-unit">Client Email</th>
+                            <th class="loan-applications-table-unit">Application Date</th>
+                            <th class="loan-applications-table-unit">Amount</th>
+                            <th class="loan-applications-table-unit">Status</th>
+                            <th class="loan-applications-table-unit">View</th>
+                        </tr>
+                    </thead>
+                    <tbody id="my-loan-applications-table"></tbody>
+                </table>
+                <h2><span><i class="fas fa-money-check-alt"></i></span> My Loans</h2>
+                <div id="loans-feedback"></div>
+                <table class="card">
+                    <thead>
+                        <tr>
+                            <th class="loans-table-unit">Client Name</th>
+                            <th class="loans-table-unit">Client Email</th>
+                            <th class="loans-table-unit">Application Date</th>
+                            <th class="loans-table-unit">Amount</th>
+                            <th class="loans-table-unit">Balance</th>
+                            <th class="loans-table-unit">View</th>
+                        </tr>
+                    </thead>
+                    <tbody id="my-loans-table"></tbody>
+                </table>
+            </div>
+        </main>
+        <script src="js/client-first-name.js"></script>
+        <script src="js/fetch.js"></script>
+        <script src="./js/dropdown.js"></script>
+        <script src="./js/display-modal.js"></script>
+        <script src="js/profile.js"></script>
+        <script src="./js/loan-apply.js"></script>
+    </body>
 </html>
