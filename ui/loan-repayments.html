@@ -15,7 +15,7 @@
 </head>
 <body>
     <div id="loan-application-form-modal" class="modal">
-        <form class="modal-content card">
+        <form class="modal-content card" id="loan-application-form">
             <span class="close" id="close-btn"><i class="fa fa-times" aria-hidden="true"></i></span>
             <div class="form-header">
                 <h1 class="display-text">Apply for a Loan</h1>
@@ -49,6 +49,7 @@
                 <input type="submit" class="form-button btn-one" id="submit-btn" value="Apply">
                 <input type="reset" class="form-button btn-two" id="cancel-btn" value="Cancel">
             </div>
+            <div class="form-feedback" id="loan-application-form-feedback"></div>
         </form>
     </div>
     <header>
@@ -97,7 +98,7 @@
     <script src="js/client-first-name.js"></script>
     <script src="./js/dropdown.js"></script>
     <script src="js/display-modal.js"></script>
-    <script src="js/loan-apply.js"></script>
     <script src="./js/loan-repayments.js"></script>
+    <script src="js/loan-apply.js"></script>
 </body>
 </html>
