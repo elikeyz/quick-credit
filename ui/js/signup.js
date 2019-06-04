@@ -10,7 +10,7 @@ const passwordField = document.getElementById('password-signup');
 const confirmPasswordField = document.getElementById('confirm-password-signup');
 
 const signup = () => fetch('https://elikeyz-quick-credit.herokuapp.com/api/v1/auth/signup', {
-  method: 'post',
+  method: 'POST',
   headers: {
     'Content-type': 'application/json',
   },

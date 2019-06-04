@@ -251,10 +251,12 @@ apiGetFetch('/users/me/loans')
       loansFeedbackDiv.innerHTML = '';
       if (data.data.length < 1) {
         loanApplicationsFeedbackDiv.innerHTML = '<p>You have not made any loan applications yet</p>';
+        loansFeedbackDiv.innerHTML = '<p>You have no active loans yet</p>';
+      } else {
+        data.data.sort((a, b) => new Date(b.createdon) - new Date(a.createdon));
+        renderLoanApplications(data.data);
+        renderLoans(data.data);
       }
-      data.data.sort((a, b) => new Date(b.createdon) - new Date(a.createdon));
-      renderLoanApplications(data.data);
-      renderLoans(data.data);
     } else if (data.status === 401) {
       location.assign('./login.html');
     } else {
@@ -263,6 +265,7 @@ apiGetFetch('/users/me/loans')
     }
   })
   .catch((err) => {
+    console.log(err);
     loanApplicationsFeedbackDiv.innerHTML = `<p class="rejected">${err}</p>`;
     loansFeedbackDiv.innerHTML = `<p class="rejected">${err}</p>`;
   });
