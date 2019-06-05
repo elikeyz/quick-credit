@@ -11,7 +11,7 @@ const setupLoanApplicationForm = () => {
       purpose: document.getElementById('reason').value,
       tenor: parseInt(document.getElementById('tenor').value, 10),
     };
-    apiFetch('/loans', 'post', requestBody)
+    apiFetch('/loans', 'POST', requestBody)
       .then((data) => {
         submitBtn.removeAttribute('disabled');
         if (data.status === 201) {

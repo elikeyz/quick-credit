@@ -7,12 +7,7 @@ const setModalBtnClickEvent = (
     event.preventDefault();
     modal.style.display = 'flex';
 
-    const cancelBtn = document.getElementById(modalCancelBtnId);
     const closeBtn = document.getElementById(modalCloseBtnId);
-
-    cancelBtn.addEventListener('click', () => {
-      modal.style.display = 'none';
-    });
 
     closeBtn.addEventListener('click', () => {
       modal.style.display = 'none';
@@ -21,6 +16,10 @@ const setModalBtnClickEvent = (
     if (setupModalContent) {
       setupModalContent(id);
     }
+    const cancelBtn = document.getElementById(modalCancelBtnId);
+    cancelBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
   });
 };
 

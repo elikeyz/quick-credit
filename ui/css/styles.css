@@ -188,6 +188,13 @@ form {
     justify-content: center;
 }
 
+.modal-feedback {
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+}
+
 label {
     font-weight: bold;
     width: 100%;

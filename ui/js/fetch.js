@@ -4,7 +4,7 @@ if (!localStorage.getItem('quick-credit-access-data')) {
 const { token } = JSON.parse(localStorage.getItem('quick-credit-access-data'));
 
 const apiGetFetch = url => fetch(`https://elikeyz-quick-credit.herokuapp.com/api/v1${url}`, {
-  method: 'get',
+  method: 'GET',
   headers: {
     'Content-type': 'application/json',
     Authorization: `Bearer ${token}`,
