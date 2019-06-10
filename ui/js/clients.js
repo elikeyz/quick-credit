@@ -60,7 +60,7 @@ const setupClientVerification = ({ status, id }) => {
           modalFeedbackDiv.innerHTML = `<p class="rejected">${err}</p>`;
         });
     });
-  };
+  }
 };
 
 const renderClientModalContent = (client) => {
@@ -105,14 +105,15 @@ apiGetFetch('/users')
     if (data.status === 200) {
       feedbackDiv.innerHTML = '';
       if (data.data.length < 1) {
-        feedbackDiv.innerHTML = '<p>There are no registered clients yet</p>'
+        feedbackDiv.innerHTML = '<p>There are no registered clients yet</p>';
+      } else {
+        data.data.sort((a, b) => {
+          if (a.firstname < b.firstname) return -1;
+          if (a.firstname > b.firstname) return 1;
+          return 0;
+        });
+        renderClients(data.data);
       }
-      data.data.sort((a, b) => {
-        if (a.firstname < b.firstname) return -1;
-        if (a.firstname > b.firstname) return 1;
-        return 0;
-      });
-      renderClients(data.data);
     } else if (data.status === 401) {
       location.assign('./login.html');
     } else {
