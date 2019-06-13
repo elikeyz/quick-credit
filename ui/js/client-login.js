@@ -2,6 +2,7 @@ const clientLoginBtn = document.getElementById('client-login-btn');
 const adminLoginBtn = document.getElementById('admin-login-btn');
 const feedbackDiv = document.getElementById('feedback');
 
+// Authenticate the client's login details
 clientLoginBtn.addEventListener('click', (event) => {
   event.preventDefault();
   clientLoginBtn.setAttribute('disabled', true);

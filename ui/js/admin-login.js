@@ -1,3 +1,4 @@
+// Authenticate the admin's login details
 adminLoginBtn.addEventListener('click', (event) => {
   event.preventDefault();
   clientLoginBtn.setAttribute('disabled', true);
@@ -9,7 +10,7 @@ adminLoginBtn.addEventListener('click', (event) => {
       localStorage.setItem('quick-credit-access-data', JSON.stringify(data.data));
       location.assign('./clients.html');
     } else if (data.status === 200) {
-      feedbackDiv.innerHTML = '<p class="rejected">You are not authorized to enter the Client Interface</p>';
+      feedbackDiv.innerHTML = '<p class="rejected">You are not authorized to enter the Admin Interface</p>';
       clientLoginBtn.removeAttribute('disabled');
       adminLoginBtn.removeAttribute('disabled');
     } else {

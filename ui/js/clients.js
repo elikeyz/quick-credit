@@ -1,6 +1,7 @@
 const clientsTable = document.getElementById('clients-table');
 const feedbackDiv = document.getElementById('feedback');
 
+// Render the head section of the modal display
 const renderDisplayHeader = ({ firstname, lastname, email }) => {
   const modalUsernameContainer = document.getElementById('client-username-container');
   const userdataHtml = `<img class="avatar" src="./images/avatar.png" alt="Avatar">
@@ -9,6 +10,7 @@ const renderDisplayHeader = ({ firstname, lastname, email }) => {
   modalUsernameContainer.innerHTML = userdataHtml;
 };
 
+// Render the body section of the client modal
 const renderClientBody = ({ address, workaddress, status }) => {
   let statusHtml = '';
   let verifyBtnHtml = '';
@@ -39,6 +41,7 @@ const renderClientBody = ({ address, workaddress, status }) => {
   clientBody.innerHTML = clientBodyHtml;
 };
 
+// Set a click listener on the Verify button to mark the client as verified
 const setupClientVerification = ({ status, id }) => {
   if (status === 'unverified') {
     const verifyBtn = document.getElementById('verify-btn');
@@ -63,12 +66,14 @@ const setupClientVerification = ({ status, id }) => {
   }
 };
 
+// Render the entire content of the client modal
 const renderClientModalContent = (client) => {
   renderDisplayHeader(client);
   renderClientBody(client);
   setupClientVerification(client);
 };
 
+// Set the View button click event listeners on the client entries
 const setupClientView = (clients) => {
   const clientIds = clients.map(client => client.id);
   const setupClientModalContent = (clientId) => {
@@ -78,6 +83,7 @@ const setupClientView = (clients) => {
   displayModal('client-modal', 'cancel-btn', 'close-btn', 'open-modal', clientIds, setupClientModalContent);
 };
 
+// Render the clients data in the table
 const renderClients = (clients) => {
   clients.forEach(({
     firstname, lastname, email, status, id,
@@ -99,6 +105,7 @@ const renderClients = (clients) => {
   setupClientView(clients);
 };
 
+// Fetch the client information from the API for rendering
 feedbackDiv.innerHTML = '<p class="unverified">Loading Registered Clients...</p>';
 apiGetFetch('/users')
   .then((data) => {
