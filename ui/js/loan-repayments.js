@@ -1,6 +1,7 @@
 const myRepaymentsContainer = document.getElementById('my-repayments-container');
 const feedbackDiv = document.getElementById('feedback');
 
+// Render the user's repayment history in the table
 const renderRepaymentHistory = (data) => {
   if (data.status === 200) {
     feedbackDiv.innerHTML = '';
@@ -25,8 +26,8 @@ const renderRepaymentHistory = (data) => {
   }
 };
 
+// Fetch the user's repayments for rendering
 feedbackDiv.innerHTML = '<p class="unverified">Loading Repayment History...</p>';
-
 apiGetFetch('/users/me/repayments')
   .then(renderRepaymentHistory)
   .catch((err) => {

@@ -1,6 +1,7 @@
 const loanApplicationsTable = document.getElementById('loan-applications-table');
 const feedbackDiv = document.getElementById('feedback');
 
+// Render the head section of the modal display
 const renderDisplayHeader = ({ firstname, lastname, client }) => {
   const loanApplicationUsernameContainer = document.getElementById('loan-application-username-container');
   const userdataHtml = `<img class="avatar" src="./images/avatar.png" alt="Avatar">
@@ -9,6 +10,7 @@ const renderDisplayHeader = ({ firstname, lastname, client }) => {
   loanApplicationUsernameContainer.innerHTML = userdataHtml;
 };
 
+// Render the first column of the loan application modal
 const renderLoanApplicationFirstColumn = ({
   createdon, amount, tenor, status: loanStatus,
 }) => {
@@ -40,6 +42,7 @@ const renderLoanApplicationFirstColumn = ({
   firstColumn.innerHTML = firstColumnHtml;
 };
 
+// Render the second column of the loan application modal
 const renderLoanApplicationSecondColumn = ({ purpose, interest, paymentinstallment }) => {
   const secondColumn = document.getElementById('loan-application-second-column');
   const secondColumnHtml = `<div class="profile-unit">
@@ -57,6 +60,7 @@ const renderLoanApplicationSecondColumn = ({ purpose, interest, paymentinstallme
   secondColumn.innerHTML = secondColumnHtml;
 };
 
+// Render the loan application modal buttons
 const renderLoanApplicationBtns = ({
   status, balance, amount, interest,
 }) => {
@@ -78,6 +82,7 @@ const renderLoanApplicationBtns = ({
   btnContainer.innerHTML = btnHtml;
 };
 
+// Set a click listener on the Approve button to approve the loan application
 const setupApproveBtn = ({ id }) => {
   const approveBtn = document.getElementById('accept-btn');
   const modalFeedbackDiv = document.getElementById('modal-feedback');
@@ -102,6 +107,7 @@ const setupApproveBtn = ({ id }) => {
   }
 };
 
+// Set a click listener on the Reject button to reject the loan application
 const setupRejectBtn = ({ id }) => {
   const rejectBtn = document.getElementById('reject-btn');
   const modalFeedbackDiv = document.getElementById('modal-feedback');
@@ -126,6 +132,7 @@ const setupRejectBtn = ({ id }) => {
   }
 };
 
+// Render the entire content of the loan application modal
 const renderLoanApplicationModalContent = (loan) => {
   renderDisplayHeader(loan);
   renderLoanApplicationFirstColumn(loan);
@@ -135,6 +142,7 @@ const renderLoanApplicationModalContent = (loan) => {
   setupRejectBtn(loan);
 };
 
+// Set the View button click event listeners of the loan application entries
 const setupLoanApplicationsView = (loans) => {
   const loanIds = loans.map(loan => loan.id);
   const setupLoanApplicationModalContent = (loanId) => {
@@ -151,6 +159,7 @@ const setupLoanApplicationsView = (loans) => {
   );
 };
 
+// Render all the loan applications in the table
 const renderLoanApplications = (loans) => {
   loans.forEach(({
     firstname, lastname, client, createdon, amount, status, id,
@@ -176,6 +185,7 @@ const renderLoanApplications = (loans) => {
   setupLoanApplicationsView(loans);
 };
 
+// Fetch and render all the dynamic information on the Loan Applications Page
 feedbackDiv.innerHTML = '<p class="unverified">Loading Loan Applications...</p>';
 apiGetFetch('/loans')
   .then((data) => {
