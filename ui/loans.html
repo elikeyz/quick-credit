@@ -15,7 +15,7 @@
     </head>
     <body>
         <div id="loan-repayment-form-modal" class="modal">
-            <form class="modal-content card">
+            <form class="modal-content card" id="loan-repayment-form">
                 <span class="close" id="close-form-btn"><i class="fa fa-times" aria-hidden="true"></i></span>
                 <div class="form-header">
                     <h1 class="display-text">Post Client Loan Repayment</h1>
@@ -23,9 +23,7 @@
                 <div class="form-unit">
                     <label for="email">Enter Client Email</label>
                     <input list="client-emails" type="email" id="email" placeholder="Client Email" required>
-                    <datalist id="client-emails">
-                        <option value="johndoe25@gmail.com">
-                    </datalist>
+                    <datalist id="client-emails"></datalist>
                 </div>
                 <div class="form-feedback" id="client-email-feedback"></div>
                 <div class="form-unit">

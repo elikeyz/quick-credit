@@ -1,3 +1,4 @@
+// Set a submit event on the loan application form to create a new loan application
 const setupLoanApplicationForm = () => {
   const form = document.getElementById('loan-application-form');
   const submitBtn = document.getElementById('submit-btn');
@@ -24,6 +25,7 @@ const setupLoanApplicationForm = () => {
         }
       })
       .catch((err) => {
+        submitBtn.removeAttribute('disabled');
         formFeedbackDiv.innerHTML = `<p class="rejected">${err}</p>`;
       });
   });

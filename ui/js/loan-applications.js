@@ -88,9 +88,11 @@ const setupApproveBtn = ({ id }) => {
   const modalFeedbackDiv = document.getElementById('modal-feedback');
   if (approveBtn) {
     approveBtn.addEventListener('click', () => {
+      approveBtn.setAttribute('disabled', true);
       modalFeedbackDiv.innerHTML = '<p class="unverified">Approving Loan Application...</p>';
       apiFetch(`/loans/${id}`, 'PATCH', { status: 'approved' })
         .then((data) => {
+          approveBtn.removeAttribute('disabled');
           if (data.status === 200) {
             modalFeedbackDiv.innerHTML = '<p class="verified">Loan application has been approved successfully</p>';
             location.reload();
@@ -101,6 +103,7 @@ const setupApproveBtn = ({ id }) => {
           }
         })
         .catch((err) => {
+          approveBtn.removeAttribute('disabled');
           modalFeedbackDiv.innerHTML = `<p class="rejected">${err}</p>`;
         });
     });
@@ -113,9 +116,11 @@ const setupRejectBtn = ({ id }) => {
   const modalFeedbackDiv = document.getElementById('modal-feedback');
   if (rejectBtn) {
     rejectBtn.addEventListener('click', () => {
+      rejectBtn.setAttribute('disabled', true);
       modalFeedbackDiv.innerHTML = '<p class="unverified">Rejecting loan application</p>';
       apiFetch(`/loans/${id}`, 'PATCH', { status: 'rejected' })
         .then((data) => {
+          rejectBtn.removeAttribute('disabled');
           if (data.status === 200) {
             modalFeedbackDiv.innerHTML = '<p class="verified">Loan application has been rejected successfully</p>';
             location.reload();
@@ -126,6 +131,7 @@ const setupRejectBtn = ({ id }) => {
           }
         })
         .catch((err) => {
+          rejectBtn.removeAttribute('disabled');
           modalFeedbackDiv.innerHTML = `<p class="rejected">${err}</p>`;
         });
     });
