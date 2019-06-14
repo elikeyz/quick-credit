@@ -47,9 +47,11 @@ const setupClientVerification = ({ status, id }) => {
     const verifyBtn = document.getElementById('verify-btn');
     const modalFeedbackDiv = document.getElementById('modal-feedback');
     verifyBtn.addEventListener('click', () => {
+      verifyBtn.setAttribute('disabled', true);
       modalFeedbackDiv.innerHTML = '<p class="unverified">Verifying Client...</p>';
       apiFetch(`/users/${id}/verify`, 'PATCH')
         .then((data) => {
+          verifyBtn.removeAttribute('disabled');
           if (data.status === 200) {
             modalFeedbackDiv.innerHTML = '<p class="verified">Client has been successfully marked as Verified</p>';
             location.reload();
@@ -60,6 +62,7 @@ const setupClientVerification = ({ status, id }) => {
           }
         })
         .catch((err) => {
+          verifyBtn.removeAttribute('disabled');
           modalFeedbackDiv.innerHTML = `<p class="rejected">${err}</p>`;
         });
     });
