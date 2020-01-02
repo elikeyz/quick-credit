@@ -61,6 +61,10 @@ footer {
     margin: 0;
 }
 
+.large-text {
+    font-size: larger;
+}
+
 .display-icon {
     font-size: 30px;
 }
